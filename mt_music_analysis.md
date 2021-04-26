@@ -262,8 +262,20 @@ gen_tib <- gen_tib %>%
 
 ### Additional Calculations for Density
 
-translate texture to numeric value in new column \* monophony = 1 \*
-homophony = 1.5 \* antiphony = 1.5 \* polyphony = 2
+**NB: This section will in all likelihood be deleted, since it
+ultimately did not figure into the final analysis.**
+
+Translate texture to numeric value in new column:
+
+  - monophony = 1
+
+  - homophony = 1.5
+
+  - antiphony = 1.5
+
+  - polyphony = 2
+
+<!-- end list -->
 
 ``` r
 gen_tib <- gen_tib %>% 
@@ -276,7 +288,7 @@ gen_tib <- gen_tib %>%
     relocate(texture_value, .after = texture)
 ```
 
-add density column for each voice
+Add density column for each voice.
 
 ``` r
 gen_tib <- gen_tib %>% 
@@ -290,7 +302,7 @@ gen_tib <- gen_tib %>%
                       dm_b2 = (notes_b2+tones_b2)/quarters_per_bar)
 ```
 
-create a **dm\_sum** column from 8 individual **dm** columns
+Create a **dm\_sum** column from 8 individual **dm** columns.
 
 ``` r
 gen_tib <- gen_tib %>% 
@@ -306,7 +318,7 @@ gen_tib <- gen_tib %>%
     mutate(dmc = (dm_sum/4)*texture_value)
 ```
 
-Need to reconvert gen\_tib to tibble after performing rowwise()
+Need to reconvert gen\_tib to tibble after performing `rowwise()`.
 
 ``` r
 gen_tib <- gen_tib %>% as_tibble()
