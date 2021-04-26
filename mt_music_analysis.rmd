@@ -117,7 +117,9 @@ gen_tib <- as_tibble(bind_rows(voice_analysis_list))
 
 # Cleaning and Manipulation
 
-## General Refinement - Durations
+## General Refinement 
+
+### Durations
 
 Convert **piece_no**, **category** and **subcategory** to factors.
 
@@ -128,22 +130,24 @@ dur_tib <- dur_tib %>%
     mutate(subcategory = as_factor(subcategory))
 ```
 
-Check to see if each piece is now a factor.
-* NB: n col. refers to # of segments
+<!-- Check to see if each piece is now a factor. -->
 
-```{r}
-dur_tib$piece_no %>% 
-    fct_count()
-```
-same for category
+<!-- * NB: n col. refers to # of segments -->
 
-```{r}
-dur_tib$category %>% 
-    fct_count()
-```
+<!-- ```{r} -->
+<!-- dur_tib$piece_no %>%  -->
+<!--     fct_count() -->
+<!-- ``` -->
+
+<!-- same for category -->
+
+<!-- ```{r} -->
+<!-- dur_tib$category %>%  -->
+<!--     fct_count() -->
+<!-- ``` -->
 
 
-and subcategory - AND relevel
+Relevel subcategories.
 
 ```{r}
 dur_tib$subcategory <- dur_tib$subcategory %>% 
