@@ -615,23 +615,24 @@ dur_6_4_duple_perc <- round((dur_meter %>%
 
 `r dur_6_4_duple_perc` % of measures with duple meters are in 6/4.
 
-```{r}
-# duration of duple meters
-dur_meter_groups %>% 
-  filter(group == "duple") %>% 
-  select(duration) -
-  # subtract duration of 6/4 measures
-  dur_meter %>% 
-    filter(meter == "6_4") %>% 
-    select(duration) %>% 
-    sum() - 
-  # subtract duration of triple meters
-  dur_meter_groups %>% 
-  filter(group == "triple") %>% 
-  select(duration)
-```
 
-Almost even.
+<!-- ```{r} -->
+<!-- # duration of duple meters -->
+<!-- dur_meter_groups %>%  -->
+<!--   filter(group == "duple") %>%  -->
+<!--   select(duration) - -->
+<!--   # subtract duration of 6/4 measures -->
+<!--   dur_meter %>%  -->
+<!--     filter(meter == "6_4") %>%  -->
+<!--     select(duration) %>%  -->
+<!--     sum() -  -->
+<!--   # subtract duration of triple meters -->
+<!--   dur_meter_groups %>%  -->
+<!--   filter(group == "triple") %>%  -->
+<!--   select(duration) -->
+<!-- ``` -->
+
+<!-- Almost even. -->
 
 
 
