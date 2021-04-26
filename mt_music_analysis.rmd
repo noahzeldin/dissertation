@@ -575,7 +575,7 @@ knitr::kable(dur_meter_groups)
 
 <!-- Interesting: pretty evenly split. -->
 
-##### Special Case: 6/4
+#### Special Case: 6/4
 
 **Need to account for 6/4, which is compound duple.**
 
