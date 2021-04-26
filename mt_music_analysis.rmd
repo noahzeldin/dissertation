@@ -355,20 +355,20 @@ dur_piece %>%
     arrange(desc(duration_min))
 ```
 
-##### NEW with Lubridate - FIX!
+<!-- ##### NEW with Lubridate - FIX! -->
 
-```{r}
-dur_piece_lubridate <- dur_piece %>% 
-    separate(duration_min, sep = "\\.", into = c("min", "sec")) %>% 
-    mutate(min = as.numeric(min),
-           sec = as.numeric(sec) # PROBLEM - removes zeros
-           ) %>% 
-    mutate(sec = round(sec * .6)) %>% 
-    mutate(duration = (minutes(min) + seconds(sec)), .keep = "unused") %>% 
-    relocate(duration, .after = piece_no)
+<!-- ```{r} -->
+<!-- dur_piece_lubridate <- dur_piece %>%  -->
+<!--     separate(duration_min, sep = "\\.", into = c("min", "sec")) %>%  -->
+<!--     mutate(min = as.numeric(min), -->
+<!--            sec = as.numeric(sec) # PROBLEM - removes zeros -->
+<!--            ) %>%  -->
+<!--     mutate(sec = round(sec * .6)) %>%  -->
+<!--     mutate(duration = (minutes(min) + seconds(sec)), .keep = "unused") %>%  -->
+<!--     relocate(duration, .after = piece_no) -->
 
-dur_piece_lubridate
-```
+<!-- dur_piece_lubridate -->
+<!-- ``` -->
 
 
 ### Duration by Category
@@ -400,17 +400,17 @@ Output of `dur_subcategory`:
 knitr::kable(dur_subcategory)
 ```
 
-arranged descending
+<!-- arranged descending -->
 
-```{r}
-dur_subcategory %>% 
-    arrange(desc(prop_of_dur))
-```
+<!-- ```{r} -->
+<!-- dur_subcategory %>%  -->
+<!--     arrange(desc(prop_of_dur)) -->
+<!-- ``` -->
 
-Exactly what I expected:   
-* largest proportion = 1a. mixed choir with orchestra
-* followed by 3. tenor solo with accompaniment
-* then 1b. = male choir with orchestra
-** actually, only one piece = Streiklied
+<!-- Exactly what I expected:    -->
+<!-- * largest proportion = 1a. mixed choir with orchestra -->
+<!-- * followed by 3. tenor solo with accompaniment -->
+<!-- * then 1b. = male choir with orchestra -->
+<!-- ** actually, only one piece = Streiklied -->
 
 
