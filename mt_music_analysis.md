@@ -443,35 +443,29 @@ dur_piece %>%
     ## 10 10               1.96       0.051
     ## # ... with 11 more rows
 
-##### NEW with Lubridate - FIX\!
+<!-- ##### NEW with Lubridate - FIX! -->
 
-``` r
-dur_piece_lubridate <- dur_piece %>% 
-    separate(duration_min, sep = "\\.", into = c("min", "sec")) %>% 
-    mutate(min = as.numeric(min),
-           sec = as.numeric(sec) # PROBLEM - removes zeros
-           ) %>% 
-    mutate(sec = round(sec * .6)) %>% 
-    mutate(duration = (minutes(min) + seconds(sec)), .keep = "unused") %>% 
-    relocate(duration, .after = piece_no)
+<!-- ```{r} -->
 
-dur_piece_lubridate
-```
+<!-- dur_piece_lubridate <- dur_piece %>%  -->
 
-    ## # A tibble: 21 x 3
-    ##    piece_no duration prop_of_dur
-    ##    <fct>    <Period>       <dbl>
-    ##  1 1        4M 55S         0.127
-    ##  2 2b       2M 4S          0.054
-    ##  3 3a       3M 50S         0.099
-    ##  4 3b       29S            0.013
-    ##  5 4        4M 7S          0.107
-    ##  6 5        3M 55S         0.102
-    ##  7 6a       4S             0.002
-    ##  8 6b       8S             0.003
-    ##  9 6c       14S            0.006
-    ## 10 7a       1M 37S         0.042
-    ## # ... with 11 more rows
+<!--     separate(duration_min, sep = "\\.", into = c("min", "sec")) %>%  -->
+
+<!--     mutate(min = as.numeric(min), -->
+
+<!--            sec = as.numeric(sec) # PROBLEM - removes zeros -->
+
+<!--            ) %>%  -->
+
+<!--     mutate(sec = round(sec * .6)) %>%  -->
+
+<!--     mutate(duration = (minutes(min) + seconds(sec)), .keep = "unused") %>%  -->
+
+<!--     relocate(duration, .after = piece_no) -->
+
+<!-- dur_piece_lubridate -->
+
+<!-- ``` -->
 
 ### Duration by Category
 
@@ -519,28 +513,375 @@ Output of `dur_subcategory`:
 | 4c          |   14.54545 |     0.2424242 |     0.0062845 |
 | 4d          |   36.67471 |     0.6112452 |     0.0158456 |
 
-arranged descending
+<!-- arranged descending -->
+
+<!-- ```{r} -->
+
+<!-- dur_subcategory %>%  -->
+
+<!--     arrange(desc(prop_of_dur)) -->
+
+<!-- ``` -->
+
+<!-- Exactly what I expected:    -->
+
+<!-- * largest proportion = 1a. mixed choir with orchestra -->
+
+<!-- * followed by 3. tenor solo with accompaniment -->
+
+<!-- * then 1b. = male choir with orchestra -->
+
+<!-- ** actually, only one piece = Streiklied -->
+
+## Meter and Tempo
+
+### Rates of Change
+
+Construct table with following stats for each piece:
+
+  - duration
+
+  - # of meter changes
+
+  - rate of meter changes in seconds = duration / \# of meter changes
+
+  - rate of meter changes in bars
+
+  - # of tempo changes
+
+  - rate of tempo changes in seconds = duration / \# of meter changes
+
+  - rate of tempo changes in bars
+
+<!-- end list -->
 
 ``` r
-dur_subcategory %>% 
-    arrange(desc(prop_of_dur))
+dur_meter_tempo_piece <- dur_tib %>% 
+    group_by(piece_no) %>% 
+    summarize(meter_ch_count = sum(meter_ch_count),
+              tempo_ch_count = sum(tempo_ch_count),
+              duration = sum(duration)) %>% 
+    mutate(meter_ch_rate_sec = round(duration / meter_ch_count, 
+                                     digits = 2),
+           tempo_ch_rate_sec = round(duration / tempo_ch_count, 
+                                     digits = 2),
+           duration = round(duration, digits = 2)) %>% 
+    relocate(meter_ch_rate_sec, .after = meter_ch_count) %>% 
+    relocate(tempo_ch_rate_sec, .after = tempo_ch_count)
+
+dur_meter_tempo_piece
 ```
 
-    ## # A tibble: 10 x 4
-    ##    subcategory duration duration_min prop_of_dur
-    ##    <fct>          <dbl>        <dbl>       <dbl>
-    ##  1 1a            1305.       21.8        0.564  
-    ##  2 3c             326.        5.43       0.141  
-    ##  3 3b             235.        3.92       0.102  
-    ##  4 3a             230         3.83       0.0994 
-    ##  5 1b              97.5       1.62       0.0421 
-    ##  6 4a              37.2       0.620      0.0161 
-    ##  7 4d              36.7       0.611      0.0158 
-    ##  8 2b              28.2       0.470      0.0122 
-    ##  9 4c              14.5       0.242      0.00628
-    ## 10 4b               3.6       0.0600     0.00156
+    ## # A tibble: 21 x 6
+    ##    piece_no meter_ch_count meter_ch_rate_s~ tempo_ch_count tempo_ch_rate_s~
+    ##    <fct>             <dbl>            <dbl>          <dbl>            <dbl>
+    ##  1 1                     9            32.8               1           295.  
+    ##  2 2b                    9            13.8               1           124.  
+    ##  3 3a                    1           230                 4            57.5 
+    ##  4 3b                   12             2.47              1            29.6 
+    ##  5 4                    18            13.7               1           247.  
+    ##  6 5                     7            33.6               9            26.1 
+    ##  7 6a                    1             3.6               1             3.6 
+    ##  8 6b                    4             1.9               1             7.62
+    ##  9 6c                    1            14.6               1            14.6 
+    ## 10 7a                    3            32.5               1            97.5 
+    ## # ... with 11 more rows, and 1 more variable: duration <dbl>
 
-Exactly what I expected:  
-\* largest proportion = 1a. mixed choir with orchestra \* followed by 3.
-tenor solo with accompaniment \* then 1b. = male choir with orchestra
-\*\* actually, only one piece = Streiklied
+Output of `dur_meter_tempo_piece`:
+
+| piece\_no | meter\_ch\_count | meter\_ch\_rate\_sec | tempo\_ch\_count | tempo\_ch\_rate\_sec | duration |
+| :-------- | ---------------: | -------------------: | ---------------: | -------------------: | -------: |
+| 1         |                9 |                32.76 |                1 |               294.86 |   294.86 |
+| 2b        |                9 |                13.82 |                1 |               124.35 |   124.35 |
+| 3a        |                1 |               230.00 |                4 |                57.50 |   230.00 |
+| 3b        |               12 |                 2.47 |                1 |                29.61 |    29.61 |
+| 4         |               18 |                13.73 |                1 |               247.22 |   247.22 |
+| 5         |                7 |                33.61 |                9 |                26.14 |   235.24 |
+| 6a        |                1 |                 3.60 |                1 |                 3.60 |     3.60 |
+| 6b        |                4 |                 1.90 |                1 |                 7.62 |     7.62 |
+| 6c        |                1 |                14.55 |                1 |                14.55 |    14.55 |
+| 7a        |                3 |                32.50 |                1 |                97.50 |    97.50 |
+| 7b        |                1 |                 2.40 |                1 |                 2.40 |     2.40 |
+| 8a        |                1 |               138.95 |                1 |               138.95 |   138.95 |
+| 8b        |                1 |               187.13 |                7 |                26.73 |   187.13 |
+| 9         |                8 |                36.14 |                1 |               289.09 |   289.09 |
+| 10        |                5 |                23.48 |                1 |               117.38 |   117.38 |
+| 11        |                2 |                18.00 |                1 |                36.00 |    36.00 |
+| 12a       |                5 |                 5.64 |                1 |                28.18 |    28.18 |
+| 12b       |                1 |                54.29 |                1 |                54.29 |    54.29 |
+| 13a       |                1 |                 5.85 |                1 |                 5.85 |     5.85 |
+| 13b       |                2 |                14.21 |                1 |                28.42 |    28.42 |
+| 14        |                5 |                28.46 |                1 |               142.29 |   142.29 |
+
+<!-- sorted by **meter_ch_count**   -->
+
+<!-- ```{r} -->
+
+<!-- dur_meter_tempo_piece %>%  -->
+
+<!--     arrange(desc(meter_ch_count)) %>%  -->
+
+<!--     select(-tempo_ch_count, -tempo_ch_rate_sec) -->
+
+<!-- ``` -->
+
+5 pieces with greatest number of meter changes.
+
+``` r
+meter_ch_count_piece_top_5 <- dur_meter_tempo_piece %>% 
+    arrange(desc(meter_ch_count)) %>% 
+    select(-tempo_ch_count, -tempo_ch_rate_sec) %>% 
+    slice(1:5)
+
+knitr::kable(meter_ch_count_piece_top_5)
+```
+
+| piece\_no | meter\_ch\_count | meter\_ch\_rate\_sec | duration |
+| :-------- | ---------------: | -------------------: | -------: |
+| 4         |               18 |                13.73 |   247.22 |
+| 3b        |               12 |                 2.47 |    29.61 |
+| 1         |                9 |                32.76 |   294.86 |
+| 2b        |                9 |                13.82 |   124.35 |
+| 9         |                8 |                36.14 |   289.09 |
+
+<!-- sorted by **meter_ch_rate_sec** ASCENDING   -->
+
+<!-- ```{r} -->
+
+<!-- dur_meter_tempo_piece %>%  -->
+
+<!--     filter(meter_ch_count != 1) %>%  -->
+
+<!--     select(-tempo_ch_count, -tempo_ch_rate_sec) %>%  -->
+
+<!--     arrange(meter_ch_rate_sec) -->
+
+<!-- ``` -->
+
+5 pieces with quickest rates of meter changes.
+
+``` r
+meter_ch_rate_piece_top_5 <- dur_meter_tempo_piece %>% 
+    filter(meter_ch_count != 1) %>% 
+    select(-tempo_ch_count, -tempo_ch_rate_sec) %>% 
+    arrange(meter_ch_rate_sec) %>% 
+    slice(1:5)
+
+knitr::kable(meter_ch_rate_piece_top_5)
+```
+
+| piece\_no | meter\_ch\_count | meter\_ch\_rate\_sec | duration |
+| :-------- | ---------------: | -------------------: | -------: |
+| 6b        |                4 |                 1.90 |     7.62 |
+| 3b        |               12 |                 2.47 |    29.61 |
+| 12a       |                5 |                 5.64 |    28.18 |
+| 4         |               18 |                13.73 |   247.22 |
+| 2b        |                9 |                13.82 |   124.35 |
+
+<!-- sorted by **tempo_ch_count**   -->
+
+<!-- ```{r} -->
+
+<!-- dur_meter_tempo_piece %>%   -->
+
+<!--     select(-meter_ch_count, -meter_ch_rate_sec) %>%  -->
+
+<!--     arrange(desc(tempo_ch_count)) -->
+
+<!-- ``` -->
+
+3 pieces with greatest number of tempo changes.
+
+``` r
+tempo_ch_count_and_rate_piece <- dur_meter_tempo_piece %>% 
+    filter(tempo_ch_count != 1) %>% 
+    select(-meter_ch_count, -meter_ch_rate_sec) %>% 
+    arrange(tempo_ch_rate_sec)
+
+knitr::kable(tempo_ch_count_and_rate_piece)
+```
+
+| piece\_no | tempo\_ch\_count | tempo\_ch\_rate\_sec | duration |
+| :-------- | ---------------: | -------------------: | -------: |
+| 5         |                9 |                26.14 |   235.24 |
+| 8b        |                7 |                26.73 |   187.13 |
+| 3a        |                4 |                57.50 |   230.00 |
+
+### Most common meters
+
+Create table with meter, non\_of\_mm and duration.
+
+``` r
+dur_meter <- dur_tib %>% 
+    unite(meter_1, meter_2, col = "meter", sep = "_") %>% 
+    select(piece_no, no_of_mm, meter, duration) %>% 
+    relocate(meter, .after = piece_no) %>% 
+    filter(meter != "0_0") # remove the pick-up from piece_no 10
+```
+
+Most common meters by no\_of\_mm.
+
+``` r
+dur_meter %>% 
+    group_by(meter) %>% 
+    count(no_of_mm) %>% 
+    mutate(no_of_mm = no_of_mm * n) %>% 
+    select(-n) %>% 
+    summarize(no_of_mm = sum(no_of_mm)) %>% 
+    arrange(desc(no_of_mm))
+```
+
+    ## # A tibble: 8 x 2
+    ##   meter no_of_mm
+    ##   <chr>    <dbl>
+    ## 1 2_4        568
+    ## 2 3_4        235
+    ## 3 3_2        198
+    ## 4 2_2        187
+    ## 5 6_4         45
+    ## 6 4_2         40
+    ## 7 4_4         20
+    ## 8 1_4          5
+
+Most common meters by duration.
+
+``` r
+dur_meter %>% 
+    group_by(meter) %>% 
+    summarize(duration = sum(duration)) %>% 
+    arrange(desc(duration))
+```
+
+    ## # A tibble: 8 x 2
+    ##   meter duration
+    ##   <chr>    <dbl>
+    ## 1 2_4     635.  
+    ## 2 3_2     624.  
+    ## 3 3_4     467.  
+    ## 4 2_2     228.  
+    ## 5 4_2     203.  
+    ## 6 6_4     112.  
+    ## 7 4_4      41.9 
+    ## 8 1_4       3.17
+
+#### Grouped by duple vs. triple
+
+``` r
+dur_meter_groups <- dur_meter %>% 
+    group_by(meter) %>% 
+    summarize(duration = sum(duration)) %>% 
+    separate(meter, sep = "_", into = c("meter_1", "meter_2")) %>% 
+    mutate(meter_1 = as.factor(meter_1))
+
+dur_meter_groups$meter_1 <- dur_meter_groups$meter_1 %>% 
+    fct_relabel(~ c("other", "duple", "triple", "duple", "duple"))
+
+dur_meter_groups <- dur_meter_groups %>% 
+    select(-meter_2) %>% 
+    rename(group = meter_1) %>% 
+    group_by(group) %>% 
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_dur = duration / sum(duration),
+           perc_dur = round(prop_dur*100))
+
+dur_meter_groups
+```
+
+    ## # A tibble: 3 x 4
+    ##   group  duration prop_dur perc_dur
+    ##   <fct>     <dbl>    <dbl>    <dbl>
+    ## 1 other      3.17  0.00137        0
+    ## 2 duple   1220.    0.527         53
+    ## 3 triple  1091.    0.471         47
+
+Interesting: pretty evenly split.
+
+##### 6/4
+
+However, need to account for 6/4, which is compound duple.
+
+Check which mm. are in 6/4.
+
+``` r
+gen_tib %>% 
+  filter(meter_1 == 6, meter_2 == 4) 
+```
+
+    ## # A tibble: 46 x 83
+    ##       id piece_no measure texture texture_value voices groupings soprano  alto
+    ##    <int> <fct>      <dbl> <chr>           <dbl>  <dbl> <chr>       <dbl> <dbl>
+    ##  1   196 4              3 m                 1        1 tb              0     0
+    ##  2   206 4             13 p                 2        2 none            0     0
+    ##  3   207 4             14 p                 2        2 none            0     0
+    ##  4   209 4             16 h                 1.5      2 tb              0     0
+    ##  5   221 4             28 p                 2        1 sa_tb           1     1
+    ##  6   222 4             29 p                 2        2 sa_tb           1     1
+    ##  7   223 4             30 p                 2        2 sa_tb           1     1
+    ##  8   224 4             31 p                 2        2 sa_tb           1     1
+    ##  9   225 4             32 p                 2        1 sa_tb           0     0
+    ## 10   226 4             33 na                0        0 na              0     0
+    ## # ... with 36 more rows, and 74 more variables: tenor <dbl>, bass <dbl>,
+    ## #   parts_active <dbl>, ratio_voices_parts <dbl>, rests_s1 <dbl>,
+    ## #   rests_s2 <dbl>, rests_a1 <dbl>, rests_a2 <dbl>, rests_t1 <dbl>,
+    ## #   rests_t2 <dbl>, rests_b1 <dbl>, rests_b2 <dbl>, rests_all <dbl>,
+    ## #   quarters_s1 <dbl>, quarters_s2 <dbl>, quarters_a1 <dbl>, quarters_a2 <dbl>,
+    ## #   quarters_t1 <dbl>, quarters_t2 <dbl>, quarters_b1 <dbl>, quarters_b2 <dbl>,
+    ## #   quarters_sum <dbl>, notes_s1 <dbl>, notes_s2 <dbl>, notes_a1 <dbl>,
+    ## #   notes_a2 <dbl>, notes_t1 <dbl>, notes_t2 <dbl>, notes_b1 <dbl>,
+    ## #   notes_b2 <dbl>, notes_sum <dbl>, notes_sum_pairings <dbl>, tones_s1 <dbl>,
+    ## #   tones_s2 <dbl>, tones_a1 <dbl>, tones_a2 <dbl>, tones_t1 <dbl>,
+    ## #   tones_t2 <dbl>, tones_b1 <dbl>, tones_b2 <dbl>, tones_sum <dbl>,
+    ## #   tones <chr>, tones_count <dbl>, spoken <dbl>, acapella <dbl>,
+    ## #   meter_1 <dbl>, meter_2 <dbl>, quarters_per_bar <dbl>, tempo <dbl>,
+    ## #   duration <dbl>, dur_choir <dbl>, dur_spoken <dbl>, dur_acapella <dbl>,
+    ## #   dur_s1 <dbl>, dur_s2 <dbl>, dur_a1 <dbl>, dur_a2 <dbl>, dur_t1 <dbl>,
+    ## #   dur_t2 <dbl>, dur_b1 <dbl>, dur_b2 <dbl>, `meter 1` <dbl>, `meter 2` <dbl>,
+    ## #   `quarters per bar` <dbl>, dm_s1 <dbl>, dm_s2 <dbl>, dm_a1 <dbl>,
+    ## #   dm_a2 <dbl>, dm_t1 <dbl>, dm_t2 <dbl>, dm_b1 <dbl>, dm_b2 <dbl>,
+    ## #   dm_sum <dbl>, dmc <dbl>
+
+Compute percent of duration that is 6/4.
+
+``` r
+dur_6_4_perc <- round((dur_meter %>% 
+    filter(meter == "6_4") %>% 
+    select(duration) %>% 
+    sum() / 
+  dur_meter_groups %>% 
+    select(duration) %>% 
+    sum()) * 100, digits = 1)
+```
+
+percent of duration of duple that is 6/4.
+
+``` r
+dur_6_4_duple_perc <- round((dur_meter %>% 
+    filter(meter == "6_4") %>% 
+    select(duration) %>% 
+    sum() / 
+  dur_meter_groups %>% 
+    filter(group == "duple") %>% 
+    select(duration) %>% 
+    sum()) * 100, digits = 1)
+```
+
+``` r
+# duration of duple meters
+dur_meter_groups %>% 
+  filter(group == "duple") %>% 
+  select(duration) -
+  # subtract duration of 6/4 measures
+  dur_meter %>% 
+    filter(meter == "6_4") %>% 
+    select(duration) %>% 
+    sum() - 
+  # subtract duration of triple meters
+  dur_meter_groups %>% 
+  filter(group == "triple") %>% 
+  select(duration)
+```
+
+    ##   duration
+    ## 1  16.6928
+
+Almost even.

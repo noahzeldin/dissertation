@@ -416,15 +416,22 @@ knitr::kable(dur_subcategory)
 
 ## Meter and Tempo
 
-### Meter and Tempo rates of change
+### Rates of Change
 
 Construct table with following stats for each piece:
+
 * duration
+
 * # of meter changes
+
 * rate of meter changes in seconds = duration / # of meter changes
+
 * rate of meter changes in bars
+
 * # of tempo changes
+
 * rate of tempo changes in seconds = duration / # of meter changes
+
 * rate of tempo changes in bars
 
 ```{r}
@@ -444,34 +451,42 @@ dur_meter_tempo_piece <- dur_tib %>%
 dur_meter_tempo_piece
 ```
 
-sorted by **meter_ch_count**  
+Output of `dur_meter_tempo_piece`:
 
-```{r}
-dur_meter_tempo_piece %>% 
-    arrange(desc(meter_ch_count)) %>% 
-    select(-tempo_ch_count, -tempo_ch_rate_sec)
+```{r, echo=FALSE}
+knitr::kable(dur_meter_tempo_piece)
 ```
 
-* same as above but only top 5 for table in write-up - maybe move down, I dunno
+<!-- sorted by **meter_ch_count**   -->
+
+<!-- ```{r} -->
+<!-- dur_meter_tempo_piece %>%  -->
+<!--     arrange(desc(meter_ch_count)) %>%  -->
+<!--     select(-tempo_ch_count, -tempo_ch_rate_sec) -->
+<!-- ``` -->
+
+5 pieces with greatest number of meter changes.
 
 ```{r}
 meter_ch_count_piece_top_5 <- dur_meter_tempo_piece %>% 
     arrange(desc(meter_ch_count)) %>% 
     select(-tempo_ch_count, -tempo_ch_rate_sec) %>% 
     slice(1:5)
+
+knitr::kable(meter_ch_count_piece_top_5)
 ```
 
 
-sorted by **meter_ch_rate_sec** ASCENDING  
+<!-- sorted by **meter_ch_rate_sec** ASCENDING   -->
 
-```{r}
-dur_meter_tempo_piece %>% 
-    filter(meter_ch_count != 1) %>% 
-    select(-tempo_ch_count, -tempo_ch_rate_sec) %>% 
-    arrange(meter_ch_rate_sec)
-```
+<!-- ```{r} -->
+<!-- dur_meter_tempo_piece %>%  -->
+<!--     filter(meter_ch_count != 1) %>%  -->
+<!--     select(-tempo_ch_count, -tempo_ch_rate_sec) %>%  -->
+<!--     arrange(meter_ch_rate_sec) -->
+<!-- ``` -->
 
-* same as above but only top 5 for table in write-up - maybe move down, I dunno
+5 pieces with quickest rates of meter changes.
 
 ```{r}
 meter_ch_rate_piece_top_5 <- dur_meter_tempo_piece %>% 
@@ -479,17 +494,19 @@ meter_ch_rate_piece_top_5 <- dur_meter_tempo_piece %>%
     select(-tempo_ch_count, -tempo_ch_rate_sec) %>% 
     arrange(meter_ch_rate_sec) %>% 
     slice(1:5)
+
+knitr::kable(meter_ch_rate_piece_top_5)
 ```
 
-sorted by **tempo_ch_count**  
+<!-- sorted by **tempo_ch_count**   -->
 
-```{r}
-dur_meter_tempo_piece %>%  
-    select(-meter_ch_count, -meter_ch_rate_sec) %>% 
-    arrange(desc(tempo_ch_count))
-```
+<!-- ```{r} -->
+<!-- dur_meter_tempo_piece %>%   -->
+<!--     select(-meter_ch_count, -meter_ch_rate_sec) %>%  -->
+<!--     arrange(desc(tempo_ch_count)) -->
+<!-- ``` -->
 
-sorted by **tempo_ch_rate_sec** ASCENDING  
+3 pieces with greatest number of tempo changes.  
 
 ```{r}
 tempo_ch_count_and_rate_piece <- dur_meter_tempo_piece %>% 
@@ -497,7 +514,7 @@ tempo_ch_count_and_rate_piece <- dur_meter_tempo_piece %>%
     select(-meter_ch_count, -meter_ch_rate_sec) %>% 
     arrange(tempo_ch_rate_sec)
 
-tempo_ch_count_and_rate_piece
+knitr::kable(tempo_ch_count_and_rate_piece)
 ```
 
 ### Most common meters
