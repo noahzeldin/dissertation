@@ -317,3 +317,91 @@ pitch_tib <- gen_tib_sung %>%
     mutate(tones_sum = sum(c_across(c:b))) 
 ```
 
+
+# Stats
+
+## Durations - General
+
+### total duration in minutes
+
+```{r}
+dur_total_min <- sum(dur_tib$duration) / 60
+print(dur_total_min)
+```
+
+### duration by piece
+
+```{r}
+dur_piece <- dur_tib %>% 
+    group_by(piece_no) %>%
+    summarize(duration_min = (sum(duration) / 60)) %>% 
+    mutate(prop_of_dur = (duration_min/sum(duration_min)),
+           duration_min = round(duration_min, digits = 2),
+           prop_of_dur = round(prop_of_dur, digits = 3))
+
+dur_piece
+```
+
+resort to find longest pieces
+
+```{r}
+dur_piece %>% 
+    arrange(desc(duration_min))
+```
+##### NEW with Lubridate - FIX!
+
+```{r}
+dur_piece_lubridate <- dur_piece %>% 
+    separate(duration_min, sep = "\\.", into = c("min", "sec")) %>% 
+    mutate(min = as.numeric(min),
+           sec = as.numeric(sec) # PROBLEM - removes zeros
+           ) %>% 
+    mutate(sec = round(sec * .6)) %>% 
+    mutate(duration = (minutes(min) + seconds(sec)), .keep = "unused") %>% 
+    relocate(duration, .after = piece_no)
+
+dur_piece_lubridate
+```
+
+
+### duration by category
+
+```{r}
+dur_tib %>% 
+    group_by(category) %>%
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_of_dur = (duration/sum(duration)))
+```
+
+No contest: two biggest categories are 1. choir with orchestra and 3. tenor solo
+close to 95 %
+
+
+
+
+### duration by subcategory
+
+```{r}
+dur_subcategory <- dur_tib %>% 
+    group_by(subcategory) %>%
+    summarize(duration = sum(duration)) %>% 
+    mutate(duration_min = (duration/60)) %>% 
+    mutate(prop_of_dur = (duration/sum(duration)))
+
+print(dur_subcategory)
+```
+
+arranged descending
+
+```{r}
+dur_subcategory %>% 
+    arrange(desc(prop_of_dur))
+```
+
+Exactly what I expected:   
+* largest proportion = 1a. mixed choir with orchestra
+* followed by 3. tenor solo with accompaniment
+* then 1b. = male choir with orchestra
+** actually, only one piece = Streiklied
+
+
