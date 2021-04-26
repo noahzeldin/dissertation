@@ -414,3 +414,203 @@ knitr::kable(dur_subcategory)
 <!-- ** actually, only one piece = Streiklied -->
 
 
+## Meter and Tempo
+
+### Meter and Tempo rates of change
+
+Construct table with following stats for each piece:
+* duration
+* # of meter changes
+* rate of meter changes in seconds = duration / # of meter changes
+* rate of meter changes in bars
+* # of tempo changes
+* rate of tempo changes in seconds = duration / # of meter changes
+* rate of tempo changes in bars
+
+```{r}
+dur_meter_tempo_piece <- dur_tib %>% 
+    group_by(piece_no) %>% 
+    summarize(meter_ch_count = sum(meter_ch_count),
+              tempo_ch_count = sum(tempo_ch_count),
+              duration = sum(duration)) %>% 
+    mutate(meter_ch_rate_sec = round(duration / meter_ch_count, 
+                                     digits = 2),
+           tempo_ch_rate_sec = round(duration / tempo_ch_count, 
+                                     digits = 2),
+           duration = round(duration, digits = 2)) %>% 
+    relocate(meter_ch_rate_sec, .after = meter_ch_count) %>% 
+    relocate(tempo_ch_rate_sec, .after = tempo_ch_count)
+
+dur_meter_tempo_piece
+```
+
+sorted by **meter_ch_count**  
+
+```{r}
+dur_meter_tempo_piece %>% 
+    arrange(desc(meter_ch_count)) %>% 
+    select(-tempo_ch_count, -tempo_ch_rate_sec)
+```
+
+* same as above but only top 5 for table in write-up - maybe move down, I dunno
+
+```{r}
+meter_ch_count_piece_top_5 <- dur_meter_tempo_piece %>% 
+    arrange(desc(meter_ch_count)) %>% 
+    select(-tempo_ch_count, -tempo_ch_rate_sec) %>% 
+    slice(1:5)
+```
+
+
+sorted by **meter_ch_rate_sec** ASCENDING  
+
+```{r}
+dur_meter_tempo_piece %>% 
+    filter(meter_ch_count != 1) %>% 
+    select(-tempo_ch_count, -tempo_ch_rate_sec) %>% 
+    arrange(meter_ch_rate_sec)
+```
+
+* same as above but only top 5 for table in write-up - maybe move down, I dunno
+
+```{r}
+meter_ch_rate_piece_top_5 <- dur_meter_tempo_piece %>% 
+    filter(meter_ch_count != 1) %>% 
+    select(-tempo_ch_count, -tempo_ch_rate_sec) %>% 
+    arrange(meter_ch_rate_sec) %>% 
+    slice(1:5)
+```
+
+sorted by **tempo_ch_count**  
+
+```{r}
+dur_meter_tempo_piece %>%  
+    select(-meter_ch_count, -meter_ch_rate_sec) %>% 
+    arrange(desc(tempo_ch_count))
+```
+
+sorted by **tempo_ch_rate_sec** ASCENDING  
+
+```{r}
+tempo_ch_count_and_rate_piece <- dur_meter_tempo_piece %>% 
+    filter(tempo_ch_count != 1) %>% 
+    select(-meter_ch_count, -meter_ch_rate_sec) %>% 
+    arrange(tempo_ch_rate_sec)
+
+tempo_ch_count_and_rate_piece
+```
+
+### Most common meters
+
+Create table with meter, non_of_mm and duration.
+
+```{r}
+dur_meter <- dur_tib %>% 
+    unite(meter_1, meter_2, col = "meter", sep = "_") %>% 
+    select(piece_no, no_of_mm, meter, duration) %>% 
+    relocate(meter, .after = piece_no) %>% 
+    filter(meter != "0_0") # remove the pick-up from piece_no 10
+```
+
+Most common meters by no_of_mm.
+
+```{r}
+dur_meter %>% 
+    group_by(meter) %>% 
+    count(no_of_mm) %>% 
+    mutate(no_of_mm = no_of_mm * n) %>% 
+    select(-n) %>% 
+    summarize(no_of_mm = sum(no_of_mm)) %>% 
+    arrange(desc(no_of_mm))
+```
+
+Most common meters by duration.
+
+```{r}
+dur_meter %>% 
+    group_by(meter) %>% 
+    summarize(duration = sum(duration)) %>% 
+    arrange(desc(duration))
+```
+
+#### Grouped by duple vs. triple
+
+```{r}
+dur_meter_groups <- dur_meter %>% 
+    group_by(meter) %>% 
+    summarize(duration = sum(duration)) %>% 
+    separate(meter, sep = "_", into = c("meter_1", "meter_2")) %>% 
+    mutate(meter_1 = as.factor(meter_1))
+
+dur_meter_groups$meter_1 <- dur_meter_groups$meter_1 %>% 
+    fct_relabel(~ c("other", "duple", "triple", "duple", "duple"))
+
+dur_meter_groups <- dur_meter_groups %>% 
+    select(-meter_2) %>% 
+    rename(group = meter_1) %>% 
+    group_by(group) %>% 
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_dur = duration / sum(duration),
+           perc_dur = round(prop_dur*100))
+
+dur_meter_groups
+```
+
+Interesting: pretty evenly split.
+
+##### 6/4
+
+However, need to account for 6/4, which is compound duple.
+
+Check which mm. are in 6/4.
+
+```{r}
+gen_tib %>% 
+  filter(meter_1 == 6, meter_2 == 4) 
+```
+
+Compute percent of duration that is 6/4.
+
+```{r}
+dur_6_4_perc <- round((dur_meter %>% 
+    filter(meter == "6_4") %>% 
+    select(duration) %>% 
+    sum() / 
+  dur_meter_groups %>% 
+    select(duration) %>% 
+    sum()) * 100, digits = 1)
+```
+
+percent of duration of duple that is 6/4.
+
+```{r}
+dur_6_4_duple_perc <- round((dur_meter %>% 
+    filter(meter == "6_4") %>% 
+    select(duration) %>% 
+    sum() / 
+  dur_meter_groups %>% 
+    filter(group == "duple") %>% 
+    select(duration) %>% 
+    sum()) * 100, digits = 1)
+```
+
+```{r}
+# duration of duple meters
+dur_meter_groups %>% 
+  filter(group == "duple") %>% 
+  select(duration) -
+  # subtract duration of 6/4 measures
+  dur_meter %>% 
+    filter(meter == "6_4") %>% 
+    select(duration) %>% 
+    sum() - 
+  # subtract duration of triple meters
+  dur_meter_groups %>% 
+  filter(group == "triple") %>% 
+  select(duration)
+```
+
+Almost even.
+
+
+
