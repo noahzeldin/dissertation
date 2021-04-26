@@ -635,4 +635,314 @@ dur_6_4_duple_perc <- round((dur_meter %>%
 <!-- Almost even. -->
 
 
+## Durations - Choir
+
+### Choir Total Durations
+
+Create tibble with only measures with choir
+
+```{r}
+choir_tib <- gen_tib %>% 
+    filter(dur_choir != 0)
+```
+
+Total duration of choir
+
+```{r}
+dur_choir_total_sec <- sum(choir_tib$dur_choir)
+dur_choir_total_min <- sum(choir_tib$dur_choir) / 60
+print(dur_choir_total_min)
+```
+
+Duration of choir as proportion of total duration
+
+```{r}
+dur_choir_prop <- round((dur_choir_total_min / dur_total_min), digits = 4)*100
+print(dur_choir_prop)
+```
+
+### Choir Sung Durations
+
+```{r}
+gen_tib %>% 
+    filter(dur_choir != 0 & spoken == 0) %>% 
+    group_by(piece_no) %>% 
+    select(piece_no, dur_choir) %>% 
+    summarize(dur_choir = sum(dur_choir)) %>% 
+    mutate(dur_choir_prop = dur_choir / sum(dur_choir)) %>% 
+    mutate(dur_choir = round(dur_choir, digits = 2), 
+           dur_choir_prop = round(dur_choir_prop, digits = 3)) %>% 
+    arrange(desc(dur_choir_prop))
+```
+
+Pretty interesting:
+* 9. Aendere die Welt has by far most choir singing --> include in analysis
+* other pieces with complex polyphony in top 5:
+** 4. Lob der illegalen Arbeit and 2b. Lob der USSR
+
+### Choir Acapella Durations
+
+```{r}
+dur_acapella <- gen_tib %>% 
+    filter(acapella == 1) %>% 
+    group_by(piece_no) %>% 
+    select(piece_no, dur_choir) %>% 
+    summarize(dur_choir = sum(dur_choir)) %>% 
+    mutate(dur_choir_prop = dur_choir / sum(dur_choir),
+           dur_choir = round(dur_choir, digits = 2),
+           dur_choir_prop = round(dur_choir_prop, digits = 3)) 
+
+print(dur_acapella)
+```
+
+arrange descending to see top pieces
+
+```{r}
+dur_acapella %>% 
+    arrange(desc(dur_choir_prop))
+```
+
+proportion of dur_chor that is acapella
+
+```{r}
+sum(dur_acapella$dur_choir) / dur_choir_total_sec
+```
+
+
+
+Good results:
+* top 2 are 2b. Lob der USSR and 9. Aendere die Welt
+
+
+### Choir Spoken Durations
+
+```{r}
+gen_tib %>% 
+    filter(spoken == 1) %>% 
+    group_by(piece_no) %>% 
+    select(piece_no, dur_choir) %>% 
+    summarize(dur_choir = sum(dur_choir)) %>% 
+    mutate(dur_choir_prop = dur_choir / sum(dur_choir),
+           dur_choir = round(dur_choir, digits = 2),
+           dur_choir_prop = round(dur_choir_prop, digits = 3)) %>% 
+    arrange(desc(dur_choir_prop))
+```
+
+Interesting that 14. Schlusschor is top.
+
+Other remarks:
+* close second is 3b. Sprechchor = Wer fuer den Kommunismus kaempft
+* interesting that 3b. is only category 4 piece in top 5
+
+### Choir Voice Durations 
+
+#### Check for mm. where duration of 1st and 2nd parts don't align
+
+1. Sopranos
+
+```{r}
+gen_tib_sung %>% 
+    filter(quarters_s1 != 0 & quarters_s2 != 0 & quarters_s1 != quarters_s2)
+```
+
+2. Altos
+
+```{r}
+gen_tib_sung %>% 
+    filter(quarters_a1 != 0 & quarters_a2 != 0 & quarters_a1 != quarters_a2)
+```
+
+3. Tenors
+
+```{r}
+gen_tib_sung %>% 
+    filter(quarters_t1 != 0 & quarters_t2 != 0 & quarters_t1 != quarters_t2) 
+```
+
+Only antiphonic passage at beginning of Lob der Partei. Doesn't matter, because t1 and t2 overlap.
+
+4. Basses
+
+```{r}
+gen_tib_sung %>% 
+    filter(quarters_b1 != 0 & quarters_b2 != 0 & quarters_b1 != quarters_b2)
+```
+
+Final measure of Streiklied. Doesn't matter, because b1 and b2 overlap.
+
+#### Check for measures where 2nd sings but 1st doesn't
+
+1. Sopranos
+
+```{r}
+gen_tib_sung %>% 
+    filter(quarters_s1 == 0 & quarters_s2 != 0)
+```
+
+2. Altos
+
+```{r}
+gen_tib_sung %>% 
+    filter(quarters_a1 == 0 & quarters_a2 != 0)
+```
+
+3. Tenors
+
+```{r}
+gen_tib_sung %>% 
+    filter(quarters_t1 == 0 & quarters_t2 != 0)
+```
+
+Only beginning of Lob der Partei, as expected.
+
+Save as extra duration to add to male proportion.
+
+```{r}
+dur_t2_extra <- gen_tib_sung %>% 
+  filter(quarters_t1 == 0 & quarters_t2 != 0) %>%
+  select(dur_t2) %>% 
+  sum()
+```
+
+
+4. Basses
+
+```{r}
+gen_tib_sung %>% 
+    filter(quarters_b1 == 0 & quarters_b2 != 0)
+```
+
+##### Same but with duration
+
+1. Sopranos
+
+```{r}
+gen_tib_sung %>% 
+    filter(dur_s1 != 0 & dur_s2 != 0 & dur_s1 != dur_s2)
+```
+
+2. Altos
+
+```{r}
+gen_tib_sung %>% 
+    filter(dur_a1 != 0 & dur_a2 != 0 & dur_a1 != dur_a2)
+```
+
+3. Tenors
+
+```{r}
+gen_tib_sung %>% 
+    filter(dur_t1 != 0 & dur_t2 != 0 & dur_t1 != dur_t2) %>% 
+    select(piece_no, measure, dur_t1, dur_t2) 
+```
+
+Again, doesn't matter, b/c overlap.
+
+4. Basses
+
+```{r}
+gen_tib_sung %>% 
+    filter(dur_b1 != 0 & dur_b2 != 0 & dur_b1 != dur_b2) %>% 
+    select(piece_no, measure, dur_b1, dur_b2)
+```
+
+Again, doesn't matter, b/c overlap.
+
+#### Computations for male vs. female
+
+Four voices - FIX - need to account for doublings, can't just add 1 and 2
+
+**CURRENTLY SKIPPING THIS CHUNK - PROB DELETE**
+```{r, eval=FALSE}
+dur_soprano <- sum(gen_tib_sung$dur_s1 + gen_tib_sung$dur_s2)
+dur_alto <- sum(gen_tib_sung$dur_a1 + gen_tib_sung$dur_a2)
+dur_tenor <- sum(gen_tib_sung$dur_t1 + gen_tib_sung$dur_t2)
+dur_bass <- sum(gen_tib_sung$dur_b1 + gen_tib_sung$dur_b2) # FIX/CHECK
+
+dur_soprano <- sum(gen_tib_sung$soprano * gen_tib_sung)
+
+
+dur_voice <- 
+    tibble(voice = c("soprano", "alto", "tenor", "bass"),
+    dur_min = 
+    c(dur_soprano /60, 
+    dur_alto / 60, 
+    dur_tenor / 60, 
+    dur_bass / 60))
+
+dur_voice %>% 
+    mutate(dur_prop = dur_min / sum(dur_min))
+```
+
+Generate sums of sung material.
+
+```{r}
+dur_s1_sung <- gen_tib_sung %>% 
+    select(dur_s1) %>% 
+    sum()
+
+dur_a1_sung <- gen_tib_sung %>% 
+    select(dur_a1) %>% 
+    sum()
+
+dur_t1_sung <- gen_tib_sung %>% 
+    select(dur_t1) %>% 
+    sum()
+
+dur_b1_sung <- gen_tib_sung %>% 
+    select(dur_b1) %>% 
+    sum()
+
+dur_sung_total <- dur_s1_sung + dur_a1_sung + dur_t1_sung + dur_b1_sung + dur_t2_extra
+
+dur_female_sung <- dur_s1_sung + dur_a1_sung
+dur_male_sung <- dur_t1_sung + dur_b1_sung + dur_t2_extra
+```
+
+Calculate proportions of male and female durations.
+
+```{r}
+dur_female_sung_perc <- round((dur_female_sung/dur_sung_total)*100)
+dur_male_sung_perc <- round((dur_male_sung/dur_sung_total)*100)
+```
+
+
+Compute proportion of discrepancy resulting from 5 and 7a
+
+1. Get extra durations for tenors and basses.
+
+```{r}
+dur_t1_sung_5_and_7a <- gen_tib_sung %>% 
+    filter(piece_no == "5" | piece_no == "7a") %>% 
+    select(dur_t1) %>% 
+    sum()
+
+dur_b1_sung_5_and_7a <-gen_tib_sung %>% 
+    filter(piece_no == "5" | piece_no == "7a") %>% 
+    select(dur_b1) %>% 
+    sum()
+```
+
+2. Amount by which dur_male is longer than dur_female.
+
+```{r}
+dur_male_sung - dur_female_sung
+```
+
+3. Extra duration from 5 and 7a.
+
+```{r}
+dur_t1_sung_5_and_7a + dur_b1_sung_5_and_7a
+```
+
+4. Compute proportion / percentage.
+
+```{r}
+dur_male_extra_from_5_and_7a_perc <- 
+  round(((dur_t1_sung_5_and_7a + dur_b1_sung_5_and_7a) /
+         (dur_male_sung - dur_female_sung)) * 100)
+```
+
+
+
 
