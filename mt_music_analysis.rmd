@@ -113,3 +113,203 @@ voice_analysis_list <- lapply(voice_analysis_sheets,
 gen_tib <- as_tibble(bind_rows(voice_analysis_list))
 ```
 
+
+
+# Cleaning and Manipulation
+
+## General Refinement - Durations
+
+Convert **piece_no**, **category** and **subcategory** to factors.
+
+```{r}
+dur_tib <- dur_tib %>% 
+    mutate(piece_no = as_factor(piece_no)) %>% 
+    mutate(category = as_factor(category)) %>% 
+    mutate(subcategory = as_factor(subcategory))
+```
+
+Check to see if each piece is now a factor.
+* NB: n col. refers to # of segments
+
+```{r}
+dur_tib$piece_no %>% 
+    fct_count()
+```
+same for category
+
+```{r}
+dur_tib$category %>% 
+    fct_count()
+```
+
+
+and subcategory - AND relevel
+
+```{r}
+dur_tib$subcategory <- dur_tib$subcategory %>% 
+    fct_relevel("1b", after = 1) %>% 
+    fct_relevel("2b", after = 2) %>% 
+    fct_relevel("3b", after = 4) %>% 
+    fct_relevel("3c", after = 5)
+
+dur_tib$subcategory %>% 
+    fct_count()
+```
+
+## General Refinement - Voice Analysis
+
+
+### Create gen_tib
+
+Convert **piece_no** to factor.
+
+```{r}
+gen_tib <- gen_tib %>% 
+    mutate(piece_no = as_factor(piece_no))
+```
+
+Check to see if each piece is now a factor.
+* **Add something about n = # of mm. - and check.**
+
+```{r}
+gen_tib$piece_no %>% 
+    fct_count()
+```
+
+For some reason, 6c is after 7a, so relevel and check.
+
+```{r}
+gen_tib$piece_no <- gen_tib$piece_no %>% 
+    fct_relevel("6c", after = 7)
+
+gen_tib$piece_no %>% 
+    fct_count()
+```
+
+
+group by piece
+
+```{r}
+by_piece <- gen_tib %>% group_by(piece_no)
+```
+
+add **rowid** column and make first column (called "id")
+
+```{r}
+gen_tib <- gen_tib %>% 
+    rowid_to_column("id")
+```
+
+
+### Additional Calculations for Density
+
+translate texture to numeric value in new column
+* monophony = 1
+* homophony = 1.5
+* antiphony = 1.5
+* polyphony = 2
+
+```{r}
+gen_tib <- gen_tib %>% 
+    mutate(texture_value = case_when(texture == "na" ~ "0", 
+                                   texture == "m" ~ "1", 
+                                   texture == "h" ~ "1.5", 
+                                   texture == "a" ~ "1.5", # added 12.26.20
+                                   texture == "p" ~ "2",)) %>% 
+    mutate(texture_value = as.numeric(texture_value)) %>% 
+    relocate(texture_value, .after = texture)
+```
+
+add density column for each voice
+
+```{r}
+gen_tib <- gen_tib %>% 
+    mutate(dm_s1 = (notes_s1+tones_s1)/quarters_per_bar,
+                      dm_s2 = (notes_s2+tones_s2)/quarters_per_bar,
+                      dm_a1 = (notes_a1+tones_a1)/quarters_per_bar,
+                      dm_a2 = (notes_a2+tones_a2)/quarters_per_bar,
+                      dm_t1 = (notes_t1+tones_t1)/quarters_per_bar,
+                      dm_t2 = (notes_t2+tones_t2)/quarters_per_bar,
+                      dm_b1 = (notes_b1+tones_b1)/quarters_per_bar,
+                      dm_b2 = (notes_b2+tones_b2)/quarters_per_bar)
+```
+
+create a **dm_sum** column from 8 individual **dm** columns
+
+```{r}
+gen_tib <- gen_tib %>% 
+    rowwise() %>% 
+    mutate(dm_sum = sum(c_across(dm_s1:dm_b2)))
+```
+
+With new **dm_sum** column, create **dmc** column.
+
+```{r}
+gen_tib <- gen_tib %>% 
+    rowwise() %>% 
+    mutate(dmc = (dm_sum/4)*texture_value)
+```
+
+Need to reconvert gen_tib to tibble after performing rowwise()
+
+```{r}
+gen_tib <- gen_tib %>% as_tibble()
+```
+
+
+### Create gen_tib_sung
+
+1. Filter out parts without choral singing. (This includes passages spoken by
+the choir.)
+* **CHECK IF NECESSARY TO ADD** `as_tibble()` **TO END.**
+
+```{r}
+gen_tib_sung <- gen_tib %>% 
+    filter(texture != "na" & 
+               parts_active > 0 & 
+               spoken == 0) %>% 
+    as_tibble() # may not be necessary
+```
+
+2. Check to see if any NAs remain. The following should return an **empty** 
+table.
+
+```{r}
+gen_tib_sung %>% 
+    filter(is.na(dm_s1),
+           is.na(dm_s2), 
+           is.na(dm_a1),
+           is.na(dm_a2),
+           is.na(dm_t1),
+           is.na(dm_t2),
+           is.na(dm_b1),
+           is.na(dm_b2)) %>% 
+    select(id, piece_no, measure, starts_with("notes_"), starts_with("tones_"),
+           quarters_per_bar, starts_with("dm_")) 
+```
+
+
+### Create pitch_tib
+
+```{r}
+pitch_tib <- gen_tib_sung %>% 
+    select(id, piece_no, measure, tones, dur_choir, dmc) %>%
+    relocate(tones, .after = dmc) %>% 
+    mutate(
+        c = str_count(tones, "c$|c\\,"),
+        c_sharp_d_flat = str_count(tones, "c-sharp|d-flat"),
+        d = str_count(tones, "d$|d\\,"),
+        d_sharp_e_flat = str_count(tones, "d-sharp|e-flat"),
+        e = str_count(tones, "e$|e\\,"),
+        f = str_count(tones, "f$|f\\,"),
+        f_sharp_g_flat = str_count(tones, "f-sharp|g-flat"),
+        g = str_count(tones, "g$|g\\,"),
+        g_sharp_a_flat = str_count(tones, "g-sharp|a-flat"),
+        a = str_count(tones, "a$|a\\,"),
+        a_sharp_b_flat = str_count(tones, "a-sharp|b-flat"),
+        b = str_count(tones, "b$|b\\,"),    
+                ) %>% 
+    rowwise %>% 
+    mutate(tones_sum = sum(c_across(c:b))) 
+```
+
