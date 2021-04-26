@@ -163,7 +163,9 @@ dur_tib$subcategory %>%
 ### Voice Analysis
 
 
-## Create gen_tib
+# Create basic tibbles for further manipulation.
+
+## General Tibble: gen_tib
 
 Convert **piece_no** to factor.
 
@@ -260,7 +262,7 @@ gen_tib <- gen_tib %>% as_tibble()
 ```
 
 
-### Create gen_tib_sung
+## Tibble for Choral Portions: gen_tib_sung
 
 1. Filter out parts without choral singing. (This includes passages spoken by
 the choir.)
@@ -292,7 +294,7 @@ gen_tib_sung %>%
 ```
 
 
-### Create pitch_tib
+## Tibble for Pitch: pitch_tib
 
 ```{r}
 pitch_tib <- gen_tib_sung %>% 
