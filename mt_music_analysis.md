@@ -371,3 +371,170 @@ pitch_tib <- gen_tib_sung %>%
     rowwise %>% 
     mutate(tones_sum = sum(c_across(c:b))) 
 ```
+
+# Stats
+
+## Durations - General
+
+### Total Duration in Minutes
+
+``` r
+dur_total_min <- sum(dur_tib$duration) / 60
+print(dur_total_min)
+```
+
+    ## [1] 38.57511
+
+Total duration in minutes: 38.58.
+
+### duration by piece
+
+``` r
+dur_piece <- dur_tib %>% 
+    group_by(piece_no) %>%
+    summarize(duration_min = (sum(duration) / 60)) %>% 
+    mutate(prop_of_dur = (duration_min/sum(duration_min)),
+           duration_min = round(duration_min, digits = 2),
+           prop_of_dur = round(prop_of_dur, digits = 3))
+
+dur_piece
+```
+
+    ## # A tibble: 21 x 3
+    ##    piece_no duration_min prop_of_dur
+    ##    <fct>           <dbl>       <dbl>
+    ##  1 1                4.91       0.127
+    ##  2 2b               2.07       0.054
+    ##  3 3a               3.83       0.099
+    ##  4 3b               0.49       0.013
+    ##  5 4                4.12       0.107
+    ##  6 5                3.92       0.102
+    ##  7 6a               0.06       0.002
+    ##  8 6b               0.13       0.003
+    ##  9 6c               0.24       0.006
+    ## 10 7a               1.62       0.042
+    ## # ... with 11 more rows
+
+resort to find longest pieces
+
+``` r
+dur_piece %>% 
+    arrange(desc(duration_min))
+```
+
+    ## # A tibble: 21 x 3
+    ##    piece_no duration_min prop_of_dur
+    ##    <fct>           <dbl>       <dbl>
+    ##  1 1                4.91       0.127
+    ##  2 9                4.82       0.125
+    ##  3 4                4.12       0.107
+    ##  4 5                3.92       0.102
+    ##  5 3a               3.83       0.099
+    ##  6 8b               3.12       0.081
+    ##  7 14               2.37       0.061
+    ##  8 8a               2.32       0.06 
+    ##  9 2b               2.07       0.054
+    ## 10 10               1.96       0.051
+    ## # ... with 11 more rows
+
+##### NEW with Lubridate - FIX\!
+
+``` r
+dur_piece_lubridate <- dur_piece %>% 
+    separate(duration_min, sep = "\\.", into = c("min", "sec")) %>% 
+    mutate(min = as.numeric(min),
+           sec = as.numeric(sec) # PROBLEM - removes zeros
+           ) %>% 
+    mutate(sec = round(sec * .6)) %>% 
+    mutate(duration = (minutes(min) + seconds(sec)), .keep = "unused") %>% 
+    relocate(duration, .after = piece_no)
+
+dur_piece_lubridate
+```
+
+    ## # A tibble: 21 x 3
+    ##    piece_no duration prop_of_dur
+    ##    <fct>    <Period>       <dbl>
+    ##  1 1        4M 55S         0.127
+    ##  2 2b       2M 4S          0.054
+    ##  3 3a       3M 50S         0.099
+    ##  4 3b       29S            0.013
+    ##  5 4        4M 7S          0.107
+    ##  6 5        3M 55S         0.102
+    ##  7 6a       4S             0.002
+    ##  8 6b       8S             0.003
+    ##  9 6c       14S            0.006
+    ## 10 7a       1M 37S         0.042
+    ## # ... with 11 more rows
+
+### duration by category
+
+``` r
+dur_tib %>% 
+    group_by(category) %>%
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_of_dur = (duration/sum(duration)))
+```
+
+    ## # A tibble: 4 x 3
+    ##   category duration prop_of_dur
+    ##   <fct>       <dbl>       <dbl>
+    ## 1 1          1403.       0.606 
+    ## 2 2            28.2      0.0122
+    ## 3 3           791.       0.342 
+    ## 4 4            92.0      0.0398
+
+No contest: two biggest categories are 1. choir with orchestra and 3.
+tenor solo close to 95 %
+
+### duration by subcategory
+
+``` r
+dur_subcategory <- dur_tib %>% 
+    group_by(subcategory) %>%
+    summarize(duration = sum(duration)) %>% 
+    mutate(duration_min = (duration/60)) %>% 
+    mutate(prop_of_dur = (duration/sum(duration)))
+
+print(dur_subcategory)
+```
+
+    ## # A tibble: 10 x 4
+    ##    subcategory duration duration_min prop_of_dur
+    ##    <fct>          <dbl>        <dbl>       <dbl>
+    ##  1 1a            1305.       21.8        0.564  
+    ##  2 1b              97.5       1.62       0.0421 
+    ##  3 2b              28.2       0.470      0.0122 
+    ##  4 3a             230         3.83       0.0994 
+    ##  5 3b             235.        3.92       0.102  
+    ##  6 3c             326.        5.43       0.141  
+    ##  7 4a              37.2       0.620      0.0161 
+    ##  8 4b               3.6       0.0600     0.00156
+    ##  9 4c              14.5       0.242      0.00628
+    ## 10 4d              36.7       0.611      0.0158
+
+arranged descending
+
+``` r
+dur_subcategory %>% 
+    arrange(desc(prop_of_dur))
+```
+
+    ## # A tibble: 10 x 4
+    ##    subcategory duration duration_min prop_of_dur
+    ##    <fct>          <dbl>        <dbl>       <dbl>
+    ##  1 1a            1305.       21.8        0.564  
+    ##  2 3c             326.        5.43       0.141  
+    ##  3 3b             235.        3.92       0.102  
+    ##  4 3a             230         3.83       0.0994 
+    ##  5 1b              97.5       1.62       0.0421 
+    ##  6 4a              37.2       0.620      0.0161 
+    ##  7 4d              36.7       0.611      0.0158 
+    ##  8 2b              28.2       0.470      0.0122 
+    ##  9 4c              14.5       0.242      0.00628
+    ## 10 4b               3.6       0.0600     0.00156
+
+Exactly what I expected:  
+\* largest proportion = 1a. mixed choir with orchestra \* followed by 3.
+tenor solo with accompaniment \* then 1b. = male choir with orchestra
+\*\* actually, only one piece = Streiklied
