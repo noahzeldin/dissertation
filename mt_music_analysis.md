@@ -380,14 +380,11 @@ pitch_tib <- gen_tib_sung %>%
 
 ``` r
 dur_total_min <- sum(dur_tib$duration) / 60
-print(dur_total_min)
 ```
-
-    ## [1] 38.57511
 
 Total duration in minutes: 38.58.
 
-### duration by piece
+### Duration by Piece
 
 ``` r
 dur_piece <- dur_tib %>% 
@@ -396,26 +393,35 @@ dur_piece <- dur_tib %>%
     mutate(prop_of_dur = (duration_min/sum(duration_min)),
            duration_min = round(duration_min, digits = 2),
            prop_of_dur = round(prop_of_dur, digits = 3))
-
-dur_piece
 ```
 
-    ## # A tibble: 21 x 3
-    ##    piece_no duration_min prop_of_dur
-    ##    <fct>           <dbl>       <dbl>
-    ##  1 1                4.91       0.127
-    ##  2 2b               2.07       0.054
-    ##  3 3a               3.83       0.099
-    ##  4 3b               0.49       0.013
-    ##  5 4                4.12       0.107
-    ##  6 5                3.92       0.102
-    ##  7 6a               0.06       0.002
-    ##  8 6b               0.13       0.003
-    ##  9 6c               0.24       0.006
-    ## 10 7a               1.62       0.042
-    ## # ... with 11 more rows
+Output of `dur_piece`:
 
-resort to find longest pieces
+| piece\_no | duration\_min | prop\_of\_dur |
+| :-------- | ------------: | ------------: |
+| 1         |          4.91 |         0.127 |
+| 2b        |          2.07 |         0.054 |
+| 3a        |          3.83 |         0.099 |
+| 3b        |          0.49 |         0.013 |
+| 4         |          4.12 |         0.107 |
+| 5         |          3.92 |         0.102 |
+| 6a        |          0.06 |         0.002 |
+| 6b        |          0.13 |         0.003 |
+| 6c        |          0.24 |         0.006 |
+| 7a        |          1.62 |         0.042 |
+| 7b        |          0.04 |         0.001 |
+| 8a        |          2.32 |         0.060 |
+| 8b        |          3.12 |         0.081 |
+| 9         |          4.82 |         0.125 |
+| 10        |          1.96 |         0.051 |
+| 11        |          0.60 |         0.016 |
+| 12a       |          0.47 |         0.012 |
+| 12b       |          0.90 |         0.023 |
+| 13a       |          0.10 |         0.003 |
+| 13b       |          0.47 |         0.012 |
+| 14        |          2.37 |         0.061 |
+
+Resort to find longest pieces.
 
 ``` r
 dur_piece %>% 
@@ -467,7 +473,7 @@ dur_piece_lubridate
     ## 10 7a       1M 37S         0.042
     ## # ... with 11 more rows
 
-### duration by category
+### Duration by Category
 
 ``` r
 dur_tib %>% 
@@ -484,10 +490,11 @@ dur_tib %>%
     ## 3 3           791.       0.342 
     ## 4 4            92.0      0.0398
 
-No contest: two biggest categories are 1. choir with orchestra and 3.
-tenor solo close to 95 %
+<!-- No contest: two biggest categories are 1. choir with orchestra and 3. tenor solo -->
 
-### duration by subcategory
+<!-- close to 95 % -->
+
+### Duration by Subcategory
 
 ``` r
 dur_subcategory <- dur_tib %>% 
@@ -495,23 +502,22 @@ dur_subcategory <- dur_tib %>%
     summarize(duration = sum(duration)) %>% 
     mutate(duration_min = (duration/60)) %>% 
     mutate(prop_of_dur = (duration/sum(duration)))
-
-print(dur_subcategory)
 ```
 
-    ## # A tibble: 10 x 4
-    ##    subcategory duration duration_min prop_of_dur
-    ##    <fct>          <dbl>        <dbl>       <dbl>
-    ##  1 1a            1305.       21.8        0.564  
-    ##  2 1b              97.5       1.62       0.0421 
-    ##  3 2b              28.2       0.470      0.0122 
-    ##  4 3a             230         3.83       0.0994 
-    ##  5 3b             235.        3.92       0.102  
-    ##  6 3c             326.        5.43       0.141  
-    ##  7 4a              37.2       0.620      0.0161 
-    ##  8 4b               3.6       0.0600     0.00156
-    ##  9 4c              14.5       0.242      0.00628
-    ## 10 4d              36.7       0.611      0.0158
+Output of `dur_subcategory`:
+
+| subcategory |   duration | duration\_min | prop\_of\_dur |
+| :---------- | ---------: | ------------: | ------------: |
+| 1a          | 1305.46453 |    21.7577421 |     0.5640358 |
+| 1b          |   97.50000 |     1.6250000 |     0.0421256 |
+| 2b          |   28.18182 |     0.4696970 |     0.0121762 |
+| 3a          |  230.00000 |     3.8333333 |     0.0993732 |
+| 3b          |  235.23697 |     3.9206162 |     0.1016359 |
+| 3c          |  326.07852 |     5.4346419 |     0.1408847 |
+| 4a          |   37.22431 |     0.6204052 |     0.0160830 |
+| 4b          |    3.60000 |     0.0600000 |     0.0015554 |
+| 4c          |   14.54545 |     0.2424242 |     0.0062845 |
+| 4d          |   36.67471 |     0.6112452 |     0.0158456 |
 
 arranged descending
 
