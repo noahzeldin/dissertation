@@ -320,7 +320,7 @@ pitch_tib <- gen_tib_sung %>%
 
 # Stats
 
-## Durations - General
+## Durations: General
 
 ### Total Duration in Minutes
 
@@ -635,31 +635,35 @@ dur_6_4_duple_perc <- round((dur_meter %>%
 <!-- Almost even. -->
 
 
-## Durations - Choir
+## Durations: Choir
 
 ### Choir Total Durations
 
-Create tibble with only measures with choir
+Create tibble containing only measures with choir.
 
 ```{r}
 choir_tib <- gen_tib %>% 
     filter(dur_choir != 0)
 ```
 
-Total duration of choir
+Total duration of choir:
 
 ```{r}
 dur_choir_total_sec <- sum(choir_tib$dur_choir)
 dur_choir_total_min <- sum(choir_tib$dur_choir) / 60
-print(dur_choir_total_min)
 ```
 
-Duration of choir as proportion of total duration
+The choir sings for `r dur_choir_total_min` minutes.
+
+Duration of choir as proportion of total duration:
 
 ```{r}
 dur_choir_prop <- round((dur_choir_total_min / dur_total_min), digits = 4)*100
 print(dur_choir_prop)
 ```
+
+The choir sings for `r dur_choir_prop` % of total duration of music.
+
 
 ### Choir Sung Durations
 
@@ -675,10 +679,10 @@ gen_tib %>%
     arrange(desc(dur_choir_prop))
 ```
 
-Pretty interesting:
-* 9. Aendere die Welt has by far most choir singing --> include in analysis
-* other pieces with complex polyphony in top 5:
-** 4. Lob der illegalen Arbeit and 2b. Lob der USSR
+<!-- Pretty interesting: -->
+<!-- * 9. Aendere die Welt has by far most choir singing -> include in analysis -->
+<!-- * other pieces with complex polyphony in top 5: -->
+<!-- ** 4. Lob der illegalen Arbeit and 2b. Lob der USSR -->
 
 ### Choir Acapella Durations
 
@@ -692,17 +696,17 @@ dur_acapella <- gen_tib %>%
            dur_choir = round(dur_choir, digits = 2),
            dur_choir_prop = round(dur_choir_prop, digits = 3)) 
 
-print(dur_acapella)
+knitr::kable(dur_acapella)
 ```
 
-arrange descending to see top pieces
+Arrange descending to see top pieces:
 
 ```{r}
 dur_acapella %>% 
     arrange(desc(dur_choir_prop))
 ```
 
-proportion of dur_chor that is acapella
+Proportion of `dur_chor` that is acapella:
 
 ```{r}
 sum(dur_acapella$dur_choir) / dur_choir_total_sec
@@ -710,8 +714,8 @@ sum(dur_acapella$dur_choir) / dur_choir_total_sec
 
 
 
-Good results:
-* top 2 are 2b. Lob der USSR and 9. Aendere die Welt
+<!-- Good results: -->
+<!-- * top 2 are 2b. Lob der USSR and 9. Aendere die Welt -->
 
 
 ### Choir Spoken Durations
