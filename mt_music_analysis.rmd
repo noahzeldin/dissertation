@@ -15,7 +15,7 @@ knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Desktop/Proposal/R materia
 
 Load packages  
 
-```{r}
+```{r, message=FALSE}
 library(tidyverse)
 library(readxl)
 library(ggforce)
