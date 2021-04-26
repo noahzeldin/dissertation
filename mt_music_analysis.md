@@ -18,9 +18,7 @@ library(mosaic) # may be unnecessary
 
 ## Duration
 
-1.  Import all sheets into a single list and specify column types.
-
-<!-- end list -->
+Import all sheets into a single list and specify column types.
 
 ``` r
 durations_sheets <- excel_sheets("Massnahme_durations_meter_changes.xlsx")
@@ -48,23 +46,15 @@ durations_list <- lapply(durations_sheets,
                                                           ))
 ```
 
-2.  From list create single data frame and save as tibble.
-
-<!-- end list -->
+From list create single data frame and save as tibble.
 
 ``` r
 dur_tib <- as_tibble(bind_rows(durations_list))
 ```
 
-## Importation - Voice Analysis
+## Voice Analysis
 
-1.  Check worksheets.
-
-<!-- end list -->
-
-  - ensure that there is a sheet for each choral piece
-
-<!-- end list -->
+Check worksheets and ensure that there is a sheet for each choral piece.
 
 ``` r
 excel_sheets("Massnahme_choir_voice_analysis.xlsx")
@@ -80,9 +70,7 @@ excel_sheets("Massnahme_choir_voice_analysis.xlsx")
     ## [15] "12b Wir sind der Abschaum"      "13a (untitled)"                
     ## [17] "13b (untitled)"                 "14 Schlusschor"
 
-2.  Import all sheets into a single list and specify column types.
-
-<!-- end list -->
+Import all sheets into a single list and specify column types.
 
 ``` r
 voice_analysis_sheets <- excel_sheets("Massnahme_choir_voice_analysis.xlsx")
@@ -118,19 +106,13 @@ voice_analysis_list <- lapply(voice_analysis_sheets,
                                                               ))
 ```
 
-3.  From list create single data frame and save as tibble.
-
-<!-- end list -->
+From list create single data frame and save as tibble.
 
 ``` r
 gen_tib <- as_tibble(bind_rows(voice_analysis_list))
 ```
 
-# Cleaning and Manipulation
-
-## General Refinement
-
-### Durations
+# Cleaning and Manipulation: 1. Durations
 
 Convert **piece\_no**, **category** and **subcategory** to factors.
 
@@ -190,9 +172,7 @@ dur_tib$subcategory %>%
     ##  9 4c        1
     ## 10 4d        4
 
-### Voice Analysis
-
-# Create basic tibbles for further manipulation.
+# Cleaning and Manipulation: 2. Voice Analysis
 
 ## General Tibble: gen\_tib
 
@@ -326,14 +306,9 @@ gen_tib <- gen_tib %>% as_tibble()
 
 ## Tibble for Choral Portions: gen\_tib\_sung
 
-1.  Filter out parts without choral singing. (This includes passages
-    spoken by the choir.)
-
-<!-- end list -->
-
-  - **CHECK IF NECESSARY TO ADD** `as_tibble()` **TO END.**
-
-<!-- end list -->
+Filter out parts without choral singing. (This includes passages spoken
+by the choir.) \* **CHECK IF NECESSARY TO ADD** `as_tibble()` **TO
+END.**
 
 ``` r
 gen_tib_sung <- gen_tib %>% 
@@ -343,34 +318,35 @@ gen_tib_sung <- gen_tib %>%
     as_tibble() # may not be necessary
 ```
 
-2.  Check to see if any NAs remain. The following should return an
-    **empty** table.
+<!-- Check to see if any NAs remain. The following should return an **empty**  -->
 
-<!-- end list -->
+<!-- table. -->
 
-``` r
-gen_tib_sung %>% 
-    filter(is.na(dm_s1),
-           is.na(dm_s2), 
-           is.na(dm_a1),
-           is.na(dm_a2),
-           is.na(dm_t1),
-           is.na(dm_t2),
-           is.na(dm_b1),
-           is.na(dm_b2)) %>% 
-    select(id, piece_no, measure, starts_with("notes_"), starts_with("tones_"),
-           quarters_per_bar, starts_with("dm_")) 
-```
+<!-- ```{r} -->
 
-    ## # A tibble: 0 x 33
-    ## # ... with 33 variables: id <int>, piece_no <fct>, measure <dbl>,
-    ## #   notes_s1 <dbl>, notes_s2 <dbl>, notes_a1 <dbl>, notes_a2 <dbl>,
-    ## #   notes_t1 <dbl>, notes_t2 <dbl>, notes_b1 <dbl>, notes_b2 <dbl>,
-    ## #   notes_sum <dbl>, notes_sum_pairings <dbl>, tones_s1 <dbl>, tones_s2 <dbl>,
-    ## #   tones_a1 <dbl>, tones_a2 <dbl>, tones_t1 <dbl>, tones_t2 <dbl>,
-    ## #   tones_b1 <dbl>, tones_b2 <dbl>, tones_sum <dbl>, tones_count <dbl>,
-    ## #   quarters_per_bar <dbl>, dm_s1 <dbl>, dm_s2 <dbl>, dm_a1 <dbl>, dm_a2 <dbl>,
-    ## #   dm_t1 <dbl>, dm_t2 <dbl>, dm_b1 <dbl>, dm_b2 <dbl>, dm_sum <dbl>
+<!-- gen_tib_sung %>%  -->
+
+<!--     filter(is.na(dm_s1), -->
+
+<!--            is.na(dm_s2),  -->
+
+<!--            is.na(dm_a1), -->
+
+<!--            is.na(dm_a2), -->
+
+<!--            is.na(dm_t1), -->
+
+<!--            is.na(dm_t2), -->
+
+<!--            is.na(dm_b1), -->
+
+<!--            is.na(dm_b2)) %>%  -->
+
+<!--     select(id, piece_no, measure, starts_with("notes_"), starts_with("tones_"), -->
+
+<!--            quarters_per_bar, starts_with("dm_"))  -->
+
+<!-- ``` -->
 
 ## Tibble for Pitch: pitch\_tib
 
