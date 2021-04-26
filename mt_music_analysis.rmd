@@ -422,15 +422,15 @@ Construct table with following stats for each piece:
 
 * duration
 
-* # of meter changes
+* number of meter changes
 
-* rate of meter changes in seconds = duration / # of meter changes
+* rate of meter changes in seconds = duration / number of meter changes
 
 * rate of meter changes in bars
 
-* # of tempo changes
+* number of tempo changes
 
-* rate of tempo changes in seconds = duration / # of meter changes
+* rate of tempo changes in seconds = duration / number of meter changes
 
 * rate of tempo changes in bars
 
@@ -517,9 +517,9 @@ tempo_ch_count_and_rate_piece <- dur_meter_tempo_piece %>%
 knitr::kable(tempo_ch_count_and_rate_piece)
 ```
 
-### Most common meters
+### Most Common Meters
 
-Create table with meter, non_of_mm and duration.
+Create tibble with meter, number of meters and duration.
 
 ```{r}
 dur_meter <- dur_tib %>% 
@@ -529,7 +529,7 @@ dur_meter <- dur_tib %>%
     filter(meter != "0_0") # remove the pick-up from piece_no 10
 ```
 
-Most common meters by no_of_mm.
+Most common meters by number of measures:
 
 ```{r}
 dur_meter %>% 
@@ -541,7 +541,7 @@ dur_meter %>%
     arrange(desc(no_of_mm))
 ```
 
-Most common meters by duration.
+Most common meters by duration:
 
 ```{r}
 dur_meter %>% 
@@ -550,7 +550,7 @@ dur_meter %>%
     arrange(desc(duration))
 ```
 
-#### Grouped by duple vs. triple
+#### Grouped by Duple vs. Triple
 
 ```{r}
 dur_meter_groups <- dur_meter %>% 
@@ -570,23 +570,23 @@ dur_meter_groups <- dur_meter_groups %>%
     mutate(prop_dur = duration / sum(duration),
            perc_dur = round(prop_dur*100))
 
-dur_meter_groups
+knitr::kable(dur_meter_groups)
 ```
 
-Interesting: pretty evenly split.
+<!-- Interesting: pretty evenly split. -->
 
-##### 6/4
+##### Special Case: 6/4
 
-However, need to account for 6/4, which is compound duple.
+**Need to account for 6/4, which is compound duple.**
 
-Check which mm. are in 6/4.
+Check which measures are in 6/4.
 
 ```{r}
 gen_tib %>% 
   filter(meter_1 == 6, meter_2 == 4) 
 ```
 
-Compute percent of duration that is 6/4.
+Compute percent of duration that is 6/4:
 
 ```{r}
 dur_6_4_perc <- round((dur_meter %>% 
@@ -598,7 +598,9 @@ dur_6_4_perc <- round((dur_meter %>%
     sum()) * 100, digits = 1)
 ```
 
-percent of duration of duple that is 6/4.
+`r dur_6_4_perc` % of work is in 6/4.
+
+Compute percent of duration of duple that is 6/4:
 
 ```{r}
 dur_6_4_duple_perc <- round((dur_meter %>% 
@@ -610,6 +612,8 @@ dur_6_4_duple_perc <- round((dur_meter %>%
     select(duration) %>% 
     sum()) * 100, digits = 1)
 ```
+
+`r dur_6_4_duple_perc` % of measures with duple meters are in 6/4.
 
 ```{r}
 # duration of duple meters

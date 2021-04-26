@@ -541,15 +541,17 @@ Construct table with following stats for each piece:
 
   - duration
 
-  - # of meter changes
+  - number of meter changes
 
-  - rate of meter changes in seconds = duration / \# of meter changes
+  - rate of meter changes in seconds = duration / number of meter
+    changes
 
   - rate of meter changes in bars
 
-  - # of tempo changes
+  - number of tempo changes
 
-  - rate of tempo changes in seconds = duration / \# of meter changes
+  - rate of tempo changes in seconds = duration / number of meter
+    changes
 
   - rate of tempo changes in bars
 
@@ -707,9 +709,9 @@ knitr::kable(tempo_ch_count_and_rate_piece)
 | 8b        |                7 |                26.73 |   187.13 |
 | 3a        |                4 |                57.50 |   230.00 |
 
-### Most common meters
+### Most Common Meters
 
-Create table with meter, non\_of\_mm and duration.
+Create tibble with meter, number of meters and duration.
 
 ``` r
 dur_meter <- dur_tib %>% 
@@ -719,7 +721,7 @@ dur_meter <- dur_tib %>%
     filter(meter != "0_0") # remove the pick-up from piece_no 10
 ```
 
-Most common meters by no\_of\_mm.
+Most common meters by number of measures:
 
 ``` r
 dur_meter %>% 
@@ -743,7 +745,7 @@ dur_meter %>%
     ## 7 4_4         20
     ## 8 1_4          5
 
-Most common meters by duration.
+Most common meters by duration:
 
 ``` r
 dur_meter %>% 
@@ -764,7 +766,7 @@ dur_meter %>%
     ## 7 4_4      41.9 
     ## 8 1_4       3.17
 
-#### Grouped by duple vs. triple
+#### Grouped by Duple vs. Triple
 
 ``` r
 dur_meter_groups <- dur_meter %>% 
@@ -784,23 +786,22 @@ dur_meter_groups <- dur_meter_groups %>%
     mutate(prop_dur = duration / sum(duration),
            perc_dur = round(prop_dur*100))
 
-dur_meter_groups
+knitr::kable(dur_meter_groups)
 ```
 
-    ## # A tibble: 3 x 4
-    ##   group  duration prop_dur perc_dur
-    ##   <fct>     <dbl>    <dbl>    <dbl>
-    ## 1 other      3.17  0.00137        0
-    ## 2 duple   1220.    0.527         53
-    ## 3 triple  1091.    0.471         47
+| group  |    duration | prop\_dur | perc\_dur |
+| :----- | ----------: | --------: | --------: |
+| other  |    3.166667 | 0.0013684 |         0 |
+| duple  | 1219.870389 | 0.5271397 |        53 |
+| triple | 1091.094253 | 0.4714919 |        47 |
 
-Interesting: pretty evenly split.
+<!-- Interesting: pretty evenly split. -->
 
-##### 6/4
+##### Special Case: 6/4
 
-However, need to account for 6/4, which is compound duple.
+**Need to account for 6/4, which is compound duple.**
 
-Check which mm. are in 6/4.
+Check which measures are in 6/4.
 
 ``` r
 gen_tib %>% 
@@ -840,7 +841,7 @@ gen_tib %>%
     ## #   dm_a2 <dbl>, dm_t1 <dbl>, dm_t2 <dbl>, dm_b1 <dbl>, dm_b2 <dbl>,
     ## #   dm_sum <dbl>, dmc <dbl>
 
-Compute percent of duration that is 6/4.
+Compute percent of duration that is 6/4:
 
 ``` r
 dur_6_4_perc <- round((dur_meter %>% 
@@ -852,7 +853,9 @@ dur_6_4_perc <- round((dur_meter %>%
     sum()) * 100, digits = 1)
 ```
 
-percent of duration of duple that is 6/4.
+4.8 % of work is in 6/4.
+
+Compute percent of duration of duple that is 6/4:
 
 ``` r
 dur_6_4_duple_perc <- round((dur_meter %>% 
@@ -864,6 +867,8 @@ dur_6_4_duple_perc <- round((dur_meter %>%
     select(duration) %>% 
     sum()) * 100, digits = 1)
 ```
+
+9.2 % of measures with duple meters are in 6/4.
 
 ``` r
 # duration of duple meters
