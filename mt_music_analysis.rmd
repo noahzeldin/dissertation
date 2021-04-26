@@ -11,9 +11,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Desktop/Proposal/R materials for dissertation/data/Massnahme_data")
 ```
 
-# Preliminary Set-up
-
-Load packages  
+# Load packages  
 
 ```{r}
 library(tidyverse)
@@ -26,16 +24,9 @@ library(mosaic) # may be unnecessary
 
 # Importation
 
-## Importation - Duration
+## Duration
 
-check worksheets
-* ensure that there is a sheet for each piece except 2a; should be 21
-
-```{r}
-excel_sheets("Massnahme_durations_meter_changes.xlsx")
-```
-
-import all sheets into a single list and specify column types  
+1. Import all sheets into a single list and specify column types.  
 
 ```{r}
 durations_sheets <- excel_sheets("Massnahme_durations_meter_changes.xlsx")
@@ -63,26 +54,23 @@ durations_list <- lapply(durations_sheets,
                                                           ))
 ```
 
-from list create single data frame and save as tibble
-
-* can probably combine into single command
+2. From list create single data frame and save as tibble.
 
 ```{r}
-dur_df <- bind_rows(durations_list)
-
-dur_tib <- as_tibble(dur_df)
+dur_tib <- as_tibble(bind_rows(durations_list))
 ```
 
 ## Importation - Voice Analysis
 
-check worksheets
+1. Check worksheets.
+
 * ensure that there is a sheet for each choral piece
 
 ```{r}
 excel_sheets("Massnahme_choir_voice_analysis.xlsx")
 ```
 
-import all sheets into a single list and specify column types
+2. Import all sheets into a single list and specify column types.
 
 ```{r}
 voice_analysis_sheets <- excel_sheets("Massnahme_choir_voice_analysis.xlsx")
@@ -119,13 +107,9 @@ voice_analysis_list <- lapply(voice_analysis_sheets,
 ```
 
 
-from list create single data frame and save as tibble
-
-* again, probably combine into single command
+3. From list create single data frame and save as tibble.
 
 ```{r}
-gen_df <- bind_rows(voice_analysis_list)
-
-gen_tib <- as_tibble(gen_df)
+gen_tib <- as_tibble(bind_rows(voice_analysis_list))
 ```
 
