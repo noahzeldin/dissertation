@@ -7,7 +7,7 @@ output: github_document
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Desktop/Proposal/R materials for dissertation/data/Massnahme_data")
 ```
 
@@ -15,7 +15,7 @@ knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Desktop/Proposal/R materia
 
 Load packages  
 
-```{r, message=FALSE}
+```{r}
 library(tidyverse)
 library(readxl)
 library(ggforce)

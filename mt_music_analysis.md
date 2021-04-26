@@ -9,94 +9,12 @@ Load packages
 
 ``` r
 library(tidyverse)
-```
-
-    ## -- Attaching packages --------------------------------------- tidyverse 1.3.0 --
-
-    ## v ggplot2 3.3.2     v purrr   0.3.4
-    ## v tibble  3.0.4     v dplyr   1.0.2
-    ## v tidyr   1.1.2     v stringr 1.4.0
-    ## v readr   1.4.0     v forcats 0.5.0
-
-    ## Warning: package 'tibble' was built under R version 4.0.3
-
-    ## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-    ## x dplyr::filter() masks stats::filter()
-    ## x dplyr::lag()    masks stats::lag()
-
-``` r
 library(readxl)
 library(ggforce)
 library(scales)
-```
-
-    ## 
-    ## Attaching package: 'scales'
-
-    ## The following object is masked from 'package:purrr':
-    ## 
-    ##     discard
-
-    ## The following object is masked from 'package:readr':
-    ## 
-    ##     col_factor
-
-``` r
 library(lubridate)
-```
-
-    ## Warning: package 'lubridate' was built under R version 4.0.3
-
-    ## 
-    ## Attaching package: 'lubridate'
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     date, intersect, setdiff, union
-
-``` r
 library(mosaic) # may be unnecessary
 ```
-
-    ## Registered S3 method overwritten by 'mosaic':
-    ##   method                           from   
-    ##   fortify.SpatialPolygonsDataFrame ggplot2
-
-    ## 
-    ## The 'mosaic' package masks several functions from core packages in order to add 
-    ## additional features.  The original behavior of these functions should not be affected by this.
-
-    ## 
-    ## Attaching package: 'mosaic'
-
-    ## The following object is masked from 'package:Matrix':
-    ## 
-    ##     mean
-
-    ## The following object is masked from 'package:scales':
-    ## 
-    ##     rescale
-
-    ## The following objects are masked from 'package:dplyr':
-    ## 
-    ##     count, do, tally
-
-    ## The following object is masked from 'package:purrr':
-    ## 
-    ##     cross
-
-    ## The following object is masked from 'package:ggplot2':
-    ## 
-    ##     stat
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     binom.test, cor, cor.test, cov, fivenum, IQR, median, prop.test,
-    ##     quantile, sd, t.test, var
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     max, mean, min, prod, range, sample, sum
 
 # Importation
 
@@ -214,21 +132,6 @@ voice_analysis_list <- lapply(voice_analysis_sheets,
                                                               ) 
                                                               ))
 ```
-
-    ## Warning in read_fun(path = enc2native(normalizePath(path)), sheet_i = sheet, :
-    ## Expecting numeric in K24 / R24C11: got 'na'
-
-    ## Warning in read_fun(path = enc2native(normalizePath(path)), sheet_i = sheet, :
-    ## Expecting numeric in K25 / R25C11: got 'na'
-
-    ## Warning in read_fun(path = enc2native(normalizePath(path)), sheet_i = sheet, :
-    ## Expecting numeric in K26 / R26C11: got 'na'
-
-    ## Warning in read_fun(path = enc2native(normalizePath(path)), sheet_i = sheet, :
-    ## Expecting numeric in K27 / R27C11: got 'na'
-
-    ## Warning in read_fun(path = enc2native(normalizePath(path)), sheet_i = sheet, :
-    ## Expecting numeric in K50 / R50C11: got 'na'
 
 from list create single data frame and save as tibble
 
