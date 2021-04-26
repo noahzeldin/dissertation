@@ -160,10 +160,10 @@ dur_tib$subcategory %>%
     fct_count()
 ```
 
-## General Refinement - Voice Analysis
+### Voice Analysis
 
 
-### Create gen_tib
+## Create gen_tib
 
 Convert **piece_no** to factor.
 
@@ -172,15 +172,15 @@ gen_tib <- gen_tib %>%
     mutate(piece_no = as_factor(piece_no))
 ```
 
-Check to see if each piece is now a factor.
-* **Add something about n = # of mm. - and check.**
+<!-- Check to see if each piece is now a factor. -->
+<!-- * **Add something about n = # of mm. - and check.** -->
 
-```{r}
-gen_tib$piece_no %>% 
-    fct_count()
-```
+<!-- ```{r} -->
+<!-- gen_tib$piece_no %>%  -->
+<!--     fct_count() -->
+<!-- ``` -->
 
-For some reason, 6c is after 7a, so relevel and check.
+Since 6c now follows 7a, must relevel (and check).
 
 ```{r}
 gen_tib$piece_no <- gen_tib$piece_no %>% 
@@ -190,14 +190,13 @@ gen_tib$piece_no %>%
     fct_count()
 ```
 
-
-group by piece
+Group by piece.
 
 ```{r}
 by_piece <- gen_tib %>% group_by(piece_no)
 ```
 
-add **rowid** column and make first column (called "id")
+Add **rowid** column and make first column (called "id").
 
 ```{r}
 gen_tib <- gen_tib %>% 
