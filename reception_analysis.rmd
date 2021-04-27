@@ -14,13 +14,6 @@ knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Desktop/Proposal/R materia
 
 # 1. Preliminaries
 
-## set working directory to "data" folder
-
-May not be necessary, because I do this above in r setup, knitr::opts.
-
-```{r}
-setwd("C:/Users/Noah Zeldin/Desktop/Proposal/R materials for dissertation/data")
-```
 
 ## Load Packages
 
