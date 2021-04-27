@@ -458,3 +458,177 @@ grouped_ca_no_erfurt_or_unknown_english <-
 
 
 
+# KWIC and Keyword Exploration
+
+## Create Function to Link KWIC with Data
+
+```{r}
+combine_kwic_with_data <- function(corpus, words, window) {
+    
+    i <- kwic(corpus, words, window = window) %>% 
+        as_tibble() 
+    
+    i$docname <- i$docname %>% 
+        str_replace("text", "") 
+    
+    i <- i %>% mutate(docname = as.numeric(docname)) %>% 
+        rename(Article = docname) %>% # this seems to work better than including in above step
+        left_join(
+          spreadsheet_reduced, # CHECKING 12.29.20 - seems to have worked better than normal spreadsheet with corp_reduced
+          by = "Article") %>% 
+        select(-c(Text, Other_Metadata:Comp_Doc))
+
+    }
+```
+
+## Explore Various KWIC 
+
+* primitiv
+
+```{r}
+primitiv_kwic <- 
+  combine_kwic_with_data(corp, "primitiv*", 15)
+```
+
+* langweilig
+
+```{r}
+langweilig_kwic <- 
+  combine_kwic_with_data(corp, c("langeweile", "langweilig*"), 10)
+```
+
+* proletarisch
+
+```{r}
+proletarisch_kwic <- 
+  combine_kwic_with_data(corp, "proletarisch*", 10)
+```
+
+* pudowkin
+
+```{r}
+pudowkin_kwic <- 
+  combine_kwic_with_data(corp, "pudowkin*", 10)
+```
+
+* kunst
+
+```{r}
+kunst_kwic <- 
+  combine_kwic_with_data(corp, c("kunst", "künstler*"), 10)
+```
+
+* agitprop
+
+```{r}
+agitprop_kwic <- 
+  combine_kwic_with_data(corp, "agitprop*", 10)
+```
+
+* bildung
+
+```{r}
+bildung_kwic <- 
+  combine_kwic_with_data(corp, "bildung", 10)
+```
+
+* wissen
+
+```{r}
+wissen_kwic <- 
+  combine_kwic_with_data(corp, "wissen*", 10)
+```
+
+* lehrstück MUTTER
+
+```{r}
+lehrstueck_mutter_kwic <- 
+  combine_kwic_with_data(corp, "lehrstück*", 10) %>% 
+  filter(Piece == "Mutter")
+```
+
+* Oratorium MASSNAHME
+
+```{r}
+oratorium_mass_kwic <- 
+  combine_kwic_with_data(corp, "oratori*", 30) %>% 
+  filter(Piece == "Massnahme")
+```
+
+* Arbeitersänger MASSNAHME
+
+```{r}
+arbeitersaenger_mass_kwic <- 
+  combine_kwic_with_data(corp, "arbeitersänger*", 30) %>% 
+  filter(Piece == "Massnahme")
+```
+
+* Stalin and Stalinismus
+
+```{r}
+combine_kwic_with_data(corp, "stalin*", 30) %>% 
+  print()
+```
+
+Only 3 articles on Mutter.
+
+* Cantata
+
+```{r}
+combine_kwic_with_data(corp, "Kantate*", 25) %>% 
+  print()
+```
+
+No results.
+
+### Special Case: LEHRLERN in Mutter/Right
+
+NB: Can't use FN, b/c can't specify valuetype
+Here, adaptation of FN
+
+1. create tibble
+
+```{r}
+lehrlern_kwic <- kwic(corp, dict_regex, window = 20, 
+                      valuetype = "regex") %>% # must specify to used dict
+  as_tibble()
+
+lehrlern_kwic$docname <- lehrlern_kwic$docname %>% 
+    str_replace("text", "") 
+
+lehrlern_kwic <- lehrlern_kwic %>% mutate(docname = as.numeric(docname)) %>% 
+    rename(Article = docname) %>% # this seems to work better than including in above step
+    left_join(spreadsheet, by = "Article") %>% 
+    select(-c(Text, Other_Metadata:Comp_Doc))
+```
+
+2. filter for Mutter & Right
+
+```{r}
+lehrlern_kwic_mutter_right <- lehrlern_kwic %>% 
+  filter(Piece == "Mutter" & 
+               Generalized_Political_Orientation == "Right")
+```
+
+### Combinations
+
+langweilig + primitiv
+
+```{r}
+langweilig_primitiv_kwic <- 
+  inner_join(langweilig_kwic, primitiv_kwic, by = "Article")
+```
+
+## Additional Terms Post-Processing (DFMs)
+
+LEHRLERN in Mutter
+
+```{r}
+lehrlern_mutter_gpo_count <-  
+  dfm_select(mutter_dfm_gpo, pattern = "LEHRLERN") %>% 
+  as_tibble()
+
+lehrlern_mutter_gpo_count
+```
+
+
