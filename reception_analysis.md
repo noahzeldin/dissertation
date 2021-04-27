@@ -53,6 +53,14 @@ Noah Zeldin
           - [Proportion of Articles near
             Premieres](#proportion-of-articles-near-premieres)
       - [1932 articles for Measures Taken](#articles-for-measures-taken)
+  - [Visualizations](#visualizations)
+      - [English Labels](#english-labels)
+      - [Visual Summary of Reduced
+        Corpus](#visual-summary-of-reduced-corpus)
+          - [Super Long Articles](#super-long-articles)
+      - [Wordclouds](#wordclouds)
+      - [Word Frequency](#word-frequency)
+      - [Correspondence Analysis](#correspondence-analysis)
 
 # Introductory Remarks
 
@@ -1044,3 +1052,520 @@ dates_tib_lubridate %>%
     ## #   Date <chr>, Author <chr>, Complete_or_Incomplete <chr>,
     ## #   Other_Metadata <chr>, Other_Notes <chr>, AdK <chr>, AdK_Duplicate <chr>,
     ## #   Comp_Doc <chr>
+
+# Visualizations
+
+Create color scheme:
+
+``` r
+colors_four <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")
+```
+
+## English Labels
+
+``` r
+labels_english <- c(Massnahme = "Measures Taken", Mutter = "Mother")
+```
+
+## Visual Summary of Reduced Corpus
+
+Set-up for boxplot:
+
+``` r
+# 3 steps for set up
+
+# STEP 1
+toks_grouped <- gen_datafr_reduced %>% 
+    mutate(rowSums(.[ ,2:9102]), .after = 1) %>% 
+    select(doc_id, `rowSums(.[, 2:9102])`) %>% 
+    rename(tokens = `rowSums(.[, 2:9102])`)
+
+# STEP 2
+# add GPO column to gen_datafr_reduced
+# can't combine with above for some reason
+toks_grouped <- left_join(toks_grouped, 
+                                    corp_reduced_datafr[ , c("doc_id",    "Generalized_Political_Orientation", "Piece")], 
+                                    by = "doc_id", # 8.01 - now do this
+                                    # by = c("document" = "doc_id"), # used to work
+                                    copy = TRUE)
+
+# STEP 3
+# added for observation counts
+toks_grouped <- toks_grouped %>% 
+    add_count(Piece, Generalized_Political_Orientation)
+```
+
+Coding for boxplot:
+
+``` r
+toks_summary_boxplot <- 
+    toks_grouped %>% 
+    ggplot(aes(x = Piece, y = tokens, 
+               fill = Generalized_Political_Orientation)) +
+    geom_boxplot(alpha = 0.7,
+                 varwidth = TRUE) +
+    stat_summary(fun = mean, geom="point", 
+                 shape=21, size=5, color="black", fill="red", alpha = 0.75) +
+    stat_summary(fun = mean, geom="line", 
+                 size = 1.2, color = "red", alpha = 0.4, aes(group = 1)) +
+    stat_summary(fun = median, geom="point", 
+                 shape=21, size=5, color="black", fill="yellow", alpha = 0.75) +
+    stat_summary(fun = median, geom="line", 
+                 size = 1.2, color = "yellow", alpha = 0.4, aes(group = 1)) +
+    scale_fill_brewer(type = "seq", palette = "Set1") +
+    # geom_text()
+    geom_jitter(color="darkgrey",
+        size=1.25, alpha=0.95,
+        show.legend = FALSE) + # may be too much
+    coord_cartesian(xlim = NULL, ylim = c(0, 900)) +
+    ylab("Tokens") +
+  scale_x_discrete(labels=c("Measures Taken", "Mother")) +
+    xlab(NULL) +
+    labs(fill = "Political Orientation",
+         title = "Tokens per Article (Post-Processing)",
+         subtitle = "Scaled for readability. Several outliers excluded. Box width corresponds to number of articles.",
+         caption = "Red and yellow points denote respecitively the mean and median tokens per article for each \n piece. NB: The positions of the scatter points do not correspond to political orientation.") +
+    # below = text for number of articles in each category
+    # # doesn't line up with variable box width
+    # FIX BELOW - OBSERVATION COUNTS
+    geom_text(aes(label = ..count.., 
+                  y= ..prop..)
+              , stat= "count",
+              vjust = 1, # confusing - probably don't need
+              position = position_dodge2(width = 0.5
+                                          # c(0.4, 0.8)
+                                        ) 
+              ) +
+  theme(axis.title.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          panel.grid.major.x = element_blank(),
+          panel.grid.major.y = element_line(color = "grey", linetype = 3),
+          panel.grid.minor.y = element_line(color = "grey", linetype = 3),
+          plot.caption.position = "plot",
+          panel.background = element_rect(fill = "white", colour = 'black'))
+# +
+#     theme_bw()
+
+toks_summary_boxplot
+```
+
+![](reception_analysis_files/figure-gfm/unnamed-chunk-80-1.png)<!-- -->
+
+### Super Long Articles
+
+The goal is to identify the long articles in *Measures - Unknown*,
+because they really stretch out the IQR in that category.
+
+``` r
+corp_reduced_summary %>% 
+    filter(Generalized_Political_Orientation == "Unknown" &
+               Piece == "Massnahme") %>% 
+    arrange(desc(tokens)) %>% 
+  select(Article, tokens, Title:Piece)
+```
+
+    ## # A tibble: 10 x 11
+    ##    Article tokens Title Newspaper Publisher Political_Affil~ Generalized_Pol~
+    ##      <dbl>  <int> <chr> <chr>     <chr>     <chr>            <chr>           
+    ##  1      35   2055 Lehr~ Literari~ Welt Ver~ Unknown          Unknown         
+    ##  2      18   1894 Poli~ Der_Anbr~ Universa~ Unknown          Unknown         
+    ##  3      42    822 Thea~ Heidelbe~ Independ~ Unknown          Unknown         
+    ##  4      45    750 Brec~ Bergisch~ Vossen    Unknown          Unknown         
+    ##  5      41    553 Welt~ Thüringi~ Unknown   Unknown          Unknown         
+    ##  6      25    535 Anme~ Die_Lite~ Deutsche~ Unknown          Unknown         
+    ##  7      19    439 Prob~ Der_Anbr~ Universa~ Unknown          Unknown         
+    ##  8       7    365 Brec~ Münchner~ Independ~ Unknown          Unknown         
+    ##  9      37    314 Komm~ Bayrisch~ Independ~ Unknown          Unknown         
+    ## 10      43    194 Brec~ Dresdner~ Independ~ Unknown          Unknown         
+    ## # ... with 4 more variables: Date <chr>, Author <chr>,
+    ## #   Complete_or_Incomplete <chr>, Piece <chr>
+
+## Wordclouds
+
+Grouped by Piece:
+
+``` r
+# must rename groups in English for word cloud
+piece_dfm_no_erfurt_english <- dfm_group(piece_dfm_no_erfurt, groups = c("Measures Taken", "Mother"))
+
+textplot_wordcloud(piece_dfm_no_erfurt_english,
+                   max_words = 100,
+                   color = colors_four,
+                   rotation = FALSE,
+                   comparison = TRUE,
+                   labelcolor = "black")
+```
+
+![](reception_analysis_files/figure-gfm/unnamed-chunk-82-1.png)<!-- -->
+
+*Mother* - Grouped by GPO (no unknown):
+
+``` r
+wordcloud_mutter_gpo <- 
+  textplot_wordcloud(mutter_dfm_gpo_no_unknown,
+                   max_words = 100, # 125 or 100 is probably best
+                   rotation = FALSE,
+                   color = colors_four,
+                   comparison = TRUE,
+                   labelcolor = "black")
+```
+
+![](reception_analysis_files/figure-gfm/unnamed-chunk-83-1.png)<!-- -->
+
+``` r
+wordcloud_mutter_gpo
+```
+
+    ## $xlog
+    ## [1] FALSE
+    ## 
+    ## $ylog
+    ## [1] FALSE
+    ## 
+    ## $adj
+    ## [1] 0.5
+    ## 
+    ## $ann
+    ## [1] TRUE
+    ## 
+    ## $ask
+    ## [1] FALSE
+    ## 
+    ## $bg
+    ## [1] "white"
+    ## 
+    ## $bty
+    ## [1] "o"
+    ## 
+    ## $cex
+    ## [1] 1
+    ## 
+    ## $cex.axis
+    ## [1] 1
+    ## 
+    ## $cex.lab
+    ## [1] 1
+    ## 
+    ## $cex.main
+    ## [1] 1.2
+    ## 
+    ## $cex.sub
+    ## [1] 1
+    ## 
+    ## $col
+    ## [1] "black"
+    ## 
+    ## $col.axis
+    ## [1] "black"
+    ## 
+    ## $col.lab
+    ## [1] "black"
+    ## 
+    ## $col.main
+    ## [1] "black"
+    ## 
+    ## $col.sub
+    ## [1] "black"
+    ## 
+    ## $crt
+    ## [1] 0
+    ## 
+    ## $err
+    ## [1] 0
+    ## 
+    ## $family
+    ## [1] ""
+    ## 
+    ## $fg
+    ## [1] "black"
+    ## 
+    ## $fig
+    ## [1] 0 1 0 1
+    ## 
+    ## $fin
+    ## [1] 6.999999 4.999999
+    ## 
+    ## $font
+    ## [1] 1
+    ## 
+    ## $font.axis
+    ## [1] 1
+    ## 
+    ## $font.lab
+    ## [1] 1
+    ## 
+    ## $font.main
+    ## [1] 2
+    ## 
+    ## $font.sub
+    ## [1] 1
+    ## 
+    ## $lab
+    ## [1] 5 5 7
+    ## 
+    ## $las
+    ## [1] 0
+    ## 
+    ## $lend
+    ## [1] "round"
+    ## 
+    ## $lheight
+    ## [1] 1
+    ## 
+    ## $ljoin
+    ## [1] "round"
+    ## 
+    ## $lmitre
+    ## [1] 10
+    ## 
+    ## $lty
+    ## [1] "solid"
+    ## 
+    ## $lwd
+    ## [1] 1
+    ## 
+    ## $mai
+    ## [1] 0 0 0 0
+    ## 
+    ## $mar
+    ## [1] 5.1 4.1 4.1 2.1
+    ## 
+    ## $mex
+    ## [1] 1
+    ## 
+    ## $mfcol
+    ## [1] 1 1
+    ## 
+    ## $mfg
+    ## [1] 1 1 1 1
+    ## 
+    ## $mfrow
+    ## [1] 1 1
+    ## 
+    ## $mgp
+    ## [1] 3 1 0
+    ## 
+    ## $mkh
+    ## [1] 0.001
+    ## 
+    ## $new
+    ## [1] TRUE
+    ## 
+    ## $oma
+    ## [1] 0 0 0 0
+    ## 
+    ## $omd
+    ## [1] 0 1 0 1
+    ## 
+    ## $omi
+    ## [1] 0 0 0 0
+    ## 
+    ## $pch
+    ## [1] 1
+    ## 
+    ## $pin
+    ## [1] 5.759999 3.159999
+    ## 
+    ## $plt
+    ## [1] 0.08857144 0.91142856 0.18400004 0.81599996
+    ## 
+    ## $ps
+    ## [1] 12
+    ## 
+    ## $pty
+    ## [1] "m"
+    ## 
+    ## $smo
+    ## [1] 1
+    ## 
+    ## $srt
+    ## [1] 0
+    ## 
+    ## $tck
+    ## [1] NA
+    ## 
+    ## $tcl
+    ## [1] -0.5
+    ## 
+    ## $usr
+    ## [1] -0.4072001  1.4072001 -0.1480000  1.1480000
+    ## 
+    ## $xaxp
+    ## [1] 0 1 5
+    ## 
+    ## $xaxs
+    ## [1] "r"
+    ## 
+    ## $xaxt
+    ## [1] "s"
+    ## 
+    ## $xpd
+    ## [1] FALSE
+    ## 
+    ## $yaxp
+    ## [1] 0 1 5
+    ## 
+    ## $yaxs
+    ## [1] "r"
+    ## 
+    ## $yaxt
+    ## [1] "s"
+    ## 
+    ## $ylbias
+    ## [1] 0.2
+
+## Word Frequency
+
+By Piece:
+
+``` r
+# grouped by piece (weighted)
+freq_piece <- dfm_weight(gen_dfm_reduced, scheme = "prop") %>% # 12.21.20 applying dfm_weight seems to make no difference
+    textstat_frequency(n = 15, groups = "Piece")
+
+# good, except overlap of a couple of words, can't figure out how to fix
+# yeah, but may not be necessary: keyness w/ target + reference is better,
+# shows typicality rather than freq
+freq_piece_plot <- 
+  ggplot(freq_piece, 
+       aes(x = nrow(freq_piece):1, y = frequency, fill = group)) +
+    geom_col() +
+    facet_wrap(~ group, scales = "free", nrow = 2,
+               labeller = labeller(group = labels_english)
+               ) +
+    coord_flip() +
+    scale_x_continuous(breaks = nrow(freq_piece):1, 
+                       labels = freq_piece$feature) +
+    labs(x = NULL, y = "Relative Frequency") +
+    scale_fill_manual(values = colors_four) + # prob could just use brewer, b/c only 2
+    theme_bw() +
+    theme(legend.position = "none",
+          panel.grid.major.y = element_line(color = "grey", linetype = 3),
+          panel.grid.minor.y = element_blank(),
+          panel.grid.major.x = element_line(color = "grey", linetype = 3),
+          panel.grid.minor.x = element_line(color = "grey", linetype = 3),
+          plot.caption.position = "plot",
+          panel.background = element_rect(fill = "white", colour = 'black'))
+
+freq_piece_plot
+```
+
+![](reception_analysis_files/figure-gfm/unnamed-chunk-84-1.png)<!-- -->
+
+By Piece + GPO:
+
+``` r
+freq_grouped_wt <- dfm_weight(gen_dfm_reduced, scheme = "prop") %>% 
+    textstat_frequency(n = 10, 
+                       groups = c("Piece", "Generalized_Political_Orientation")) 
+
+freq_grouped_wt <- freq_grouped_wt %>% 
+    mutate(group = str_replace_all(group, 
+                                   c("Massnahme.Center" = 
+                                       "Measures Taken | Center",
+                                     "Massnahme.Left" = "Measures Taken | Left",
+                                     "Massnahme.Right" = 
+                                       "Measures Taken | Right",
+                                     "Massnahme.Unknown" = 
+                                       "Measures Taken | Unknown",
+                                     "Mutter.Center" = "Mother | Center",
+                                     "Mutter.Left" = "Mother | Left",
+                                     "Mutter.Right" = "Mother | Right",
+                                     "Mutter.Unknown" = "Mother | Unknown")))
+
+# good but would want to rearrange cols
+# currently: C - L - R - U
+freq_piece_gpo_plot <- ggplot(freq_grouped_wt, 
+       aes(x = nrow(freq_grouped_wt):1, y = frequency, fill = group)) +
+    geom_col() +
+    facet_wrap(~ group, scales = "free", nrow = 2,
+               # labeller = labeller(group = labels_english
+               ) +
+    coord_flip() +
+    scale_x_continuous(breaks = nrow(freq_grouped_wt):1, 
+                       labels = freq_grouped_wt$feature) +
+    labs(x = NULL, y = "Relative Frequency") +
+    scale_fill_manual(values = c(colors_four, colors_four)) + # repeat b/c need 8
+    theme_bw() +
+    theme(legend.position = "none",
+          panel.grid.major.y = element_line(color = "grey", linetype = 3),
+          panel.grid.minor.y = element_blank(),
+          panel.grid.major.x = element_line(color = "grey", linetype = 3),
+          panel.grid.minor.x = element_line(color = "grey", linetype = 3),
+          plot.caption.position = "plot",
+          panel.background = element_rect(fill = "white", colour = 'black'))
+
+freq_piece_gpo_plot
+```
+
+![](reception_analysis_files/figure-gfm/unnamed-chunk-85-1.png)<!-- -->
+
+## Correspondence Analysis
+
+Main
+
+``` r
+ca_main_english <- plot(grouped_ca_no_erfurt_or_unknown_english,
+                invisible = "row",
+                col.quali.sup = "darkblue",
+                selectCol = "contrib 20",
+                autoLab = "y", 
+                ylim = c(-0.75, 1.75), 
+                unselect = 1,
+                cex = 0.85)
+
+ca_main_english <- ca_main_english + 
+    labs(title = "The Political-Aesthetic Space of The Measures Taken and The Mother",
+         subtitle = "(CA of pieces and political orientations with the top 20 contributing keywords.)") +
+    theme_bw()
+
+ca_main_english
+```
+
+![](reception_analysis_files/figure-gfm/unnamed-chunk-86-1.png)<!-- -->
+
+*Measures Taken*
+
+``` r
+ca_measures <- plot(grouped_ca_no_erfurt_or_unknown_english,
+     invisible = "row",
+     col.quali.sup = "darkblue",
+     selectCol = "contrib 20",
+     autoLab = "y",
+     xlim = c(0, 1.5),
+     ylim = c(-1, 2), 
+     unselect = 1,
+     cex = 0.85)
+
+ca_measures <- ca_measures + 
+  labs(title = "The Political-Aesthetic Space of The Measures Taken",
+       subtitle = "(Enlargement of positive x region of above.)") +
+  theme_bw()
+
+ca_measures
+```
+
+![](reception_analysis_files/figure-gfm/unnamed-chunk-87-1.png)<!-- -->
+
+*Mother*
+
+``` r
+ca_mother <- plot(grouped_ca_no_erfurt_or_unknown_english,
+     invisible = "row",
+     col.quali.sup = "darkblue",
+     selectCol = "contrib 20",
+     autoLab = "y",
+     xlim = c(-1.25, 0),
+     ylim = c(-0.75, 0.25), 
+     unselect = 1,
+     cex = 0.85)
+
+ca_mother <- ca_mother + 
+  labs(title = "The Political-Aesthetic Space of The Mother",
+       subtitle = "(Enlargement of negative x region of above.)") +
+  theme_bw() 
+
+ca_mother
+```
+
+![](reception_analysis_files/figure-gfm/unnamed-chunk-88-1.png)<!-- -->

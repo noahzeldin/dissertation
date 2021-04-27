@@ -1114,10 +1114,8 @@ ca_main_english <- plot(grouped_ca_no_erfurt_or_unknown_english,
                 invisible = "row",
                 col.quali.sup = "darkblue",
                 selectCol = "contrib 20",
-                autoLab = "y", # "n" worked decently for Massnahme but terrible for Mutter
-                # xlim = c(-1.75, 1.25), # didn't help much - default is -1.5, 1.5
-                ylim = c(-0.75, 1.75), # second modified sizing - probably better
-                # ylim = c(-1, 2), # first modified sizing
+                autoLab = "y", 
+                ylim = c(-0.75, 1.75), 
                 unselect = 1,
                 cex = 0.85)
 
@@ -1129,7 +1127,7 @@ ca_main_english <- ca_main_english +
 ca_main_english
 ```
 
-Measures
+*Measures Taken*
 
 ```{r}
 ca_measures <- plot(grouped_ca_no_erfurt_or_unknown_english,
@@ -1150,7 +1148,7 @@ ca_measures <- ca_measures +
 ca_measures
 ```
 
-Mother
+*Mother*
 
 ```{r}
 ca_mother <- plot(grouped_ca_no_erfurt_or_unknown_english,
