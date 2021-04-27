@@ -1133,19 +1133,19 @@ dur_texture_piece_mosaic_plot
 ```
 
 
-#### Presence of Each Texture by Piece
+<!-- #### Presence of Each Texture by Piece -->
 
-Create table:
+<!-- Create table: -->
 
-```{r}
-texture_piece_presence <- dur_texture_piece %>% 
-    group_by(piece_no, texture) %>% 
-    count(texture) %>% 
-    spread(texture, n, fill = 0) %>% 
-    mutate(no_of_textures = sum(c_across(a:p)))
+<!-- ```{r} -->
+<!-- texture_piece_presence <- dur_texture_piece %>%  -->
+<!--     group_by(piece_no, texture) %>%  -->
+<!--     count(texture) %>%  -->
+<!--     spread(texture, n, fill = 0) %>%  -->
+<!--     mutate(no_of_textures = sum(c_across(a:p))) -->
 
-texture_piece_presence
-```
+<!-- texture_piece_presence -->
+<!-- ``` -->
 
 <!-- ##### Pieces grouped by number of textures -->
 
