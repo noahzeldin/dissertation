@@ -51,9 +51,9 @@ Noah Zeldin
 
 Below is the annotated set-up for my formal analysis of Hanns Eisler’s
 music to *The Measures Taken*, which is included in the second chapter
-of my dissertation. This analysis was conducted in R. I have tried to
+of my dissertation. This analysis was conducted in R. (I have tried to
 use [tidyverse](https://www.tidyverse.org/) syntax as consistently as
-possible. Data sets will be made available to researchers upon request.
+possible.) Data sets will be made available to researchers upon request.
 
 **NB: Further refinements to the coding are forthcoming.**
 
@@ -373,17 +373,14 @@ gen_tib <- gen_tib %>% as_tibble()
 
 ## Tibble for Choral Portions: gen\_tib\_sung
 
-Filter out parts without choral singing. (This includes passages spoken
-by the choir.) \* **CHECK IF NECESSARY TO ADD** `as_tibble()` **TO
-END.**
+Filter out parts without choral singing (includes passages *spoken* by
+choir):
 
 ``` r
 gen_tib_sung <- gen_tib %>% 
     filter(texture != "na" & 
                parts_active > 0 & 
                spoken == 0) 
-# %>% 
-#     as_tibble() # may not be necessary
 ```
 
 <!-- Check to see if any NAs remain. The following should return an **empty**  -->
@@ -418,6 +415,8 @@ gen_tib_sung <- gen_tib %>%
 
 ## Tibble for Pitch: pitch\_tib
 
+Create tibble containing data on choir’s pitch material in each measure:
+
 ``` r
 pitch_tib <- gen_tib_sung %>% 
     select(id, piece_no, measure, tones, dur_choir, dmc) %>%
@@ -442,6 +441,11 @@ pitch_tib <- gen_tib_sung %>%
 
 # Stats
 
+This section contains calculations derived from the tibbles generated
+and cleaned in the previous sections. These calculations formed the
+basis of my formal analysis and some of the values were used in the
+write-up included in the chapter.
+
 ## Durations: General
 
 ### Total Duration in Minutes
@@ -454,6 +458,8 @@ Total duration in minutes: 38.58.
 
 ### Duration by Piece
 
+Create tibble with durations for all pieces:
+
 ``` r
 dur_piece <- dur_tib %>% 
     group_by(piece_no) %>%
@@ -461,9 +467,9 @@ dur_piece <- dur_tib %>%
     mutate(prop_of_dur = (duration_min/sum(duration_min)),
            duration_min = round(duration_min, digits = 2),
            prop_of_dur = round(prop_of_dur, digits = 3))
-```
 
-Output of `dur_piece`:
+knitr::kable(dur_piece)
+```
 
 | piece\_no | duration\_min | prop\_of\_dur |
 | :-------- | ------------: | ------------: |
@@ -489,7 +495,7 @@ Output of `dur_piece`:
 | 13b       |          0.47 |         0.012 |
 | 14        |          2.37 |         0.061 |
 
-Resort to find longest pieces.
+Resort to find longest pieces:
 
 ``` r
 dur_piece %>% 
@@ -537,6 +543,18 @@ dur_piece %>%
 
 ### Duration by Category
 
+I assigned one of four categories to each of the pieces. These are:
+
+1.  choir with orchestra
+
+2.  spoken dialogue with orchestra
+
+3.  pieces featuring solo tenor
+
+4.  choir acapella or choir with snare drum
+
+<!-- end list -->
+
 ``` r
 dur_tib %>% 
     group_by(category) %>%
@@ -558,15 +576,20 @@ dur_tib %>%
 
 ### Duration by Subcategory
 
+Each of the four categories was then subdivided, resulting in a total of
+ten different subcategories of music. (All of this is laid out in
+**table 2.1. The Structure of *The Measures Taken*** in ch. 2 of the
+dissertation.)
+
 ``` r
 dur_subcategory <- dur_tib %>% 
     group_by(subcategory) %>%
     summarize(duration = sum(duration)) %>% 
     mutate(duration_min = (duration/60)) %>% 
     mutate(prop_of_dur = (duration/sum(duration)))
-```
 
-Output of `dur_subcategory`:
+knitr::kable(dur_subcategory)
+```
 
 | subcategory |   duration | duration\_min | prop\_of\_dur |
 | :---------- | ---------: | ------------: | ------------: |
@@ -1666,7 +1689,7 @@ texture_tib %>%
     geom_col(aes(x = texture, y = prop_of_sung, fill = texture))
 ```
 
-![](mt_music_analysis_files/figure-gfm/unnamed-chunk-67-1.png)<!-- -->
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-65-1.png)<!-- -->
 
 #### By Duration
 
@@ -1691,7 +1714,7 @@ dur_texture_work %>%
     geom_col(aes(x = texture, y = prop_of_sung, fill = texture))
 ```
 
-![](mt_music_analysis_files/figure-gfm/unnamed-chunk-69-1.png)<!-- -->
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-67-1.png)<!-- -->
 
 <!-- #### Table of Polyphonic Passages by Piece/Measure -->
 
@@ -1839,7 +1862,7 @@ dur_texture_piece_mosaic_plot <- ggplot(dur_texture_piece_mosaic_table,
 dur_texture_piece_mosaic_plot
 ```
 
-![](mt_music_analysis_files/figure-gfm/unnamed-chunk-73-1.png)<!-- -->
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-71-1.png)<!-- -->
 
 <!-- #### Presence of Each Texture by Piece -->
 
@@ -2020,7 +2043,7 @@ pitch_distribution_plot <- pitch_long %>%
 pitch_distribution_plot
 ```
 
-![](mt_music_analysis_files/figure-gfm/unnamed-chunk-75-1.png)<!-- -->
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-73-1.png)<!-- -->
 
 <!-- **OLD** -->
 

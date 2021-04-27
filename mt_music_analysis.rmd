@@ -17,8 +17,9 @@ knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Desktop/Proposal/R materia
 
 Below is the annotated set-up for my formal analysis of Hanns Eisler's music to
 *The Measures Taken*, which is included in the second chapter of my 
-dissertation. This analysis was conducted in R. I have tried to use 
-[tidyverse](https://www.tidyverse.org/) syntax as consistently as possible. Data sets will be made available to researchers upon request.
+dissertation. This analysis was conducted in R. (I have tried to use 
+[tidyverse](https://www.tidyverse.org/) syntax as consistently as possible.) 
+Data sets will be made available to researchers upon request.
 
 **NB: Further refinements to the coding are forthcoming.** 
 
@@ -287,17 +288,13 @@ gen_tib <- gen_tib %>% as_tibble()
 
 ## Tibble for Choral Portions: gen_tib_sung
 
-Filter out parts without choral singing. (This includes passages spoken by
-the choir.)
-* **CHECK IF NECESSARY TO ADD** `as_tibble()` **TO END.**
+Filter out parts without choral singing (includes passages *spoken* by choir):
 
 ```{r}
 gen_tib_sung <- gen_tib %>% 
     filter(texture != "na" & 
                parts_active > 0 & 
                spoken == 0) 
-# %>% 
-#     as_tibble() # may not be necessary
 ```
 
 <!-- Check to see if any NAs remain. The following should return an **empty**  -->
@@ -319,6 +316,8 @@ gen_tib_sung <- gen_tib %>%
 
 
 ## Tibble for Pitch: pitch_tib
+
+Create tibble containing data on choir's pitch material in each measure:
 
 ```{r}
 pitch_tib <- gen_tib_sung %>% 
@@ -345,6 +344,11 @@ pitch_tib <- gen_tib_sung %>%
 
 # Stats
 
+This section contains calculations derived from the tibbles generated and 
+cleaned in the previous sections. These calculations formed the basis of my
+formal analysis and some of the values were used in the write-up included in
+the chapter.
+
 ## Durations: General
 
 ### Total Duration in Minutes
@@ -357,6 +361,8 @@ Total duration in minutes: `r round(dur_total_min, digits = 2)`.
 
 ### Duration by Piece
 
+Create tibble with durations for all pieces:
+
 ```{r}
 dur_piece <- dur_tib %>% 
     group_by(piece_no) %>%
@@ -364,16 +370,12 @@ dur_piece <- dur_tib %>%
     mutate(prop_of_dur = (duration_min/sum(duration_min)),
            duration_min = round(duration_min, digits = 2),
            prop_of_dur = round(prop_of_dur, digits = 3))
-```
 
-Output of `dur_piece`:
-
-```{r, echo=FALSE}
 knitr::kable(dur_piece)
 ```
 
 
-Resort to find longest pieces.
+Resort to find longest pieces:
 
 ```{r}
 dur_piece %>% 
@@ -398,6 +400,17 @@ dur_piece %>%
 
 ### Duration by Category
 
+I assigned one of four categories to each of the pieces. These are:
+
+1. choir with orchestra
+
+2. spoken dialogue with orchestra
+
+3. pieces featuring solo tenor
+
+4. choir acapella or choir with snare drum
+
+
 ```{r}
 dur_tib %>% 
     group_by(category) %>%
@@ -411,19 +424,20 @@ dur_tib %>%
 
 ### Duration by Subcategory
 
+Each of the four categories was then subdivided, resulting in a total of ten
+different subcategories of music. (All of this is laid out in **table 2.1. The 
+Structure of *The Measures Taken*** in ch. 2 of the dissertation.)
+
 ```{r}
 dur_subcategory <- dur_tib %>% 
     group_by(subcategory) %>%
     summarize(duration = sum(duration)) %>% 
     mutate(duration_min = (duration/60)) %>% 
     mutate(prop_of_dur = (duration/sum(duration)))
-```
 
-Output of `dur_subcategory`:
-
-```{r, echo=FALSE}
 knitr::kable(dur_subcategory)
 ```
+
 
 <!-- arranged descending -->
 
