@@ -693,15 +693,6 @@ articles_perc_with_full_dates <- 100 - articles_perc_without_full_dates
 ```
 
 
-### Edit Table
-
-Can prob delete eventually
-
-```{r}
-dates_tib$Date %>% str_detect("[:digit:]{2}\\.[:digit:]{2}\\.[:digit:]{4}")
-dates_tib$Date %>% str_detect("\\S{2}\\.\\S{2}\\.[:digit:]{4}")
-```
-
 ### By Piece
 
 #### Massnahme
