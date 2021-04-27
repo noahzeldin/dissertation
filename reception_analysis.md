@@ -11,8 +11,7 @@ Noah Zeldin
       - [Create Corpora](#create-corpora)
           - [General Corpora](#general-corpora)
           - [Piece Corpora](#piece-corpora)
-          - [Title Corpora - NO MASSNAHME
-            YET](#title-corpora---no-massnahme-yet)
+          - [Title Corpora](#title-corpora)
       - [Corpus Summary - Article Lengths,
         etc.](#corpus-summary---article-lengths-etc.)
       - [Dictionaries and Additional
@@ -32,7 +31,8 @@ Noah Zeldin
       - [Create function for converting dfm to dataframe and performing
         CA](#create-function-for-converting-dfm-to-dataframe-and-performing-ca)
       - [Use this function on each dfm](#use-this-function-on-each-dfm)
-  - [KWIC and Keyword Exploration](#kwic-and-keyword-exploration)
+  - [Keywords In Context and Keyword
+    Exploration](#keywords-in-context-and-keyword-exploration)
       - [Create function to link KWIC with
         data](#create-function-to-link-kwic-with-data)
       - [Explore various KWIC](#explore-various-kwic)
@@ -48,7 +48,7 @@ Noah Zeldin
           - [By Piece](#by-piece-1)
       - [Date Ranges, Time Lengths,
         etc.](#date-ranges-time-lengths-etc.)
-          - [Time Length in YEARS](#time-length-in-years)
+          - [Time Length in Years](#time-length-in-years)
           - [Range / Interval](#range-interval)
           - [Proportion of Articles near
             Premieres](#proportion-of-articles-near-premieres)
@@ -56,7 +56,7 @@ Noah Zeldin
   - [Visualizations](#visualizations)
       - [Visual Summary of Reduced
         Corpus](#visual-summary-of-reduced-corpus)
-          - [Super Long Articles](#super-long-articles)
+          - [Very Long Articles](#very-long-articles)
       - [Wordclouds](#wordclouds)
       - [Word Frequency](#word-frequency)
       - [Correspondence Analysis](#correspondence-analysis)
@@ -72,6 +72,20 @@ counts, etc.) and [FactoMineR](http://factominer.free.fr/index.html)
 package (for correspondence analysis). (Also, I have tried to use
 [tidyverse](https://www.tidyverse.org/) syntax as consistently as
 possible.) Data sets will be made available to researchers upon request.
+
+The **main goals** of this analysis are:
+
+1.  to determine the most-discussed aspects of each work
+
+<!-- end list -->
+
+  - In the dissertation, I compare these results to the works’ postwar
+    reception.
+
+<!-- end list -->
+
+2.  to determine if there is a measurable correspondence between
+    aesthetics and politics
 
 **NB: Further refinements to the coding are forthcoming.** This was my
 first serious attempt at coding in R, so certain portions are still a
@@ -165,7 +179,7 @@ Mutter Corpus
 mutter_corp <- corpus_subset(corp, Piece == "Mutter")
 ```
 
-### Title Corpora - NO MASSNAHME YET
+### Title Corpora
 
 Title Corpus
 
@@ -173,7 +187,7 @@ Title Corpus
 corp_title <- corpus(spreadsheet, text_field = "Title")
 ```
 
-Mutter Title Corpus
+Mother Title Corpus
 
 ``` r
 mutter_corp_title <- corpus_subset(corp_title, Piece == "Mutter")
@@ -316,7 +330,7 @@ mutter_title_dfm <- convert_to_dfm_and_apply_dictionaries(mutter_title_toks)
 
 <!-- PROB NEED TO CLEAN UP -->
 
-NB: **GPO** stands for “genearl political orientation.”
+NB: **GPO** stands for “general political orientation.”
 
 ``` r
 # convert gen_dfm[_reduced] to dataframe
@@ -460,7 +474,6 @@ Mother
 mutter_corp_no_unknown <- corpus_subset(corp, 
                                         Piece == "Mutter" &! Generalized_Political_Orientation == "Unknown" )
 
-
 mutter_toks_no_unknown <- tokenize_and_remove_stopwords(mutter_corp_no_unknown)
 
 mutter_dfm_no_unknown <- convert_to_dfm_and_apply_dictionaries(mutter_toks_no_unknown)
@@ -501,7 +514,7 @@ grouped_ca_no_erfurt_or_unknown_english <-
   convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown_english)
 ```
 
-# KWIC and Keyword Exploration
+# Keywords In Context and Keyword Exploration
 
 ## Create function to link KWIC with data
 
@@ -747,7 +760,7 @@ dates_tib <- corp_reduced_datafr %>%
   arrange(desc(n))
 ```
 
-Separate Columns
+Separate columns:
 
 ``` r
 dates_tib_separate <- corp_reduced_datafr %>% 
@@ -757,7 +770,7 @@ dates_tib_separate <- corp_reduced_datafr %>%
     separate(Date, sep = "\\.", into = c("day", "month", "year"))
 ```
 
-Make Compatible with Lubridate
+Make compatible with Lubridate package:
 
 ``` r
 dates_tib_lubridate <- dates_tib_separate %>% 
@@ -772,7 +785,7 @@ dates_tib_lubridate <- dates_tib_separate %>%
   arrange(date)
 ```
 
-Percent of Articles WITHOUT Full Dates (i.e. excluded from lubridate)
+Percent of articles *without* full dates (i.e. excluded from lubridate):
 
 ``` r
 articles_perc_without_full_dates <- 
@@ -782,7 +795,7 @@ articles_perc_without_full_dates <-
   round() 
 ```
 
-Percent of Articles WITH Full Dates (i.e. included for lubridate)
+Percent of articles *with* full dates (i.e. included for lubridate):
 
 ``` r
 articles_perc_with_full_dates <- 100 - articles_perc_without_full_dates
@@ -910,7 +923,7 @@ dates_tib_lubridate %>%
 
 ## Date Ranges, Time Lengths, etc.
 
-### Time Length in YEARS
+### Time Length in Years
 
 All Articles (Edited for Lubridate)
 
@@ -1060,7 +1073,7 @@ Create color scheme:
 colors_four <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")
 ```
 
-English Labels:
+Create English labels for both works:
 
 ``` r
 labels_english <- c(Massnahme = "Measures Taken", Mutter = "Mother")
@@ -1084,8 +1097,7 @@ toks_grouped <- gen_datafr_reduced %>%
 # can't combine with above for some reason
 toks_grouped <- left_join(toks_grouped, 
                                     corp_reduced_datafr[ , c("doc_id",    "Generalized_Political_Orientation", "Piece")], 
-                                    by = "doc_id", # 8.01 - now do this
-                                    # by = c("document" = "doc_id"), # used to work
+                                    by = "doc_id", 
                                     copy = TRUE)
 
 # STEP 3
@@ -1112,7 +1124,6 @@ toks_summary_boxplot <-
     stat_summary(fun = median, geom="line", 
                  size = 1.2, color = "yellow", alpha = 0.4, aes(group = 1)) +
     scale_fill_brewer(type = "seq", palette = "Set1") +
-    # geom_text()
     geom_jitter(color="darkgrey",
         size=1.25, alpha=0.95,
         show.legend = FALSE) + # may be too much
@@ -1124,9 +1135,6 @@ toks_summary_boxplot <-
          title = "Tokens per Article (Post-Processing)",
          subtitle = "Scaled for readability. Several outliers excluded. Box width corresponds to number of articles.",
          caption = "Red and yellow points denote respecitively the mean and median tokens per article for each \n piece. NB: The positions of the scatter points do not correspond to political orientation.") +
-    # below = text for number of articles in each category
-    # # doesn't line up with variable box width
-    # FIX BELOW - OBSERVATION COUNTS
     geom_text(aes(label = ..count.., 
                   y= ..prop..)
               , stat= "count",
@@ -1142,18 +1150,16 @@ toks_summary_boxplot <-
           panel.grid.minor.y = element_line(color = "grey", linetype = 3),
           plot.caption.position = "plot",
           panel.background = element_rect(fill = "white", colour = 'black'))
-# +
-#     theme_bw()
 
 toks_summary_boxplot
 ```
 
 ![](reception_analysis_files/figure-gfm/unnamed-chunk-80-1.png)<!-- -->
 
-### Super Long Articles
+### Very Long Articles
 
-The goal is to identify the long articles in *Measures - Unknown*,
-because they really stretch out the IQR in that category.
+The goal is to identify the very long articles in *Measures - Unknown*
+category, because they stretch out the IQR.
 
 ``` r
 corp_reduced_summary %>% 
