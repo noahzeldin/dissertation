@@ -1144,65 +1144,66 @@ texture_piece_presence <- dur_texture_piece %>%
     spread(texture, n, fill = 0) %>% 
     mutate(no_of_textures = sum(c_across(a:p)))
 
-knitr::kable(texture_piece_presence)
+texture_piece_presence
 ```
 
-##### Pieces grouped by number of textures
+<!-- ##### Pieces grouped by number of textures -->
 
-Pieces with 3 textures.
+<!-- Pieces with 3 textures. -->
 
-```{r}
-texture_piece_presence %>% 
-    filter(no_of_textures == 3)
-```
+<!-- ```{r} -->
+<!-- texture_piece_presence %>%  -->
+<!--     filter(no_of_textures == 3) -->
+<!-- ``` -->
 
-Pieces with 1 texture.
+<!-- Pieces with 1 texture. -->
 
-```{r}
-texture_piece_presence %>% 
-    filter(no_of_textures == 1)
-```
+<!-- ```{r} -->
+<!-- texture_piece_presence %>%  -->
+<!--     filter(no_of_textures == 1) -->
+<!-- ``` -->
 
-Really interesting - all homophonic.
+<!-- Really interesting - all homophonic. -->
 
 
-##### Grouped by type of texture
+<!-- ##### Grouped by type of texture -->
 
-1. with antiphony
+<!-- 1. with antiphony -->
 
-```{r}
-texture_piece_presence %>% 
-    filter(a == 1)
-```
+<!-- ```{r} -->
+<!-- texture_piece_presence %>%  -->
+<!--     filter(a == 1) -->
+<!-- ``` -->
 
-Yep, only start of "Lob der Partei".
+<!-- Yep, only start of "Lob der Partei". -->
 
-2. with homophony
+<!-- 2. with homophony -->
 
-```{r}
-texture_piece_presence %>% 
-    filter(h == 1)
-```
+<!-- ```{r} -->
+<!-- texture_piece_presence %>%  -->
+<!--     filter(h == 1) -->
+<!-- ``` -->
 
-So, every single piece.
+<!-- So, every single piece. -->
 
-3. with monophony
+<!-- 3. with monophony -->
 
-```{r}
-texture_piece_presence %>% 
-    filter(m == 1)
-```
+<!-- ```{r} -->
+<!-- texture_piece_presence %>%  -->
+<!--     filter(m == 1) -->
+<!-- ``` -->
 
-###### CONSIDER CHANGING - MAY NOT NEED VALUE
+<!-- ###### CONSIDER CHANGING - MAY NOT NEED VALUE -->
 
-4. with polyphony
+<!-- 4. with polyphony -->
 
-```{r}
-no_pieces_with_polyphony <- texture_piece_presence %>% 
-    filter(p == 1) %>% 
-    print() %>% 
-    nrow()
-```
+<!-- ```{r} -->
+<!-- no_pieces_with_polyphony <- texture_piece_presence %>%  -->
+<!--     filter(p == 1) %>%  -->
+<!--     print() %>%  -->
+<!--     nrow() -->
+<!-- ``` -->
+
 
 
 
