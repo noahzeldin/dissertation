@@ -460,7 +460,7 @@ grouped_ca_no_erfurt_or_unknown_english <-
 
 # KWIC and Keyword Exploration
 
-## Create Function to Link KWIC with Data
+## Create function to link KWIC with data
 
 ```{r}
 combine_kwic_with_data <- function(corpus, words, window) {
@@ -481,7 +481,9 @@ combine_kwic_with_data <- function(corpus, words, window) {
     }
 ```
 
-## Explore Various KWIC 
+## Explore various KWIC 
+
+All of these keywords relate to claims made in ch. 2.
 
 * primitiv
 
@@ -581,7 +583,7 @@ combine_kwic_with_data(corp, "Kantate*", 25) %>%
 
 No results.
 
-### Special Case: LEHRLERN in Mutter/Right
+### Special Case: LEHRLERN in Mother/Right
 
 NB: Can't use FN, b/c can't specify valuetype
 Here, adaptation of FN
