@@ -881,3 +881,336 @@ dates_tib_lubridate %>%
 ```
 
 
+# Visualizations
+
+Create color scheme:
+
+```{r}
+colors_four <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")
+```
+
+
+## English Labels
+
+```{r}
+labels_english <- c(Massnahme = "Measures Taken", Mutter = "Mother")
+```
+
+## Visual Summary of Reduced Corpus (Fancy Boxplot)
+
+Still need to fix display of observation counts.
+
+```{r}
+toks_summary_boxplot <- 
+    toks_grouped %>% 
+    ggplot(aes(x = Piece, y = tokens, 
+               fill = Generalized_Political_Orientation)) +
+    geom_boxplot(alpha = 0.7,
+                 varwidth = TRUE) +
+    stat_summary(fun = mean, geom="point", 
+                 shape=21, size=5, color="black", fill="red", alpha = 0.75) +
+    stat_summary(fun = mean, geom="line", 
+                 size = 1.2, color = "red", alpha = 0.4, aes(group = 1)) +
+    stat_summary(fun = median, geom="point", 
+                 shape=21, size=5, color="black", fill="yellow", alpha = 0.75) +
+    stat_summary(fun = median, geom="line", 
+                 size = 1.2, color = "yellow", alpha = 0.4, aes(group = 1)) +
+    scale_fill_brewer(type = "seq", palette = "Set1") +
+    # geom_text()
+    geom_jitter(color="darkgrey",
+        size=1.25, alpha=0.95,
+        show.legend = FALSE) + # may be too much
+    coord_cartesian(xlim = NULL, ylim = c(0, 900)) +
+    ylab("Tokens") +
+  scale_x_discrete(labels=c("Measures Taken", "Mother")) +
+    xlab(NULL) +
+    labs(fill = "Political Orientation",
+         title = "Tokens per Article (Post-Processing)",
+         subtitle = "Scaled for readability. Several outliers excluded. Box width corresponds to number of articles.",
+         caption = "Red and yellow points denote respecitively the mean and median tokens per article for each \n piece. NB: The positions of the scatter points do not correspond to political orientation.") +
+    # below = text for number of articles in each category
+    # # doesn't line up with variable box width
+    # FIX BELOW - OBSERVATION COUNTS
+    geom_text(aes(label = ..count.., 
+                  y= ..prop..)
+              , stat= "count",
+              vjust = 1, # confusing - probably don't need
+              position = position_dodge2(width = 0.5
+                                          # c(0.4, 0.8)
+                                        ) 
+              ) +
+  theme(axis.title.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          panel.grid.major.x = element_blank(),
+          panel.grid.major.y = element_line(color = "grey", linetype = 3),
+          panel.grid.minor.y = element_line(color = "grey", linetype = 3),
+          plot.caption.position = "plot",
+          panel.background = element_rect(fill = "white", colour = 'black'))
+# +
+#     theme_bw()
+
+toks_summary_boxplot
+```
+
+### Super Long Articles
+
+Want to identify long articles in Measures - Unknown  
+* really strech out boxplot
+
+```{r}
+corp_reduced_summary %>% 
+    filter(Generalized_Political_Orientation == "Unknown" &
+               Piece == "Massnahme") %>% 
+    arrange(desc(tokens)) %>% 
+  select(Article, tokens, Title:Piece)
+```
+
+## Wordclouds - CAN'T SAVE AS OBJECT
+
+Grouped by Piece
+
+```{r}
+# must rename groups in English for word cloud
+piece_dfm_no_erfurt_english <- dfm_group(piece_dfm_no_erfurt, groups = c("Measures Taken", "Mother"))
+
+textplot_wordcloud(piece_dfm_no_erfurt_english,
+                   max_words = 100,
+                   color = colors_four,
+                   rotation = FALSE,
+                   comparison = TRUE,
+                   labelcolor = "black")
+```
+
+Mutter - Grouped by GPO (no unknown)
+
+NB: A bit different than in old version - probably because of modifications to dictionary.
+
+```{r}
+wordcloud_mutter_gpo <- 
+  textplot_wordcloud(mutter_dfm_gpo_no_unknown,
+                   max_words = 100, # 125 or 100 is probably best
+                   rotation = FALSE,
+                   color = colors_four,
+                   comparison = TRUE,
+                   labelcolor = "black")
+
+wordcloud_mutter_gpo
+```
+
+
+## Word Frequency 
+
+Piece
+
+```{r}
+# grouped by piece (weighted)
+freq_piece <- dfm_weight(gen_dfm_reduced, scheme = "prop") %>% # 12.21.20 applying dfm_weight seems to make no difference
+    textstat_frequency(n = 15, groups = "Piece")
+
+# good, except overlap of a couple of words, can't figure out how to fix
+# yeah, but may not be necessary: keyness w/ target + reference is better,
+# shows typicality rather than freq
+freq_piece_plot <- 
+  ggplot(freq_piece, 
+       aes(x = nrow(freq_piece):1, y = frequency, fill = group)) +
+    geom_col() +
+    facet_wrap(~ group, scales = "free", nrow = 2,
+               labeller = labeller(group = labels_english)
+               ) +
+    coord_flip() +
+    scale_x_continuous(breaks = nrow(freq_piece):1, 
+                       labels = freq_piece$feature) +
+    labs(x = NULL, y = "Relative Frequency") +
+    scale_fill_manual(values = colors_four) + # prob could just use brewer, b/c only 2
+    theme_bw() +
+    theme(legend.position = "none",
+          panel.grid.major.y = element_line(color = "grey", linetype = 3),
+          panel.grid.minor.y = element_blank(),
+          panel.grid.major.x = element_line(color = "grey", linetype = 3),
+          panel.grid.minor.x = element_line(color = "grey", linetype = 3),
+          plot.caption.position = "plot",
+          panel.background = element_rect(fill = "white", colour = 'black'))
+
+freq_piece_plot
+```
+
+Piece + GPO
+
+```{r}
+freq_grouped_wt <- dfm_weight(gen_dfm_reduced, scheme = "prop") %>% 
+    textstat_frequency(n = 10, 
+                       groups = c("Piece", "Generalized_Political_Orientation")) 
+
+freq_grouped_wt <- freq_grouped_wt %>% 
+    mutate(group = str_replace_all(group, 
+                                   c("Massnahme.Center" = 
+                                       "Measures Taken | Center",
+                                     "Massnahme.Left" = "Measures Taken | Left",
+                                     "Massnahme.Right" = 
+                                       "Measures Taken | Right",
+                                     "Massnahme.Unknown" = 
+                                       "Measures Taken | Unknown",
+                                     "Mutter.Center" = "Mother | Center",
+                                     "Mutter.Left" = "Mother | Left",
+                                     "Mutter.Right" = "Mother | Right",
+                                     "Mutter.Unknown" = "Mother | Unknown")))
+
+# good but would want to rearrange cols
+# currently: C - L - R - U
+freq_piece_gpo_plot <- ggplot(freq_grouped_wt, 
+       aes(x = nrow(freq_grouped_wt):1, y = frequency, fill = group)) +
+    geom_col() +
+    facet_wrap(~ group, scales = "free", nrow = 2,
+               # labeller = labeller(group = labels_english
+               ) +
+    coord_flip() +
+    scale_x_continuous(breaks = nrow(freq_grouped_wt):1, 
+                       labels = freq_grouped_wt$feature) +
+    labs(x = NULL, y = "Relative Frequency") +
+    scale_fill_manual(values = c(colors_four, colors_four)) + # repeat b/c need 8
+    theme_bw() +
+    theme(legend.position = "none",
+          panel.grid.major.y = element_line(color = "grey", linetype = 3),
+          panel.grid.minor.y = element_blank(),
+          panel.grid.major.x = element_line(color = "grey", linetype = 3),
+          panel.grid.minor.x = element_line(color = "grey", linetype = 3),
+          plot.caption.position = "plot",
+          panel.background = element_rect(fill = "white", colour = 'black'))
+
+freq_piece_gpo_plot
+```
+
+## CA
+
+Main
+
+```{r}
+ca_main <- plot(grouped_ca_no_erfurt_or_unknown,
+     invisible = "row",
+     col.quali.sup = "darkblue",
+     selectCol = "contrib 20",
+     autoLab = "y", # "n" worked decently for Massnahme but terrible for Mutter
+     # xlim = c(-1.75, 1.25), # didn't help much - default is -1.5, 1.5
+     ylim = c(-0.75, 1.75), # second modified sizing - probably better
+     # ylim = c(-1, 2), # first modified sizing
+     unselect = 1,
+     cex = 0.85)
+
+ca_main <- ca_main + 
+  labs(title = "The Political-Aesthetic Space of The Measures Taken and The Mother",
+       subtitle = "(CA of pieces and political orientations with the top 20 contributing keywords.)") +
+    theme_bw()
+
+ca_main
+```
+
+Massnahme
+
+```{r}
+ca_mass <- plot(grouped_ca_no_erfurt_or_unknown,
+     invisible = "row",
+     col.quali.sup = "darkblue",
+     selectCol = "contrib 20",
+     autoLab = "y",
+     xlim = c(0, 1.5),
+     ylim = c(-1, 2), 
+     unselect = 1,
+     cex = 0.85)
+
+ca_mass <- ca_mass + 
+  labs(title = "The Political-Aesthetic Space of The Measures Taken",
+       subtitle = "(Enlargement of positive x region of above.)") +
+  theme_bw()
+
+ca_mass
+```
+
+Mutter
+
+```{r}
+ca_mutter <- plot(grouped_ca_no_erfurt_or_unknown,
+     invisible = "row",
+     col.quali.sup = "darkblue",
+     selectCol = "contrib 20",
+     autoLab = "y",
+     xlim = c(-1.25, 0),
+     ylim = c(-0.75, 0.25), 
+     unselect = 1,
+     cex = 0.85)
+
+ca_mutter <- ca_mutter + 
+  labs(title = "The Political-Aesthetic Space of The Mother",
+       subtitle = "(Enlargement of negative x region of above.)") +
+  theme_bw() 
+
+ca_mutter
+```
+
+### ENGLISH - 1.02.21
+
+Main
+
+```{r}
+ca_main_english <- plot(grouped_ca_no_erfurt_or_unknown_english,
+                invisible = "row",
+                col.quali.sup = "darkblue",
+                selectCol = "contrib 20",
+                autoLab = "y", # "n" worked decently for Massnahme but terrible for Mutter
+                # xlim = c(-1.75, 1.25), # didn't help much - default is -1.5, 1.5
+                ylim = c(-0.75, 1.75), # second modified sizing - probably better
+                # ylim = c(-1, 2), # first modified sizing
+                unselect = 1,
+                cex = 0.85)
+
+ca_main_english <- ca_main_english + 
+    labs(title = "The Political-Aesthetic Space of The Measures Taken and The Mother",
+         subtitle = "(CA of pieces and political orientations with the top 20 contributing keywords.)") +
+    theme_bw()
+
+ca_main_english
+```
+
+Measures
+
+```{r}
+ca_measures <- plot(grouped_ca_no_erfurt_or_unknown_english,
+     invisible = "row",
+     col.quali.sup = "darkblue",
+     selectCol = "contrib 20",
+     autoLab = "y",
+     xlim = c(0, 1.5),
+     ylim = c(-1, 2), 
+     unselect = 1,
+     cex = 0.85)
+
+ca_measures <- ca_measures + 
+  labs(title = "The Political-Aesthetic Space of The Measures Taken",
+       subtitle = "(Enlargement of positive x region of above.)") +
+  theme_bw()
+
+ca_measures
+```
+
+Mother
+
+```{r}
+ca_mother <- plot(grouped_ca_no_erfurt_or_unknown_english,
+     invisible = "row",
+     col.quali.sup = "darkblue",
+     selectCol = "contrib 20",
+     autoLab = "y",
+     xlim = c(-1.25, 0),
+     ylim = c(-0.75, 0.25), 
+     unselect = 1,
+     cex = 0.85)
+
+ca_mother <- ca_mother + 
+  labs(title = "The Political-Aesthetic Space of The Mother",
+       subtitle = "(Enlargement of negative x region of above.)") +
+  theme_bw() 
+
+ca_mother
+```
+
+
+
