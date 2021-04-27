@@ -24,7 +24,7 @@ Data sets will be made available to researchers upon request.
 
 **NB: Further refinements to the coding are forthcoming.** 
 
-# Load packages  
+# Load Packages  
 
 ```{r}
 library(tidyverse)
