@@ -51,11 +51,11 @@ Noah Zeldin
 
 Below is the annotated set-up for my formal analysis of Hanns Eisler’s
 music to *The Measures Taken*, which is included in the second chapter
-of my dissertation. The data sets will be made available to researchers
-upon request.
+of my dissertation. This analysis was conducted in R. I have tried to
+use [tidyverse](https://www.tidyverse.org/) syntax as consistently as
+possible. Data sets will be made available to researchers upon request.
 
-NB: I have tried to use [tidyverse](https://www.tidyverse.org/) syntax
-as consistently as possible.
+**NB: Further refinements to the coding are forthcoming.**
 
 # Load packages
 
@@ -179,7 +179,7 @@ gen_tib <- as_tibble(bind_rows(voice_analysis_list))
 
 # Cleaning and Manipulation: 1. Durations
 
-Convert **piece\_no**, **category** and **subcategory** to factors.
+Convert **piece\_no**, **category** and **subcategory** to factors:
 
 ``` r
 dur_tib <- dur_tib %>% 
@@ -308,7 +308,9 @@ gen_tib <- gen_tib %>%
 ### Additional Calculations for Density
 
 **NB: This section will in all likelihood be deleted, since it
-ultimately was not included in the final analysis.**
+ultimately was not included in the final analysis.** The goal was to
+find a formula that would allow for a quantitative comparison of the
+informational density of the choral material in each measure.
 
 Translate texture to numeric value in new column:
 
@@ -379,8 +381,9 @@ END.**
 gen_tib_sung <- gen_tib %>% 
     filter(texture != "na" & 
                parts_active > 0 & 
-               spoken == 0) %>% 
-    as_tibble() # may not be necessary
+               spoken == 0) 
+# %>% 
+#     as_tibble() # may not be necessary
 ```
 
 <!-- Check to see if any NAs remain. The following should return an **empty**  -->
