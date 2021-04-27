@@ -920,7 +920,7 @@ dur_choir_total_sec <- sum(choir_tib$dur_choir)
 dur_choir_total_min <- sum(choir_tib$dur_choir) / 60
 ```
 
-The choir sings for 20.0349413 minutes.
+The choir sings for 20.03 minutes.
 
 Duration of choir as proportion of total duration:
 
@@ -1055,15 +1055,17 @@ gen_tib %>%
     ## 8 10            3             0.027
     ## 9 7b            1.8           0.016
 
-Interesting that 14. Schlusschor is top.
+<!-- Interesting that 14. Schlusschor is top. -->
 
-Other remarks: \* close second is 3b. Sprechchor = Wer fuer den
-Kommunismus kaempft \* interesting that 3b. is only category 4 piece in
-top 5
+<!-- Other remarks: -->
+
+<!-- * close second is 3b. Sprechchor = Wer fuer den Kommunismus kaempft -->
+
+<!-- * interesting that 3b. is only category 4 piece in top 5 -->
 
 ### Choir Voice Durations
 
-#### Check for mm. where duration of 1st and 2nd parts don’t align
+#### Check for measures where duration of 1st and 2nd parts don’t align.
 
 1.  Sopranos
 
@@ -1161,8 +1163,8 @@ gen_tib_sung %>%
     ## #   dm_s1 <dbl>, dm_s2 <dbl>, dm_a1 <dbl>, dm_a2 <dbl>, dm_t1 <dbl>,
     ## #   dm_t2 <dbl>, dm_b1 <dbl>, dm_b2 <dbl>, dm_sum <dbl>, dmc <dbl>
 
-Only antiphonic passage at beginning of Lob der Partei. Doesn’t matter,
-because t1 and t2 overlap.
+Only antiphonic passage at beginning of “Lob der Partei.” Doesn’t
+matter, because t1 and t2 overlap.
 
 4.  Basses
 
@@ -1196,7 +1198,8 @@ gen_tib_sung %>%
     ## #   dm_s1 <dbl>, dm_s2 <dbl>, dm_a1 <dbl>, dm_a2 <dbl>, dm_t1 <dbl>,
     ## #   dm_t2 <dbl>, dm_b1 <dbl>, dm_b2 <dbl>, dm_sum <dbl>, dmc <dbl>
 
-Final measure of Streiklied. Doesn’t matter, because b1 and b2 overlap.
+Final measure of “Streiklied.” Doesn’t matter, because b1 and b2
+overlap.
 
 #### Check for measures where 2nd sings but 1st doesn’t
 
@@ -1298,7 +1301,7 @@ gen_tib_sung %>%
     ## #   dm_s1 <dbl>, dm_s2 <dbl>, dm_a1 <dbl>, dm_a2 <dbl>, dm_t1 <dbl>,
     ## #   dm_t2 <dbl>, dm_b1 <dbl>, dm_b2 <dbl>, dm_sum <dbl>, dmc <dbl>
 
-Only beginning of Lob der Partei, as expected.
+Only beginning of “Lob der Partei,” as expected.
 
 Save as extra duration to add to male proportion.
 
@@ -1421,7 +1424,7 @@ gen_tib_sung %>%
     ## 2 10            10  0.375   2.25
     ## 3 10            14  0.375   2.25
 
-Again, doesn’t matter, b/c overlap.
+Again, doesn’t matter because of overlap.
 
 4.  Basses
 
@@ -1438,37 +1441,47 @@ gen_tib_sung %>%
     ##   <fct>      <dbl>  <dbl>  <dbl>
     ## 1 7a            64   0.75   0.25
 
-Again, doesn’t matter, b/c overlap.
+Again, doesn’t matter because of overlap.
 
 #### Computations for male vs. female
 
-Four voices - FIX - need to account for doublings, can’t just add 1 and
-2
+<!-- Four voices - FIX - need to account for doublings, can't just add 1 and 2 -->
 
-**CURRENTLY SKIPPING THIS CHUNK - PROB DELETE**
+<!-- **CURRENTLY SKIPPING THIS CHUNK - PROB DELETE** -->
 
-``` r
-dur_soprano <- sum(gen_tib_sung$dur_s1 + gen_tib_sung$dur_s2)
-dur_alto <- sum(gen_tib_sung$dur_a1 + gen_tib_sung$dur_a2)
-dur_tenor <- sum(gen_tib_sung$dur_t1 + gen_tib_sung$dur_t2)
-dur_bass <- sum(gen_tib_sung$dur_b1 + gen_tib_sung$dur_b2) # FIX/CHECK
+<!-- ```{r, eval=FALSE} -->
 
-dur_soprano <- sum(gen_tib_sung$soprano * gen_tib_sung)
+<!-- dur_soprano <- sum(gen_tib_sung$dur_s1 + gen_tib_sung$dur_s2) -->
 
+<!-- dur_alto <- sum(gen_tib_sung$dur_a1 + gen_tib_sung$dur_a2) -->
 
-dur_voice <- 
-    tibble(voice = c("soprano", "alto", "tenor", "bass"),
-    dur_min = 
-    c(dur_soprano /60, 
-    dur_alto / 60, 
-    dur_tenor / 60, 
-    dur_bass / 60))
+<!-- dur_tenor <- sum(gen_tib_sung$dur_t1 + gen_tib_sung$dur_t2) -->
 
-dur_voice %>% 
-    mutate(dur_prop = dur_min / sum(dur_min))
-```
+<!-- dur_bass <- sum(gen_tib_sung$dur_b1 + gen_tib_sung$dur_b2) # FIX/CHECK -->
 
-Generate sums of sung material.
+<!-- dur_soprano <- sum(gen_tib_sung$soprano * gen_tib_sung) -->
+
+<!-- dur_voice <-  -->
+
+<!--     tibble(voice = c("soprano", "alto", "tenor", "bass"), -->
+
+<!--     dur_min =  -->
+
+<!--     c(dur_soprano /60,  -->
+
+<!--     dur_alto / 60,  -->
+
+<!--     dur_tenor / 60,  -->
+
+<!--     dur_bass / 60)) -->
+
+<!-- dur_voice %>%  -->
+
+<!--     mutate(dur_prop = dur_min / sum(dur_min)) -->
+
+<!-- ``` -->
+
+Generate sums of sung material for each voice:
 
 ``` r
 dur_s1_sung <- gen_tib_sung %>% 
@@ -1493,14 +1506,14 @@ dur_female_sung <- dur_s1_sung + dur_a1_sung
 dur_male_sung <- dur_t1_sung + dur_b1_sung + dur_t2_extra
 ```
 
-Calculate proportions of male and female durations.
+Calculate proportions of male and female durations:
 
 ``` r
 dur_female_sung_perc <- round((dur_female_sung/dur_sung_total)*100)
 dur_male_sung_perc <- round((dur_male_sung/dur_sung_total)*100)
 ```
 
-Compute proportion of discrepancy resulting from 5 and 7a
+Compute proportion of discrepancy resulting from 5 and 7a:
 
 1.  Get extra durations for tenors and basses.
 
