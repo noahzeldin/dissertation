@@ -3,6 +3,7 @@ Measures Taken Formal Musical Analysis
 Noah Zeldin
 4/26/2021
 
+  - [Introductory Remarks](#introductory-remarks)
   - [Load packages](#load-packages)
   - [Importation](#importation)
       - [Duration](#duration)
@@ -46,6 +47,16 @@ Noah Zeldin
           - [Combinations of Groupings](#combinations-of-groupings)
           - [Separate Groupings](#separate-groupings)
 
+# Introductory Remarks
+
+Below is the annotated set-up for my formal analysis of Hanns Eisler’s
+music to *The Measures Taken*, which is included in the second chapter
+of my dissertation. The data sets will be made available to researchers
+upon request.
+
+NB: I have tried to use [tidyverse](https://www.tidyverse.org/) syntax
+as consistently as possible.
+
 # Load packages
 
 ``` r
@@ -59,9 +70,19 @@ library(mosaic) # may be unnecessary
 
 # Importation
 
+There are **two** separate spreadsheets:
+
+1.  **durations** of each piece
+
+2.  data relating to the **choral** material
+
+Both are necessary. The chapter begins with a structural overview of the
+work but focuses on the choral material. The calculations involved with
+the latter require the former.
+
 ## Duration
 
-Import all sheets into a single list and specify column types.
+Import all sheets into a single list and specify column types:
 
 ``` r
 durations_sheets <- excel_sheets("Massnahme_durations_meter_changes.xlsx")
@@ -89,7 +110,7 @@ durations_list <- lapply(durations_sheets,
                                                           ))
 ```
 
-From list create single data frame and save as tibble.
+From `durations_list` create single data frame and save as tibble:
 
 ``` r
 dur_tib <- as_tibble(bind_rows(durations_list))
@@ -97,7 +118,8 @@ dur_tib <- as_tibble(bind_rows(durations_list))
 
 ## Voice Analysis
 
-Check worksheets and ensure that there is a sheet for each choral piece.
+Check worksheets and ensure that there is a sheet for each piece
+containing choral material:
 
 ``` r
 excel_sheets("Massnahme_choir_voice_analysis.xlsx")
@@ -113,7 +135,7 @@ excel_sheets("Massnahme_choir_voice_analysis.xlsx")
     ## [15] "12b Wir sind der Abschaum"      "13a (untitled)"                
     ## [17] "13b (untitled)"                 "14 Schlusschor"
 
-Import all sheets into a single list and specify column types.
+Import all sheets into a single list and specify column types:
 
 ``` r
 voice_analysis_sheets <- excel_sheets("Massnahme_choir_voice_analysis.xlsx")
@@ -149,7 +171,7 @@ voice_analysis_list <- lapply(voice_analysis_sheets,
                                                               ))
 ```
 
-From list create single data frame and save as tibble.
+From `voice_analysis_list` create single data frame and save as tibble:
 
 ``` r
 gen_tib <- as_tibble(bind_rows(voice_analysis_list))
@@ -188,7 +210,7 @@ dur_tib <- dur_tib %>%
 
 <!-- ``` -->
 
-Relevel subcategories.
+Re-level subcategories:
 
 ``` r
 dur_tib$subcategory <- dur_tib$subcategory %>% 
@@ -219,7 +241,7 @@ dur_tib$subcategory %>%
 
 ## General Tibble: gen\_tib
 
-Convert **piece\_no** to factor.
+Convert **piece\_no** to factor:
 
 ``` r
 gen_tib <- gen_tib %>% 
@@ -238,7 +260,7 @@ gen_tib <- gen_tib %>%
 
 <!-- ``` -->
 
-Since 6c now follows 7a, must relevel (and check).
+Since 6c now follows 7a, must re-level (and check):
 
 ``` r
 gen_tib$piece_no <- gen_tib$piece_no %>% 
@@ -270,13 +292,13 @@ gen_tib$piece_no %>%
     ## 17 13b      17
     ## 18 14       96
 
-Group by piece.
+Group by piece:
 
 ``` r
 by_piece <- gen_tib %>% group_by(piece_no)
 ```
 
-Add **rowid** column and make first column (called “id”).
+Add **rowid** column and as new first column (“id”):
 
 ``` r
 gen_tib <- gen_tib %>% 
@@ -286,7 +308,7 @@ gen_tib <- gen_tib %>%
 ### Additional Calculations for Density
 
 **NB: This section will in all likelihood be deleted, since it
-ultimately did not figure into the final analysis.**
+ultimately was not included in the final analysis.**
 
 Translate texture to numeric value in new column:
 
@@ -311,7 +333,7 @@ gen_tib <- gen_tib %>%
     relocate(texture_value, .after = texture)
 ```
 
-Add density column for each voice.
+Add density column for each voice:
 
 ``` r
 gen_tib <- gen_tib %>% 
@@ -325,7 +347,7 @@ gen_tib <- gen_tib %>%
                       dm_b2 = (notes_b2+tones_b2)/quarters_per_bar)
 ```
 
-Create a **dm\_sum** column from 8 individual **dm** columns.
+Create a **dm\_sum** column from 8 individual **dm** columns:
 
 ``` r
 gen_tib <- gen_tib %>% 
@@ -333,7 +355,7 @@ gen_tib <- gen_tib %>%
     mutate(dm_sum = sum(c_across(dm_s1:dm_b2)))
 ```
 
-With new **dm\_sum** column, create **dmc** column.
+With new **dm\_sum** column, create **dmc** column:
 
 ``` r
 gen_tib <- gen_tib %>% 
@@ -341,7 +363,7 @@ gen_tib <- gen_tib %>%
     mutate(dmc = (dm_sum/4)*texture_value)
 ```
 
-Need to reconvert gen\_tib to tibble after performing `rowwise()`.
+Reconvert gen\_tib to tibble after performing `rowwise()`:
 
 ``` r
 gen_tib <- gen_tib %>% as_tibble()
