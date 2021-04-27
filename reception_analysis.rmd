@@ -1060,7 +1060,7 @@ freq_piece_plot
 
 By Piece + GPO:
 
-```{r, fig.width=10, fig.height=8}
+```{r, fig.width=11, fig.height=8}
 freq_grouped_wt <- dfm_weight(gen_dfm_reduced, scheme = "prop") %>% 
     textstat_frequency(n = 10, 
                        groups = c("Piece", "Generalized_Political_Orientation")) 
@@ -1109,7 +1109,7 @@ freq_piece_gpo_plot
 
 Main
 
-```{r, fig.width=10, fig.height=10}
+```{r, fig.width=11, fig.height=11}
 ca_main <- plot(grouped_ca_no_erfurt_or_unknown_english,
                 invisible = "row",
                 col.quali.sup = "darkblue",
