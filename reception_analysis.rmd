@@ -422,5 +422,107 @@ mutter_dfm_gpo_no_unknown <- dfm_group(mutter_dfm_no_unknown,
 ```
 
 
+# FactoMineR Set-Up
+
+REVISIT - may be dumb if I also want to perform PCA, etc. --> would need dataframes
+
+## Create Function for Converting dfm to dataframe and Performing CA
+
+```{r}
+convert_to_dataframe_and_perform_ca <- function(i) {
+    convert(i, to = "data.frame") %>% 
+        CA(quali.sup = 1, graph = FALSE)
+}
+```
+
+## Do This with Each dfm
+
+I think this is the only one I need
+
+```{r}
+# piece + GPO = 8 groups NO ERFURT OR UNKNOWN
+grouped_ca_no_erfurt_or_unknown <- convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown)
+```
+
+NEW with English - 1.02.21
+
+```{r}
+grouped_dfm_no_erfurt_or_unknown_english <- 
+  dfm_group(grouped_dfm_no_erfurt_or_unknown,
+            groups = c("Measures.Center", "Mother.Center", "Measures.Left",
+                       "Mother.Left", "Measures.Right", "Mother.Right"))
+
+grouped_ca_no_erfurt_or_unknown_english <- 
+  convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown_english)
+```
+
+
+ALL OTHERS NOT EVALUATING
+
+General
+
+```{r, eval=FALSE}
+# ungrouped
+gen_ca <- convert_to_dataframe_and_perform_ca(gen_dfm)
+# ungrouped NO ERFURT
+gen_ca_no_erfurt <- convert_to_dataframe_and_perform_ca(gen_dfm_no_erfurt)
+# ungrouped REDUCED
+gen_ca_reduced <- convert_to_dataframe_and_perform_ca(gen_dfm_reduced)
+# perform CA w/o doc col; quali.sup = GPO (still final col, b/c couldn't relocate)
+
+# 12.18.20 FIX IF NEEDED
+# # # ERROR: The following variables are not quantitative: Generalized_Political_Orientation
+# gen_ca_reduced_gpo_2 <- CA(gen_datafr_reduced_gpo_2,
+#                            quali.sup = c(9102), # might run into problems - all the more reason to move to 1st column
+#                            graph = FALSE)
+```
+
+GPO
+
+```{r, eval=FALSE}
+# GPO = 4 groups
+gpo_ca <- convert_to_dataframe_and_perform_ca(gpo_dfm)
+# GPO = 4 groups NO ERFURT
+gpo_ca_no_erfurt <- convert_to_dataframe_and_perform_ca(gpo_dfm_no_erfurt)
+# GPO = 4 groups NO ERFURT OR UNKNOWN
+gpo_ca_no_erfurt_or_unknown <- convert_to_dataframe_and_perform_ca(gpo_dfm_no_erfurt_or_unknown)
+# piece + GPO = 8 groups
+grouped_ca <- convert_to_dataframe_and_perform_ca(grouped_dfm)
+# piece + GPO = 8 groups NO ERFURT
+grouped_ca_no_erfurt <- convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt)
+# piece + GPO = 8 groups NO ERFURT OR UNKNOWN
+grouped_ca_no_erfurt_or_unknown <- convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown)
+```
+
+Piece
+
+```{r, eval=FALSE}
+# Massnahme 
+mass_ca <- convert_to_dataframe_and_perform_ca(mass_dfm)
+# Massnahme NO ERFURT
+mass_ca_no_erfurt <- convert_to_dataframe_and_perform_ca(mass_dfm_no_erfurt)
+
+mass_ca_no_erfurt_or_unknown <- convert_to_dataframe_and_perform_ca(mass_dfm_no_erfurt_or_unknown)
+
+mass_ca_gpo_no_erfurt_or_unknown <- convert_to_dataframe_and_perform_ca(mass_dfm_gpo_no_erfurt_or_unknown)
+
+# Mutter - STILL HAS OUTLIER!
+mutter_ca <- convert_to_dataframe_and_perform_ca(mutter_dfm)
+
+mutter_ca_no_unknown <- convert_to_dataframe_and_perform_ca(mutter_dfm_no_unknown)
+
+mutter_ca_gpo_no_unknown <- convert_to_dataframe_and_perform_ca(mutter_dfm_gpo_no_unknown)
+```
+
+Piece + GPO
+
+```{r, eval=FALSE}
+# Massnahme w/ GPO = 4 groups
+mass_ca_gpo <- convert_to_dataframe_and_perform_ca(mass_dfm_gpo)
+# Massnahme w/ GPO = 4 groups NO ERFURT
+mass_ca_gpo_no_erfurt <- convert_to_dataframe_and_perform_ca(mass_dfm_gpo_no_erfurt)
+# Mutter w/ GPO = 4 groups - STILL HAS OUTLIER!
+mutter_ca_gpo <- convert_to_dataframe_and_perform_ca(mutter_dfm_gpo)
+```
 
 
