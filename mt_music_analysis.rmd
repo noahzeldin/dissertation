@@ -1249,75 +1249,7 @@ pitch_long <- pitch_tib %>%
 levels(pitch_long$pitch)
 ```
 
-<!-- ### Scatterplot of pitches - FIX! BUT LOW PRIORITY -->
-
-<!-- Lots to fix:   -->
-<!-- * fix overlapping -->
-<!-- * also, one piece, maybe 6c is in wrong order -->
-<!-- * add label for each piece -->
-
-<!-- ```{r} -->
-<!-- ggplot(pitch_long, aes(x = id, y = value -->
-<!--                # y = as.factor(value) # no longer necessary -->
-<!--                # ,  -->
-<!--                # color = piece_no,  -->
-<!--                # size = dur_choir -->
-<!--                # , alpha = 0.01 -->
-<!--                )) + -->
-<!--     geom_mark_rect(aes(fill = piece_no, -->
-<!--                        alpha = 0.01)) + -->
-<!--     geom_point(aes(color = pitch, -->
-<!--                    alpha = dur_choir)) + -->
-<!--     ylab("pitch") + -->
-<!--     # ylim(0, 13) + # seems unnecessary / not doing anything -->
-<!--     scale_y_discrete(breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), -->
-<!--                      labels = c("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", -->
-<!--                                 "A", "A#", "B")) + -->
-<!--     theme(panel.grid.major.x = element_blank(), -->
-<!--           panel.grid.minor.x = element_blank(), -->
-<!--           panel.grid.major.y = element_line(color = "grey",  -->
-<!--                                             linetype = "dashed"), -->
-<!--           panel.background = element_rect(fill = "transparent"), # may not quite be what I want -->
-<!--           axis.title.x = element_blank(), -->
-<!--           axis.text.x = element_blank(), -->
-<!--           axis.ticks.x = element_blank(), -->
-<!--           legend.position = "none" -->
-<!--           ) -->
-<!-- ``` -->
-
-
-
-<!-- <!-- ### Barplots  --> -->
-
-<!-- CONSIDER WEIGHTING BY DURATION - currently unweighted -->
-
-<!-- entire work by number of measures -->
-
-<!-- ```{r} -->
-<!-- ggplot(pitch_long, aes(x = pitch)) + -->
-<!--     geom_bar(aes(group = pitch, -->
-<!--                  fill = pitch -->
-<!--                  # , -->
-<!--                  # y = ..prop.. -->
-<!--                  )) + -->
-<!--     theme(legend.position = "none",  -->
-<!--           axis.title.x = element_blank()) + -->
-<!--     ylab("Number of Measures") -->
-<!-- ``` -->
-
-<!-- ```{r} -->
-<!-- ggplot(pitch_long, aes(x = pitch)) + -->
-<!--     geom_bar(aes(group = pitch, -->
-<!--                  fill = pitch, -->
-<!--                  # y = ..prop..)) + -->
-<!--     y = ..count../sum(..count..))) + -->
-<!--     scale_y_continuous(labels = percent_format()) + -->
-<!--         theme(legend.position = "none",  -->
-<!--           axis.title.x = element_blank()) -->
-<!-- ``` -->
-
-
-### Pitch Diestribution
+### Pitch Distribution
 
 ```{r}
 pitch_distribution_plot <- pitch_long %>% 
