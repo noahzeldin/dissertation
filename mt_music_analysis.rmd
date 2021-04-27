@@ -1102,7 +1102,7 @@ Again, homophony clearly dominates, followed by monophony.
 <!-- ``` -->
 
 
-### Individual Pieces
+### Individual Pieces (By Duration)
 
 <!-- #### By Measure Count -->
 
@@ -1151,9 +1151,7 @@ Again, homophony clearly dominates, followed by monophony.
 <!-- bar_texture_piece -->
 <!-- ``` -->
 
-#### By Duration
-
-Create table.
+Create tibble:
 
 ```{r}
 dur_texture_piece <- gen_tib %>% 
@@ -1170,10 +1168,10 @@ dur_texture_piece <- gen_tib %>%
     ungroup() %>% 
     mutate(prop_of_work = round((duration / sum(duration)), 
                                 digits = 3),
-           prop_piece_of_work = dur_piece/sum(dur_piece)) # added this for variable width bar plot but gave up b/c too complicated
+           prop_piece_of_work = dur_piece/sum(dur_piece)) # check if necessary
 ```
 
-Mosaic plot, displaying proportion of each texture in each piece.
+Create mosaic plot, displaying proportion of each texture in each piece:
 
 ```{r}
 # create new table just for this plot
@@ -1293,9 +1291,13 @@ dur_texture_piece_mosaic_plot
 
 ## Pitch
 
+Although pitch is a secondary consideration in my analysis, I wanted to get a 
+sense of the chromaticism of each piece. As I point out in ch. 2, the pieces
+with more concretely political texts tend to be less chromatic.
+
 ### Set-Up for Pitch Computations
 
-Create new, elongated table:
+Create new, elongated table with pitches:
 
 ```{r}
 pitch_long <- pitch_tib %>% 
@@ -1415,20 +1417,23 @@ pitch_no_piece
 
 ## Groupings 
 
-### Goal and Preliminary Remarks
-
 <!-- UPDATE 12.08: changed source data from `gen_tib` to `gen_tib_sung`. -->
 <!-- * This should avoid pieces with no singing. -->
 
-Goal: Determine which groupings of voices are most common.  
+Directly related to Eisler's heavy use of reduced choral textures (monophony
+and homophony), the composer also frequently groups voices together. The 
+calculations in this section explore this compositional tactical and e.g. 
+determine which groupings of voices are most common.  
 
-* directly related to homophony and voice reduction  
+NB: It is necessary to perform two separate calculations:  
 
-Need to perform two separate calculations:  
+1. separate groupings  
 
-* 1. separate groupings  
+2. combinations of groupings  
 
-* 2. combinations of groupings  
+To give an example, the first reveals the duration of the grouping sopranos-
+tenors, while the second will reveals the duration of this grouping *plus* the
+grouping altos-basses. 
 
 <!-- **2. combinations of groupings** will be much easier, because this is the  -->
 <!-- existing observation in the spreadsheet. Can calculate now.   -->
@@ -1441,7 +1446,7 @@ Need to perform two separate calculations:
 
 #### By Number of Measures  
 
-Generate basic tibble for whole work.
+Generate basic tibble for whole work:
 
 ```{r}
 groupings_tib <- gen_tib_sung %>% 
@@ -1491,8 +1496,9 @@ groupings_5_dur <- groupings_dur_tib %>%
 groupings_5_dur 
 ```
 
-Differs only slightly from previous computation (by number of measures). 
-Top 3 and no. 5 are same as `groupings_5` but 4th place now **satb** (rather than st). 
+This differs only slightly from previous computation (by number of measures). 
+Top 3 and no. 5 are same as `groupings_5` but 4th place is now **satb** (rather 
+than st). 
 
 ##### Separated by Texture
 
@@ -1546,9 +1552,8 @@ groupings_homophony_dur <- gen_tib_sung %>%
 groupings_homophony_dur
 ```
 
-Show that all instances of homophony with no groupings are just two voices.
-
-* Need for write-up.
+Show that all instances of homophony with no groupings are just two voices 
+(necessary for write-up in ch. 2):
 
 ```{r}
 gen_tib_sung %>% 
@@ -1601,7 +1606,7 @@ groupings_separate_10
 <!-- ** This makes sense, since male voices sing much more than female voices.   -->
 
 
-#### By Duration (of mMasures)  
+#### By Duration (of Measures)  
 
 Create tibble with each separate grouping and its total duration:  
 
