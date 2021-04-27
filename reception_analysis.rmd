@@ -890,7 +890,7 @@ colors_four <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")
 ```
 
 
-## English Labels
+English Labels:
 
 ```{r}
 labels_english <- c(Massnahme = "Measures Taken", Mutter = "Mother")
@@ -1009,7 +1009,7 @@ textplot_wordcloud(piece_dfm_no_erfurt_english,
 
 *Mother* - Grouped by GPO (no unknown):
 
-```{r}
+```{r, results='hide'}
 wordcloud_mutter_gpo <- 
   textplot_wordcloud(mutter_dfm_gpo_no_unknown,
                    max_words = 100, # 125 or 100 is probably best
@@ -1017,8 +1017,6 @@ wordcloud_mutter_gpo <-
                    color = colors_four,
                    comparison = TRUE,
                    labelcolor = "black")
-
-wordcloud_mutter_gpo
 ```
 
 
