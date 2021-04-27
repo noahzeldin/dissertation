@@ -263,11 +263,13 @@ mutter_dfm <- convert_to_dfm_and_apply_dictionaries(mutter_toks)
 mutter_title_dfm <- convert_to_dfm_and_apply_dictionaries(mutter_title_toks)
 ```
 
-### Add GPO to general/ungrouped dfm - PROB NEED TO CLEAN UP
+### Add GPO to general/ungrouped dfm -
+
+<!-- PROB NEED TO CLEAN UP -->
+
+NB: **GPO** stands for "genearl political orientation."
 
 ```{r}
-# from exp_7.24 --> look at notes in original script; needs some refinement
-
 # convert gen_dfm[_reduced] to dataframe
 gen_datafr_reduced <- convert(gen_dfm_reduced, to = "data.frame")
 # convert corp_reduced to dataframe - this has GPOs + other metadata
@@ -295,11 +297,11 @@ grouped_dfm <- dfm_group(gen_dfm,
 # same but NO ERFURT
 grouped_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
                                    groups = c("Piece",
-                                              "Generalized_Political_Orientation"))
+                                             "Generalized_Political_Orientation"))
 ```
 
 
-### create GPO grouped dfm's for each piece 
+### Create GPO grouped dfm's for each piece 
 
 ```{r}
 # Massnahme
@@ -332,7 +334,7 @@ gpo_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
                                groups = "Generalized_Political_Orientation")
 ```
 
-### By each GPO
+### By GPO
 
 ```{r}
 # Left
@@ -360,9 +362,9 @@ mutter_sub <- dfm_subset(grouped_dfm,
                          Piece == "Mutter")
 ```
 
-## create corpus, dfm, ca, etc. of each piece w/o unknown
+## Create corpus, dfm, ca, etc. of each piece w/o unknown
 
-from exp_7.24 --> need to integrate better, just being lazy
+<!-- from exp_7.24 -> need to integrate better, just being lazy -->
 
 General - just GPO
 
@@ -389,7 +391,7 @@ grouped_dfm_no_erfurt_or_unknown <- dfm_group(dfm_no_erfurt_or_unknown,
                                               groups = c("Piece", "Generalized_Political_Orientation"))
 ```
 
-Massnahme
+Measures Taken
 
 ```{r}
 mass_corp_no_erfurt_or_unknown <- corpus_subset(corp_no_erfurt, 
@@ -404,7 +406,7 @@ mass_dfm_gpo_no_erfurt_or_unknown <- dfm_group(mass_dfm_no_erfurt_or_unknown,
                                                groups = "Generalized_Political_Orientation")
 ```
 
-Mutter
+Mother
 
 ```{r}
 mutter_corp_no_unknown <- corpus_subset(corp, 
