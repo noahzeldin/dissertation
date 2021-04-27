@@ -19,15 +19,28 @@ Noah Zeldin
         Stopwords](#dictionaries-and-additional-stopwords)
       - [Tokenize and Filter Corpora](#tokenize-and-filter-corpora)
       - [DFMs](#dfms)
-          - [Add GPO to general/ungrouped dfm - PROB NEED TO CLEAN
-            UP](#add-gpo-to-generalungrouped-dfm---prob-need-to-clean-up)
-          - [create GPO grouped dfm’s for each
+          - [Add GPO to general/ungrouped dfm
+            -](#add-gpo-to-generalungrouped-dfm--)
+          - [Create GPO grouped dfm’s for each
             piece](#create-gpo-grouped-dfms-for-each-piece)
           - [Less Specific Groupings](#less-specific-groupings)
-          - [By each GPO](#by-each-gpo)
+          - [By GPO](#by-gpo)
           - [By Piece](#by-piece)
-      - [create corpus, dfm, ca, etc. of each piece w/o
+      - [Create corpus, dfm, ca, etc. of each piece w/o
         unknown](#create-corpus-dfm-ca-etc.-of-each-piece-wo-unknown)
+  - [FactoMineR Set-Up](#factominer-set-up)
+      - [Create function for converting dfm to dataframe and performing
+        CA](#create-function-for-converting-dfm-to-dataframe-and-performing-ca)
+      - [Use this function on each dfm](#use-this-function-on-each-dfm)
+  - [KWIC and Keyword Exploration](#kwic-and-keyword-exploration)
+      - [Create function to link KWIC with
+        data](#create-function-to-link-kwic-with-data)
+      - [Explore various KWIC](#explore-various-kwic)
+          - [Special Case: LEHRLERN in
+            Mother/Right](#special-case-lehrlern-in-motherright)
+          - [Combinations](#combinations)
+      - [Additional Terms Post-Processing
+        (DFMs)](#additional-terms-post-processing-dfms)
 
 # Introductory Remarks
 
@@ -35,11 +48,11 @@ Below is the annotated set-up for my quantitative analysis of the
 Weimar-era reception of Brecht and Eisler’s *The Measures Taken* and
 *The Mother*, which is included in the second chapter of my
 dissertation. This analysis was conducted in R and relies heavily on the
-[quanteda](https://quanteda.io/) and
-[FactoMineR](http://factominer.free.fr/index.html) packages. (Also, I
-have tried to use [tidyverse](https://www.tidyverse.org/) syntax as
-consistently as possible.) Data sets will be made available to
-researchers upon request.
+[quanteda](https://quanteda.io/) package (for general manipulation, word
+counts, etc.) and [FactoMineR](http://factominer.free.fr/index.html)
+package (for correspondence analysis). (Also, I have tried to use
+[tidyverse](https://www.tidyverse.org/) syntax as consistently as
+possible.) Data sets will be made available to researchers upon request.
 
 **NB: Further refinements to the coding are forthcoming.** This was my
 first serious attempt at coding in R, so certain portions are still a
@@ -280,11 +293,13 @@ mutter_dfm <- convert_to_dfm_and_apply_dictionaries(mutter_toks)
 mutter_title_dfm <- convert_to_dfm_and_apply_dictionaries(mutter_title_toks)
 ```
 
-### Add GPO to general/ungrouped dfm - PROB NEED TO CLEAN UP
+### Add GPO to general/ungrouped dfm -
+
+<!-- PROB NEED TO CLEAN UP -->
+
+NB: **GPO** stands for “genearl political orientation.”
 
 ``` r
-# from exp_7.24 --> look at notes in original script; needs some refinement
-
 # convert gen_dfm[_reduced] to dataframe
 gen_datafr_reduced <- convert(gen_dfm_reduced, to = "data.frame")
 # convert corp_reduced to dataframe - this has GPOs + other metadata
@@ -312,10 +327,10 @@ grouped_dfm <- dfm_group(gen_dfm,
 # same but NO ERFURT
 grouped_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
                                    groups = c("Piece",
-                                              "Generalized_Political_Orientation"))
+                                             "Generalized_Political_Orientation"))
 ```
 
-### create GPO grouped dfm’s for each piece
+### Create GPO grouped dfm’s for each piece
 
 ``` r
 # Massnahme
@@ -348,7 +363,7 @@ gpo_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
                                groups = "Generalized_Political_Orientation")
 ```
 
-### By each GPO
+### By GPO
 
 ``` r
 # Left
@@ -376,9 +391,9 @@ mutter_sub <- dfm_subset(grouped_dfm,
                          Piece == "Mutter")
 ```
 
-## create corpus, dfm, ca, etc. of each piece w/o unknown
+## Create corpus, dfm, ca, etc. of each piece w/o unknown
 
-from exp\_7.24 –\> need to integrate better, just being lazy
+<!-- from exp_7.24 -> need to integrate better, just being lazy -->
 
 General - just GPO
 
@@ -405,7 +420,7 @@ grouped_dfm_no_erfurt_or_unknown <- dfm_group(dfm_no_erfurt_or_unknown,
                                               groups = c("Piece", "Generalized_Political_Orientation"))
 ```
 
-Massnahme
+Measures Taken
 
 ``` r
 mass_corp_no_erfurt_or_unknown <- corpus_subset(corp_no_erfurt, 
@@ -420,7 +435,7 @@ mass_dfm_gpo_no_erfurt_or_unknown <- dfm_group(mass_dfm_no_erfurt_or_unknown,
                                                groups = "Generalized_Political_Orientation")
 ```
 
-Mutter
+Mother
 
 ``` r
 mutter_corp_no_unknown <- corpus_subset(corp, 
@@ -434,3 +449,264 @@ mutter_dfm_no_unknown <- convert_to_dfm_and_apply_dictionaries(mutter_toks_no_un
 mutter_dfm_gpo_no_unknown <- dfm_group(mutter_dfm_no_unknown,
                                        groups = "Generalized_Political_Orientation")
 ```
+
+# FactoMineR Set-Up
+
+## Create function for converting dfm to dataframe and performing CA
+
+``` r
+convert_to_dataframe_and_perform_ca <- function(i) {
+    convert(i, to = "data.frame") %>% 
+        CA(quali.sup = 1, graph = FALSE)
+}
+```
+
+## Use this function on each dfm
+
+I think this is the only one I need
+
+``` r
+# piece + GPO = 8 groups NO ERFURT OR UNKNOWN
+grouped_ca_no_erfurt_or_unknown <- convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown)
+```
+
+NEW with English - 1.02.21
+
+``` r
+grouped_dfm_no_erfurt_or_unknown_english <- 
+  dfm_group(grouped_dfm_no_erfurt_or_unknown,
+            groups = c("Measures.Center", "Mother.Center", "Measures.Left",
+                       "Mother.Left", "Measures.Right", "Mother.Right"))
+
+grouped_ca_no_erfurt_or_unknown_english <- 
+  convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown_english)
+```
+
+# KWIC and Keyword Exploration
+
+## Create function to link KWIC with data
+
+``` r
+combine_kwic_with_data <- function(corpus, words, window) {
+    
+    i <- kwic(corpus, words, window = window) %>% 
+        as_tibble() 
+    
+    i$docname <- i$docname %>% 
+        str_replace("text", "") 
+    
+    i <- i %>% mutate(docname = as.numeric(docname)) %>% 
+        rename(Article = docname) %>% # this seems to work better than including in above step
+        left_join(
+          spreadsheet_reduced, # CHECKING 12.29.20 - seems to have worked better than normal spreadsheet with corp_reduced
+          by = "Article") %>% 
+        select(-c(Text, Other_Metadata:Comp_Doc))
+
+    }
+```
+
+## Explore various KWIC
+
+All of these keywords relate to claims made in ch. 2.
+
+  - primitiv
+
+<!-- end list -->
+
+``` r
+primitiv_kwic <- 
+  combine_kwic_with_data(corp, "primitiv*", 15)
+```
+
+  - langweilig
+
+<!-- end list -->
+
+``` r
+langweilig_kwic <- 
+  combine_kwic_with_data(corp, c("langeweile", "langweilig*"), 10)
+```
+
+  - proletarisch
+
+<!-- end list -->
+
+``` r
+proletarisch_kwic <- 
+  combine_kwic_with_data(corp, "proletarisch*", 10)
+```
+
+  - pudowkin
+
+<!-- end list -->
+
+``` r
+pudowkin_kwic <- 
+  combine_kwic_with_data(corp, "pudowkin*", 10)
+```
+
+  - kunst
+
+<!-- end list -->
+
+``` r
+kunst_kwic <- 
+  combine_kwic_with_data(corp, c("kunst", "künstler*"), 10)
+```
+
+  - agitprop
+
+<!-- end list -->
+
+``` r
+agitprop_kwic <- 
+  combine_kwic_with_data(corp, "agitprop*", 10)
+```
+
+  - bildung
+
+<!-- end list -->
+
+``` r
+bildung_kwic <- 
+  combine_kwic_with_data(corp, "bildung", 10)
+```
+
+  - wissen
+
+<!-- end list -->
+
+``` r
+wissen_kwic <- 
+  combine_kwic_with_data(corp, "wissen*", 10)
+```
+
+  - lehrstück MUTTER
+
+<!-- end list -->
+
+``` r
+lehrstueck_mutter_kwic <- 
+  combine_kwic_with_data(corp, "lehrstück*", 10) %>% 
+  filter(Piece == "Mutter")
+```
+
+  - Oratorium MASSNAHME
+
+<!-- end list -->
+
+``` r
+oratorium_mass_kwic <- 
+  combine_kwic_with_data(corp, "oratori*", 30) %>% 
+  filter(Piece == "Massnahme")
+```
+
+  - Arbeitersänger MASSNAHME
+
+<!-- end list -->
+
+``` r
+arbeitersaenger_mass_kwic <- 
+  combine_kwic_with_data(corp, "arbeitersänger*", 30) %>% 
+  filter(Piece == "Massnahme")
+```
+
+  - Stalin and Stalinismus
+
+<!-- end list -->
+
+``` r
+combine_kwic_with_data(corp, "stalin*", 30) %>% 
+  print()
+```
+
+    ## # A tibble: 3 x 16
+    ##   Article  from    to pre   keyword post  pattern Title Newspaper Publisher
+    ##     <dbl> <int> <int> <chr> <chr>   <chr> <fct>   <chr> <chr>     <chr>    
+    ## 1      62    23    23 Gork~ Stalin  "- h~ stalin* "Die~ Germania  Zentrum  
+    ## 2      66    55    55 Best~ Stalin  "und~ stalin* "Gor~ Sächsisc~ SPD      
+    ## 3      83   662   662 und ~ Stalin~ "von~ stalin* "Ber~ Der_Aben~ SPD      
+    ## # ... with 6 more variables: Political_Affiliation_or_Orientation <chr>,
+    ## #   Generalized_Political_Orientation <chr>, Date <chr>, Author <chr>,
+    ## #   Complete_or_Incomplete <chr>, Piece <chr>
+
+Only 3 articles on Mutter.
+
+  - Cantata
+
+<!-- end list -->
+
+``` r
+combine_kwic_with_data(corp, "Kantate*", 25) %>% 
+  print()
+```
+
+    ## # A tibble: 0 x 16
+    ## # ... with 16 variables: Article <dbl>, from <int>, to <int>, pre <chr>,
+    ## #   keyword <chr>, post <chr>, pattern <fct>, Title <chr>, Newspaper <chr>,
+    ## #   Publisher <chr>, Political_Affiliation_or_Orientation <chr>,
+    ## #   Generalized_Political_Orientation <chr>, Date <chr>, Author <chr>,
+    ## #   Complete_or_Incomplete <chr>, Piece <chr>
+
+No results.
+
+### Special Case: LEHRLERN in Mother/Right
+
+NB: Can’t use FN, b/c can’t specify valuetype Here, adaptation of FN
+
+1.  create tibble
+
+<!-- end list -->
+
+``` r
+lehrlern_kwic <- kwic(corp, dict_regex, window = 20, 
+                      valuetype = "regex") %>% # must specify to used dict
+  as_tibble()
+
+lehrlern_kwic$docname <- lehrlern_kwic$docname %>% 
+    str_replace("text", "") 
+
+lehrlern_kwic <- lehrlern_kwic %>% mutate(docname = as.numeric(docname)) %>% 
+    rename(Article = docname) %>% # this seems to work better than including in above step
+    left_join(spreadsheet, by = "Article") %>% 
+    select(-c(Text, Other_Metadata:Comp_Doc))
+```
+
+2.  filter for Mutter & Right
+
+<!-- end list -->
+
+``` r
+lehrlern_kwic_mutter_right <- lehrlern_kwic %>% 
+  filter(Piece == "Mutter" & 
+               Generalized_Political_Orientation == "Right")
+```
+
+### Combinations
+
+langweilig + primitiv
+
+``` r
+langweilig_primitiv_kwic <- 
+  inner_join(langweilig_kwic, primitiv_kwic, by = "Article")
+```
+
+## Additional Terms Post-Processing (DFMs)
+
+LEHRLERN in Mutter
+
+``` r
+lehrlern_mutter_gpo_count <-  
+  dfm_select(mutter_dfm_gpo, pattern = "LEHRLERN") %>% 
+  as_tibble()
+
+lehrlern_mutter_gpo_count
+```
+
+    ## # A tibble: 4 x 2
+    ##   doc_id  LEHRLERN
+    ##   <chr>      <dbl>
+    ## 1 Center        29
+    ## 2 Left          18
+    ## 3 Right         15
+    ## 4 Unknown       15
