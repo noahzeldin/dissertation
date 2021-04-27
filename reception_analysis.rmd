@@ -896,9 +896,35 @@ colors_four <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")
 labels_english <- c(Massnahme = "Measures Taken", Mutter = "Mother")
 ```
 
-## Visual Summary of Reduced Corpus (Fancy Boxplot)
+## Visual Summary of Reduced Corpus
 
-Still need to fix display of observation counts.
+Set-up for boxplot:
+
+```{r}
+# 3 steps for set up
+
+# STEP 1
+toks_grouped <- gen_datafr_reduced %>% 
+    mutate(rowSums(.[ ,2:9102]), .after = 1) %>% 
+    select(doc_id, `rowSums(.[, 2:9102])`) %>% 
+    rename(tokens = `rowSums(.[, 2:9102])`)
+
+# STEP 2
+# add GPO column to gen_datafr_reduced
+# can't combine with above for some reason
+toks_grouped <- left_join(toks_grouped, 
+                                    corp_reduced_datafr[ , c("doc_id",    "Generalized_Political_Orientation", "Piece")], 
+                                    by = "doc_id", # 8.01 - now do this
+                                    # by = c("document" = "doc_id"), # used to work
+                                    copy = TRUE)
+
+# STEP 3
+# added for observation counts
+toks_grouped <- toks_grouped %>% 
+    add_count(Piece, Generalized_Political_Orientation)
+```
+
+Coding for boxplot:
 
 ```{r}
 toks_summary_boxplot <- 
@@ -954,8 +980,8 @@ toks_summary_boxplot
 
 ### Super Long Articles
 
-Want to identify long articles in Measures - Unknown  
-* really strech out boxplot
+The goal is to identify the long articles in *Measures - Unknown*, because they 
+really stretch out the IQR in that category.
 
 ```{r}
 corp_reduced_summary %>% 
@@ -965,9 +991,9 @@ corp_reduced_summary %>%
   select(Article, tokens, Title:Piece)
 ```
 
-## Wordclouds - CAN'T SAVE AS OBJECT
+## Wordclouds
 
-Grouped by Piece
+Grouped by Piece:
 
 ```{r}
 # must rename groups in English for word cloud
@@ -981,9 +1007,7 @@ textplot_wordcloud(piece_dfm_no_erfurt_english,
                    labelcolor = "black")
 ```
 
-Mutter - Grouped by GPO (no unknown)
-
-NB: A bit different than in old version - probably because of modifications to dictionary.
+*Mother* - Grouped by GPO (no unknown):
 
 ```{r}
 wordcloud_mutter_gpo <- 
@@ -1000,7 +1024,7 @@ wordcloud_mutter_gpo
 
 ## Word Frequency 
 
-Piece
+By Piece:
 
 ```{r}
 # grouped by piece (weighted)
@@ -1034,7 +1058,7 @@ freq_piece_plot <-
 freq_piece_plot
 ```
 
-Piece + GPO
+By Piece + GPO:
 
 ```{r}
 freq_grouped_wt <- dfm_weight(gen_dfm_reduced, scheme = "prop") %>% 
@@ -1080,7 +1104,7 @@ freq_piece_gpo_plot <- ggplot(freq_grouped_wt,
 freq_piece_gpo_plot
 ```
 
-## CA
+## Correspondence Analysis
 
 Main
 
@@ -1104,7 +1128,7 @@ ca_main <- ca_main +
 ca_main
 ```
 
-Massnahme
+*Measures Taken*
 
 ```{r}
 ca_mass <- plot(grouped_ca_no_erfurt_or_unknown,
@@ -1125,7 +1149,7 @@ ca_mass <- ca_mass +
 ca_mass
 ```
 
-Mutter
+*Mother*
 
 ```{r}
 ca_mutter <- plot(grouped_ca_no_erfurt_or_unknown,
