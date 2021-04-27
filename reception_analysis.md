@@ -41,6 +41,18 @@ Noah Zeldin
           - [Combinations](#combinations)
       - [Additional Terms Post-Processing
         (DFMs)](#additional-terms-post-processing-dfms)
+  - [Dates of Publication with
+    Counts](#dates-of-publication-with-counts)
+      - [Create Tables](#create-tables)
+          - [General](#general)
+          - [By Piece](#by-piece-1)
+      - [Date Ranges, Time Lengths,
+        etc.](#date-ranges-time-lengths-etc.)
+          - [Time Length in YEARS](#time-length-in-years)
+          - [Range / Interval](#range-interval)
+          - [Proportion of Articles near
+            Premieres](#proportion-of-articles-near-premieres)
+      - [1932 articles for Measures Taken](#articles-for-measures-taken)
 
 # Introductory Remarks
 
@@ -710,3 +722,325 @@ lehrlern_mutter_gpo_count
     ## 2 Left          18
     ## 3 Right         15
     ## 4 Unknown       15
+
+# Dates of Publication with Counts
+
+## Create Tables
+
+### General
+
+All Articles
+
+``` r
+dates_tib <- corp_reduced_datafr %>% 
+  as_tibble() %>% 
+  select(Article, Date, Piece) %>% 
+  group_by(Piece, Date) %>% 
+  count(Date) %>% 
+  arrange(desc(n))
+```
+
+Separate Columns
+
+``` r
+dates_tib_separate <- corp_reduced_datafr %>% 
+  as_tibble() %>% 
+    select(Article, Date, Piece) %>% 
+    filter(str_detect(Date, "\\S{2}\\.\\S{2}\\.[:digit:]{4}")) %>% 
+    separate(Date, sep = "\\.", into = c("day", "month", "year"))
+```
+
+Make Compatible with Lubridate
+
+``` r
+dates_tib_lubridate <- dates_tib_separate %>% 
+    mutate(day = as.numeric(day), 
+           month = as.numeric(month),
+           year = as.numeric(year)) %>%
+    relocate(day, .after = month) %>% 
+    relocate(year, .before = month) %>% 
+    mutate(date = make_date(year, month, day)) %>% 
+    select(Article, date, Piece) %>% 
+  filter(!is.na(date)) %>% 
+  arrange(date)
+```
+
+Percent of Articles WITHOUT Full Dates (i.e. excluded from lubridate)
+
+``` r
+articles_perc_without_full_dates <- 
+  (((nrow(dates_tib_separate) - 
+     nrow(dates_tib_lubridate)) 
+  / nrow(dates_tib_lubridate)) * 100) %>% 
+  round() 
+```
+
+Percent of Articles WITH Full Dates (i.e. included for lubridate)
+
+``` r
+articles_perc_with_full_dates <- 100 - articles_perc_without_full_dates
+```
+
+### By Piece
+
+#### Measures Taken
+
+All
+
+``` r
+dates_mass <- dates_tib %>% 
+  filter(Piece == "Massnahme") %>% 
+  ungroup %>% 
+  select(-Piece)
+```
+
+Edited, Lubridate
+
+  - Chronological, w/o counts - saved for computing range, length, etc.
+
+<!-- end list -->
+
+``` r
+dates_mass_lubridate <- 
+  dates_tib_lubridate %>% 
+  filter(Piece == "Massnahme") %>% 
+  arrange(date)
+```
+
+  - Counted and Sorted Descending
+
+<!-- end list -->
+
+``` r
+dates_tib_lubridate %>% 
+  filter(Piece == "Massnahme") %>%
+  count(date) %>% 
+  arrange(desc(n))
+```
+
+    ## # A tibble: 20 x 2
+    ##    date           n
+    ##    <date>     <int>
+    ##  1 1930-12-15    10
+    ##  2 1930-12-16     2
+    ##  3 1931-01-20     2
+    ##  4 1930-06-04     1
+    ##  5 1930-12-13     1
+    ##  6 1930-12-20     1
+    ##  7 1930-12-22     1
+    ##  8 1930-12-24     1
+    ##  9 1931-01-01     1
+    ## 10 1931-01-03     1
+    ## 11 1931-01-11     1
+    ## 12 1931-01-14     1
+    ## 13 1931-01-24     1
+    ## 14 1931-05-09     1
+    ## 15 1931-12-09     1
+    ## 16 1932-02-19     1
+    ## 17 1932-06-01     1
+    ## 18 1932-09-24     1
+    ## 19 1932-11-22     1
+    ## 20 1932-11-25     1
+
+#### Mother
+
+All
+
+``` r
+dates_mutter <- dates_tib %>% 
+  filter(Piece == "Mutter") %>% 
+  ungroup %>% 
+  select(-Piece)
+```
+
+Edited, Lubridate
+
+  - Chronological, w/o counts - saved for computing range, length, etc.
+
+<!-- end list -->
+
+``` r
+dates_mutter_lubridate <- 
+  dates_tib_lubridate %>% 
+  filter(Piece == "Mutter") %>% 
+  arrange(date)
+```
+
+  - Counted and Sorted Descending
+
+<!-- end list -->
+
+``` r
+dates_tib_lubridate %>% 
+  filter(Piece == "Mutter") %>%
+  count(date) %>% 
+  arrange(desc(n))
+```
+
+    ## # A tibble: 20 x 2
+    ##    date           n
+    ##    <date>     <int>
+    ##  1 1932-01-18    20
+    ##  2 1932-01-17     7
+    ##  3 1932-01-19     7
+    ##  4 1932-01-24     5
+    ##  5 1932-01-23     4
+    ##  6 1932-01-22     3
+    ##  7 1932-01-25     3
+    ##  8 1932-01-26     2
+    ##  9 1932-01-27     2
+    ## 10 1932-01-30     2
+    ## 11 1931-12-23     1
+    ## 12 1932-01-08     1
+    ## 13 1932-01-13     1
+    ## 14 1932-01-15     1
+    ## 15 1932-01-20     1
+    ## 16 1932-01-21     1
+    ## 17 1932-01-29     1
+    ## 18 1932-02-23     1
+    ## 19 1932-03-05     1
+    ## 20 1932-12-09     1
+
+## Date Ranges, Time Lengths, etc.
+
+### Time Length in YEARS
+
+All Articles (Edited for Lubridate)
+
+``` r
+difftime(tail(dates_tib_lubridate$date, 1),
+         head(dates_tib_lubridate$date, 1)) %>% 
+  time_length(unit = "year")
+```
+
+    ## [1] 2.516085
+
+Measures Taken
+
+``` r
+difftime(tail(dates_mass_lubridate$date, 1),
+         head(dates_mass_lubridate$date, 1)) %>% 
+  time_length(unit = "year")
+```
+
+    ## [1] 2.477755
+
+Mother
+
+``` r
+difftime(tail(dates_mutter_lubridate$date, 1),
+         head(dates_mutter_lubridate$date, 1)) %>% 
+  time_length(unit = "year")
+```
+
+    ## [1] 0.9637235
+
+### Range / Interval
+
+#### All
+
+Save general start and end dates as variables for write-up:
+
+``` r
+articles_first_date <- head(dates_tib_lubridate$date, 1)
+articles_last_date <- tail(dates_tib_lubridate$date, 1)
+```
+
+General dates interval:
+
+``` r
+interval(start = articles_first_date,
+         end = articles_last_date)
+```
+
+    ## [1] 1930-06-04 UTC--1932-12-09 UTC
+
+#### Measures Taken
+
+``` r
+interval(start = head(dates_mass_lubridate$date, 1),
+         end = tail(dates_mass_lubridate$date, 1))
+```
+
+    ## [1] 1930-06-04 UTC--1932-11-25 UTC
+
+#### Mother
+
+``` r
+interval(start = head(dates_mutter_lubridate$date, 1),
+         end = tail(dates_mutter_lubridate$date, 1))
+```
+
+    ## [1] 1931-12-23 UTC--1932-12-09 UTC
+
+### Proportion of Articles near Premieres
+
+#### Measures Taken
+
+Save date of premiere as variable (cf. BFA 3: 431):
+
+``` r
+mass_premiere_date <- ymd("1930-12-13")
+```
+
+Create interval for 1 week after premiere:
+
+``` r
+mass_premiere_week <- interval(start = mass_premiere_date,
+         end = mass_premiere_date + dweeks(x = 1))
+```
+
+Percentage of articles within 1 week of premiere:
+
+``` r
+articles_mass_premiere_week_perc <- 
+  round(((dates_mass_lubridate %>% 
+    filter(date %within% mass_premiere_week) %>% 
+    nrow()) / nrow(dates_mass_lubridate)) * 100)
+```
+
+#### Mother
+
+Save date of premiere (cf. BFA 3: 478):
+
+``` r
+mutter_premiere_date <- ymd("1932-01-17")
+```
+
+Create interval for 1 week after premiere:
+
+``` r
+mutter_premiere_week <- interval(start = mutter_premiere_date,
+         end = mutter_premiere_date + dweeks(x = 1))
+```
+
+Percentage of articles within 1 week of premiere:
+
+``` r
+articles_mutter_premiere_week_perc <- 
+  round(((dates_mutter_lubridate %>% 
+    filter(date %within% mutter_premiere_week) %>% 
+    nrow()) / nrow(dates_mutter_lubridate)) * 100)
+```
+
+## 1932 articles for Measures Taken
+
+``` r
+dates_tib_lubridate %>% 
+    filter(Piece == "Massnahme" &
+            year(date) == 1932) %>% 
+    left_join(spreadsheet)
+```
+
+    ## # A tibble: 5 x 17
+    ##   Article date       Piece Title Text  Newspaper Publisher Political_Affil~
+    ##     <dbl> <date>     <chr> <chr> <chr> <chr>     <chr>     <chr>           
+    ## 1      35 1932-02-19 Mass~ "Leh~ "Nic~ Literari~ Welt Ver~ Unknown         
+    ## 2      50 1932-06-01 Mass~ "„Di~ "1.\~ Der_Kämp~ KPD       KPD             
+    ## 3      34 1932-09-24 Mass~ "Die~ "Die~ Arbeiter~ Sozialde~ SPÖ             
+    ## 4      36 1932-11-22 Mass~ "Ers~ "In ~ General-~ Independ~ Unknown         
+    ## 5      37 1932-11-25 Mass~ "Kom~ "Am ~ Bayrisch~ Independ~ Unknown         
+    ## # ... with 9 more variables: Generalized_Political_Orientation <chr>,
+    ## #   Date <chr>, Author <chr>, Complete_or_Incomplete <chr>,
+    ## #   Other_Metadata <chr>, Other_Notes <chr>, AdK <chr>, AdK_Duplicate <chr>,
+    ## #   Comp_Doc <chr>
