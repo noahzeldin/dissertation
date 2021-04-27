@@ -3,6 +3,49 @@ Measures Taken Formal Musical Analysis
 Noah Zeldin
 4/26/2021
 
+  - [Load packages](#load-packages)
+  - [Importation](#importation)
+      - [Duration](#duration)
+      - [Voice Analysis](#voice-analysis)
+  - [Cleaning and Manipulation: 1.
+    Durations](#cleaning-and-manipulation-1.-durations)
+  - [Cleaning and Manipulation: 2. Voice
+    Analysis](#cleaning-and-manipulation-2.-voice-analysis)
+      - [General Tibble: gen\_tib](#general-tibble-gen_tib)
+          - [Additional Calculations for
+            Density](#additional-calculations-for-density)
+      - [Tibble for Choral Portions:
+        gen\_tib\_sung](#tibble-for-choral-portions-gen_tib_sung)
+      - [Tibble for Pitch: pitch\_tib](#tibble-for-pitch-pitch_tib)
+  - [Stats](#stats)
+      - [Durations: General](#durations-general)
+          - [Total Duration in Minutes](#total-duration-in-minutes)
+          - [Duration by Piece](#duration-by-piece)
+          - [Duration by Category](#duration-by-category)
+          - [Duration by Subcategory](#duration-by-subcategory)
+      - [Meter and Tempo](#meter-and-tempo)
+          - [Rates of Change](#rates-of-change)
+          - [Most Common Meters](#most-common-meters)
+      - [Durations: Choir](#durations-choir)
+          - [Choir Total Durations](#choir-total-durations)
+          - [Choir Sung Durations](#choir-sung-durations)
+          - [Choir Acapella Durations](#choir-acapella-durations)
+          - [Choir Spoken Durations](#choir-spoken-durations)
+          - [Choir Voice Durations](#choir-voice-durations)
+      - [Texture](#texture)
+          - [Whole Work](#whole-work)
+          - [Individual Pieces](#individual-pieces)
+      - [Pitch](#pitch)
+          - [Set-Up for Pitch
+            Computations](#set-up-for-pitch-computations)
+          - [Pitch Distribution](#pitch-distribution)
+          - [Chromaticism of Each Piece](#chromaticism-of-each-piece)
+      - [Groupings](#groupings)
+          - [Goal and Preliminary
+            Remarks](#goal-and-preliminary-remarks)
+          - [Combinations of Groupings](#combinations-of-groupings)
+          - [Separate Groupings](#separate-groupings)
+
 # Load packages
 
 ``` r

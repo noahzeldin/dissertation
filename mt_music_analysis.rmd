@@ -2,7 +2,9 @@
 title: "Measures Taken Formal Musical Analysis"
 author: "Noah Zeldin"
 date: "4/26/2021"
-output: github_document
+output: 
+  github_document:
+    toc: true
 ---
 
 
