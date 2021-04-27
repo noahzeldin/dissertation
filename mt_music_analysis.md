@@ -1917,123 +1917,7 @@ levels(pitch_long$pitch)
     ##  [5] "e"              "f"              "f_sharp_g_flat" "g"             
     ##  [9] "g_sharp_a_flat" "a"              "a_sharp_b_flat" "b"
 
-<!-- ### Scatterplot of pitches - FIX! BUT LOW PRIORITY -->
-
-<!-- Lots to fix:   -->
-
-<!-- * fix overlapping -->
-
-<!-- * also, one piece, maybe 6c is in wrong order -->
-
-<!-- * add label for each piece -->
-
-<!-- ```{r} -->
-
-<!-- ggplot(pitch_long, aes(x = id, y = value -->
-
-<!--                # y = as.factor(value) # no longer necessary -->
-
-<!--                # ,  -->
-
-<!--                # color = piece_no,  -->
-
-<!--                # size = dur_choir -->
-
-<!--                # , alpha = 0.01 -->
-
-<!--                )) + -->
-
-<!--     geom_mark_rect(aes(fill = piece_no, -->
-
-<!--                        alpha = 0.01)) + -->
-
-<!--     geom_point(aes(color = pitch, -->
-
-<!--                    alpha = dur_choir)) + -->
-
-<!--     ylab("pitch") + -->
-
-<!--     # ylim(0, 13) + # seems unnecessary / not doing anything -->
-
-<!--     scale_y_discrete(breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), -->
-
-<!--                      labels = c("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", -->
-
-<!--                                 "A", "A#", "B")) + -->
-
-<!--     theme(panel.grid.major.x = element_blank(), -->
-
-<!--           panel.grid.minor.x = element_blank(), -->
-
-<!--           panel.grid.major.y = element_line(color = "grey",  -->
-
-<!--                                             linetype = "dashed"), -->
-
-<!--           panel.background = element_rect(fill = "transparent"), # may not quite be what I want -->
-
-<!--           axis.title.x = element_blank(), -->
-
-<!--           axis.text.x = element_blank(), -->
-
-<!--           axis.ticks.x = element_blank(), -->
-
-<!--           legend.position = "none" -->
-
-<!--           ) -->
-
-<!-- ``` -->
-
-<!-- <!-- ### Barplots  -->
-
-–\>
-
-<!-- CONSIDER WEIGHTING BY DURATION - currently unweighted -->
-
-<!-- entire work by number of measures -->
-
-<!-- ```{r} -->
-
-<!-- ggplot(pitch_long, aes(x = pitch)) + -->
-
-<!--     geom_bar(aes(group = pitch, -->
-
-<!--                  fill = pitch -->
-
-<!--                  # , -->
-
-<!--                  # y = ..prop.. -->
-
-<!--                  )) + -->
-
-<!--     theme(legend.position = "none",  -->
-
-<!--           axis.title.x = element_blank()) + -->
-
-<!--     ylab("Number of Measures") -->
-
-<!-- ``` -->
-
-<!-- ```{r} -->
-
-<!-- ggplot(pitch_long, aes(x = pitch)) + -->
-
-<!--     geom_bar(aes(group = pitch, -->
-
-<!--                  fill = pitch, -->
-
-<!--                  # y = ..prop..)) + -->
-
-<!--     y = ..count../sum(..count..))) + -->
-
-<!--     scale_y_continuous(labels = percent_format()) + -->
-
-<!--         theme(legend.position = "none",  -->
-
-<!--           axis.title.x = element_blank()) -->
-
-<!-- ``` -->
-
-### Pitch Diestribution
+### Pitch Distribution
 
 ``` r
 pitch_distribution_plot <- pitch_long %>% 
@@ -2151,3 +2035,333 @@ pitch_no_piece
     ## 12 8b                   6
     ## 13 13a                  5
     ## 14 11                   4
+
+## Groupings
+
+### Goal and Preliminary Remarks
+
+<!-- UPDATE 12.08: changed source data from `gen_tib` to `gen_tib_sung`. -->
+
+<!-- * This should avoid pieces with no singing. -->
+
+Goal: Determine which groupings of voices are most common.
+
+  - directly related to homophony and voice reduction
+
+Need to perform two separate calculations:
+
+  - 1.  separate groupings
+
+  - 2.  combinations of groupings
+
+<!-- **2. combinations of groupings** will be much easier, because this is the  -->
+
+<!-- existing observation in the spreadsheet. Can calculate now.   -->
+
+<!-- Will need to put in some work for **1. separate groupings.**   -->
+
+<!-- * must separate groupings, probably into different columns and then count   -->
+
+### Combinations of Groupings
+
+#### By Number of Measures
+
+Generate basic tibble for whole work.
+
+``` r
+groupings_tib <- gen_tib_sung %>% 
+    count(groupings) %>% # number of measures but not durations
+    as_tibble %>% 
+    rename(n_groupings = n) %>% 
+    filter(groupings != "na") %>% 
+    mutate(prop_of_groupings = n_groupings/sum(n_groupings))
+```
+
+Create list of 5 most common groupings:
+
+``` r
+groupings_5 <- groupings_tib %>% 
+    arrange(desc(prop_of_groupings)) %>%
+    select(groupings, prop_of_groupings) %>%
+    slice(1:5) %>% 
+    mutate(perc_of_groupings = round((prop_of_groupings*100), digits = 0)) %>% 
+    print()
+```
+
+    ## # A tibble: 5 x 3
+    ##   groupings prop_of_groupings perc_of_groupings
+    ##   <chr>                 <dbl>             <dbl>
+    ## 1 st_ab                0.343                 34
+    ## 2 tb                   0.212                 21
+    ## 3 none                 0.173                 17
+    ## 4 st                   0.0517                 5
+    ## 5 b1b2                 0.04                   4
+
+#### By Duration (of Measures)
+
+Create tibble with groupings, duration and proportion:
+
+``` r
+groupings_dur_tib <- gen_tib_sung %>% 
+    select(groupings, duration) %>% 
+    filter(groupings != "na") %>% 
+    group_by(groupings) %>%
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_of_dur = (duration/sum(duration)))
+```
+
+Create list of 5 most common groupings by duration:
+
+``` r
+groupings_5_dur <- groupings_dur_tib %>% 
+    arrange(desc(prop_of_dur)) %>%
+    select(groupings, prop_of_dur) %>%
+    slice(1:5) %>%  
+    mutate(perc_of_dur = round(prop_of_dur*100))
+
+groupings_5_dur 
+```
+
+    ## # A tibble: 5 x 3
+    ##   groupings prop_of_dur perc_of_dur
+    ##   <chr>           <dbl>       <dbl>
+    ## 1 st_ab          0.367           37
+    ## 2 tb             0.157           16
+    ## 3 none           0.111           11
+    ## 4 satb           0.0967          10
+    ## 5 sa_tb          0.0519           5
+
+Differs only slightly from previous computation (by number of measures).
+Top 3 and no. 5 are same as `groupings_5` but 4th place now **satb**
+(rather than st).
+
+##### Separated by Texture
+
+``` r
+groupings_texture_dur <- gen_tib_sung %>% 
+    select(groupings, texture, duration) %>% 
+    filter(groupings != "na",
+           texture != "na") %>% 
+    group_by(groupings, texture) %>%
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_of_dur_text = (duration/sum(duration)),
+           perc_of_dur_text = round(prop_of_dur_text*100)) %>%
+    arrange(groupings, desc(duration))
+
+groupings_texture_dur
+```
+
+    ## # A tibble: 28 x 5
+    ## # Groups:   groupings [21]
+    ##    groupings    texture duration prop_of_dur_text perc_of_dur_text
+    ##    <chr>        <chr>      <dbl>            <dbl>            <dbl>
+    ##  1 ab           p           5.45           1                   100
+    ##  2 b1b2         m          17.8            0.5                  50
+    ##  3 b1b2         p          17.8            0.5                  50
+    ##  4 none         h         105.             0.826                83
+    ##  5 none         m          15.5            0.122                12
+    ##  6 none         p           6.67           0.0525                5
+    ##  7 s1t_s2b2_ab2 h          29.1            1                   100
+    ##  8 s1t1_s2t2_ab h           4.5            1                   100
+    ##  9 sa           h          20.6            1                   100
+    ## 10 sa_tb        p          45.8            0.774                77
+    ## # ... with 18 more rows
+
+With top 5 groupings:
+
+``` r
+groupings_texture_dur_5 <- semi_join(groupings_texture_dur, groupings_5_dur)
+
+groupings_texture_dur_5
+```
+
+    ## # A tibble: 10 x 5
+    ## # Groups:   groupings [5]
+    ##    groupings texture duration prop_of_dur_text perc_of_dur_text
+    ##    <chr>     <chr>      <dbl>            <dbl>            <dbl>
+    ##  1 none      h         105.             0.826                83
+    ##  2 none      m          15.5            0.122                12
+    ##  3 none      p           6.67           0.0525                5
+    ##  4 sa_tb     p          45.8            0.774                77
+    ##  5 sa_tb     h          13.4            0.226                23
+    ##  6 satb      m         110.             1                   100
+    ##  7 st_ab     h         297.             0.711                71
+    ##  8 st_ab     p         121.             0.289                29
+    ##  9 tb        m         111.             0.621                62
+    ## 10 tb        h          68              0.379                38
+
+Compute percentages of each texture:
+
+``` r
+groupings_texture_dur_5 %>% 
+    group_by(texture) %>% 
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_dur = duration / sum(duration),
+           perc_dur = round(prop_dur * 100))
+```
+
+    ## # A tibble: 3 x 4
+    ##   texture duration prop_dur perc_dur
+    ##   <chr>      <dbl>    <dbl>    <dbl>
+    ## 1 h           483.    0.541       54
+    ## 2 m           237.    0.265       27
+    ## 3 p           174.    0.194       19
+
+Just homophony:
+
+``` r
+groupings_homophony_dur <- gen_tib_sung %>% 
+    filter(texture == "h") %>% 
+    select(groupings, duration) %>% 
+    group_by(groupings) %>% 
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_of_dur = (duration/sum(duration)),
+           perc_of_dur = round(prop_of_dur*100
+                               # , digits = 1 # not sure how hard I can round,
+                               # really only need top 3/4, so doesn't matter
+                               )) %>% 
+    arrange(desc(duration))
+
+groupings_homophony_dur
+```
+
+    ## # A tibble: 17 x 4
+    ##    groupings    duration prop_of_dur perc_of_dur
+    ##    <chr>           <dbl>       <dbl>       <dbl>
+    ##  1 st_ab         297.        0.461            46
+    ##  2 none          105.        0.162            16
+    ##  3 tb             68         0.105            11
+    ##  4 st             48.2       0.0747            7
+    ##  5 s1t_s2b2_ab2   29.1       0.0451            5
+    ##  6 sa             20.6       0.0319            3
+    ##  7 sat            20.6       0.0319            3
+    ##  8 stb            17.1       0.0265            3
+    ##  9 sa_tb          13.4       0.0207            2
+    ## 10 st1b_at2       10.3       0.0159            2
+    ## 11 s1t1_s2t2_ab    4.5       0.00698           1
+    ## 12 st_a1b          3.81      0.00591           1
+    ## 13 sab             1.90      0.00295           0
+    ## 14 st_ab1          1.90      0.00295           0
+    ## 15 st_a1a2         1.71      0.00266           0
+    ## 16 sb_at           0.984     0.00153           0
+    ## 17 stb2_ab1        0.952     0.00148           0
+
+Show that all instances of homophony with no groupings are just two
+voices.
+
+  - Need for write-up.
+
+<!-- end list -->
+
+``` r
+gen_tib_sung %>% 
+    filter(texture == "h" & groupings == "none") %>% 
+    select(voices, duration) %>% 
+    group_by(voices) %>% 
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_of_dur = (duration/sum(duration)),
+           perc_of_dur = round(prop_of_dur*100)) 
+```
+
+    ## # A tibble: 1 x 4
+    ##   voices duration prop_of_dur perc_of_dur
+    ##    <dbl>    <dbl>       <dbl>       <dbl>
+    ## 1      2     105.           1         100
+
+### Separate Groupings
+
+#### By Number of Measures
+
+Create basic tibble for whole work:
+
+``` r
+groupings_separate_tib <- gen_tib_sung %>% 
+    separate(groupings, sep = "_", 
+             into = c("grouping_1", "grouping_2", "grouping_3")) %>% 
+    gather("grouping_1", "grouping_2", "grouping_3", key = "old_column", 
+           value = "groupings") %>% 
+    select(groupings) %>% 
+    filter(groupings != "na") %>% 
+    count(groupings) %>% 
+    mutate(perc_of_groupings = (n/sum(n)*100)) 
+```
+
+Create list of 10 most common separate groupings:
+
+``` r
+groupings_separate_10 <- groupings_separate_tib %>% 
+    arrange(desc(perc_of_groupings)) %>%
+    select(groupings, perc_of_groupings) %>%
+    slice(1:10) 
+
+groupings_separate_10
+```
+
+    ## # A tibble: 10 x 2
+    ##    groupings perc_of_groupings
+    ##    <chr>                 <dbl>
+    ##  1 st                   28.7  
+    ##  2 ab                   24.7  
+    ##  3 tb                   16.6  
+    ##  4 none                 12.2  
+    ##  5 b1b2                  2.83 
+    ##  6 sa                    2.83 
+    ##  7 satb                  2.71 
+    ##  8 sat1b                 2.00 
+    ##  9 stb                   1.30 
+    ## 10 sat                   0.942
+
+<!-- Also quite interesting!    -->
+
+<!-- * Like `groupings_tib`, shows that **st** and **ab** are most common, though -->
+
+<!-- interesting that **st** appears a little more frequently.   -->
+
+<!-- * **tb** is almost as common as **none** and far more common than **sa**.   -->
+
+<!-- ** This makes sense, since male voices sing much more than female voices.   -->
+
+#### By Duration (of mMasures)
+
+Create tibble with each separate grouping and its total duration:
+
+``` r
+groupings_separate_dur_tib <- gen_tib %>% 
+    separate(groupings, sep = "_", 
+             into = c("grouping_1", "grouping_2", "grouping_3")) %>% 
+    gather("grouping_1", "grouping_2", "grouping_3", key = "old_column", 
+           value = "groupings") %>% 
+    select(groupings, duration) %>% 
+    filter(groupings != "na") %>% 
+    group_by(groupings) %>% 
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_of_dur = duration/sum(duration)) 
+```
+
+Create list of 10 most common separate groupings by duration:
+
+``` r
+groupings_separate_10_dur <- groupings_separate_dur_tib %>% 
+    arrange(desc(prop_of_dur)) %>%
+    select(groupings, prop_of_dur) %>%
+    slice(1:10) %>%  
+    mutate(perc_of_dur = round(prop_of_dur*100))
+
+groupings_separate_10_dur
+```
+
+    ## # A tibble: 10 x 3
+    ##    groupings prop_of_dur perc_of_dur
+    ##    <chr>           <dbl>       <dbl>
+    ##  1 st             0.266           27
+    ##  2 ab             0.238           24
+    ##  3 tb             0.132           13
+    ##  4 none           0.124           12
+    ##  5 satb           0.0612           6
+    ##  6 sa             0.0442           4
+    ##  7 sat1b          0.0212           2
+    ##  8 b1b2           0.0198           2
+    ##  9 ab2            0.0162           2
+    ## 10 s1t            0.0162           2
+
+Results show that factoring in duration makes *very* little difference.

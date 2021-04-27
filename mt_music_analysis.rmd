@@ -1331,8 +1331,8 @@ pitch_no_piece
 
 ### Goal and Preliminary Remarks
 
-UPDATE 12.08: changed source data from `gen_tib` to `gen_tib_sung`.
-* This should avoid pieces with no singing.
+<!-- UPDATE 12.08: changed source data from `gen_tib` to `gen_tib_sung`. -->
+<!-- * This should avoid pieces with no singing. -->
 
 Goal: Determine which groupings of voices are most common.  
 
@@ -1344,18 +1344,18 @@ Need to perform two separate calculations:
 
 * 2. combinations of groupings  
 
-**2. combinations of groupings** will be much easier, because this is the 
-existing observation in the spreadsheet. Can calculate now.  
+<!-- **2. combinations of groupings** will be much easier, because this is the  -->
+<!-- existing observation in the spreadsheet. Can calculate now.   -->
 
-Will need to put in some work for **1. separate groupings.**  
+<!-- Will need to put in some work for **1. separate groupings.**   -->
 
-* must separate groupings, probably into different columns and then count  
+<!-- * must separate groupings, probably into different columns and then count   -->
 
 ### Combinations of Groupings   
 
-#### By number of measures  
+#### By Number of Measures  
 
-Generate basic table for whole work.
+Generate basic tibble for whole work.
 
 ```{r}
 groupings_tib <- gen_tib_sung %>% 
@@ -1366,26 +1366,9 @@ groupings_tib <- gen_tib_sung %>%
     mutate(prop_of_groupings = n_groupings/sum(n_groupings))
 ```
 
-Check to see if proportions add up to 1, in order to ensure that order of 
-previous step is correct.
-
-```{r}
-sum(groupings_tib$prop_of_groupings) == 1
-```
-
-Create a basic barplot of groupings for whole work.  
-
-* KIND OF STUPID
-
-```{r}
-groupings_tib %>% 
-    ggplot() +
-    geom_col(aes(x = groupings, y = prop_of_groupings, fill = groupings))
-```
 
 
-Create list of 5 most common groupings.
-* **Try to fix final line of code - base R syntax, not tidyverse.**
+Create list of 5 most common groupings:
 
 ```{r}
 groupings_5 <- groupings_tib %>% 
@@ -1397,16 +1380,9 @@ groupings_5 <- groupings_tib %>%
 ```
 
 
-Wow, really cool findings:   
+#### By Duration (of Measures)  
 
-* The grouping **st_ab** is more common than no groupings.  
-
-* Only 18% of all measures with singing have no groupings.  
-
-
-#### By duration (of measures)  
-
-Generate table with groupings, duration and proportion.  
+Create tibble with groupings, duration and proportion:  
 
 ```{r}
 groupings_dur_tib <- gen_tib_sung %>% 
@@ -1417,7 +1393,7 @@ groupings_dur_tib <- gen_tib_sung %>%
     mutate(prop_of_dur = (duration/sum(duration)))
 ```
 
-Create list of 5 most common groupings by duration.
+Create list of 5 most common groupings by duration:
 
 ```{r}
 groupings_5_dur <- groupings_dur_tib %>% 
@@ -1429,10 +1405,10 @@ groupings_5_dur <- groupings_dur_tib %>%
 groupings_5_dur 
 ```
 
-Only a little different from   
+Differs only slightly from previous computation (by number of measures). 
 Top 3 and no. 5 are same as `groupings_5` but 4th place now **satb** (rather than st). 
 
-##### And separated by Texture
+##### Separated by Texture
 
 ```{r}
 groupings_texture_dur <- gen_tib_sung %>% 
@@ -1448,7 +1424,7 @@ groupings_texture_dur <- gen_tib_sung %>%
 groupings_texture_dur
 ```
 
-With top 5 groupings
+With top 5 groupings:
 
 ```{r}
 groupings_texture_dur_5 <- semi_join(groupings_texture_dur, groupings_5_dur)
@@ -1456,7 +1432,7 @@ groupings_texture_dur_5 <- semi_join(groupings_texture_dur, groupings_5_dur)
 groupings_texture_dur_5
 ```
 
-Compute percentages of each texture.
+Compute percentages of each texture:
 
 ```{r}
 groupings_texture_dur_5 %>% 
@@ -1466,7 +1442,7 @@ groupings_texture_dur_5 %>%
            perc_dur = round(prop_dur * 100))
 ```
 
-Just homophony
+Just homophony:
 
 ```{r}
 groupings_homophony_dur <- gen_tib_sung %>% 
@@ -1485,6 +1461,7 @@ groupings_homophony_dur
 ```
 
 Show that all instances of homophony with no groupings are just two voices.
+
 * Need for write-up.
 
 ```{r}
@@ -1500,9 +1477,9 @@ gen_tib_sung %>%
 
 ### Separate Groupings  
 
-#### By number of measures   
+#### By Number of Measures   
 
-Generate basic table for whole work.  
+Create basic tibble for whole work:  
 
 ```{r}
 groupings_separate_tib <- gen_tib_sung %>% 
@@ -1513,34 +1490,34 @@ groupings_separate_tib <- gen_tib_sung %>%
     select(groupings) %>% 
     filter(groupings != "na") %>% 
     count(groupings) %>% 
-    mutate(prop_of_groupings = (n/sum(n)*100)) 
+    mutate(perc_of_groupings = (n/sum(n)*100)) 
 ```
 
-Create list of 10 most common separate groupings.
+Create list of 10 most common separate groupings:
 
 ```{r}
 groupings_separate_10 <- groupings_separate_tib %>% 
-    arrange(desc(prop_of_groupings)) %>%
-    select(groupings, prop_of_groupings) %>%
+    arrange(desc(perc_of_groupings)) %>%
+    select(groupings, perc_of_groupings) %>%
     slice(1:10) 
 
 groupings_separate_10
 ```
 
 
-Also quite interesting!   
+<!-- Also quite interesting!    -->
 
-* Like `groupings_tib`, shows that **st** and **ab** are most common, though
-interesting that **st** appears a little more frequently.  
+<!-- * Like `groupings_tib`, shows that **st** and **ab** are most common, though -->
+<!-- interesting that **st** appears a little more frequently.   -->
 
-* **tb** is almost as common as **none** and far more common than **sa**.  
+<!-- * **tb** is almost as common as **none** and far more common than **sa**.   -->
 
-** This makes sense, since male voices sing much more than female voices.  
+<!-- ** This makes sense, since male voices sing much more than female voices.   -->
 
 
-#### By duration (of measures)  
+#### By Duration (of mMasures)  
 
-Generate table with each separate grouping and its total duration.  
+Create tibble with each separate grouping and its total duration:  
 
 ```{r}
 groupings_separate_dur_tib <- gen_tib %>% 
@@ -1555,7 +1532,7 @@ groupings_separate_dur_tib <- gen_tib %>%
     mutate(prop_of_dur = duration/sum(duration)) 
 ```
 
-Create list of 10 most common separate groupings by duration.
+Create list of 10 most common separate groupings by duration:
 
 ```{r}
 groupings_separate_10_dur <- groupings_separate_dur_tib %>% 
@@ -1567,8 +1544,7 @@ groupings_separate_10_dur <- groupings_separate_dur_tib %>%
 groupings_separate_10_dur
 ```
 
-Pretty interesting - factoring in duration seems to make basically no 
-difference.  
+Results show that factoring in duration makes *very* little difference.  
 
 
 
