@@ -1302,7 +1302,7 @@ freq_piece_gpo_plot
 Main
 
 ``` r
-ca_main_english <- plot(grouped_ca_no_erfurt_or_unknown_english,
+ca_main <- plot(grouped_ca_no_erfurt_or_unknown_english,
                 invisible = "row",
                 col.quali.sup = "darkblue",
                 selectCol = "contrib 20",
@@ -1311,12 +1311,12 @@ ca_main_english <- plot(grouped_ca_no_erfurt_or_unknown_english,
                 unselect = 1,
                 cex = 0.85)
 
-ca_main_english <- ca_main_english + 
+ca_main <- ca_main + 
     labs(title = "The Political-Aesthetic Space of The Measures Taken and The Mother",
          subtitle = "(CA of pieces and political orientations with the top 20 contributing keywords.)") +
     theme_bw()
 
-ca_main_english
+ca_main
 ```
 
 ![](reception_analysis_files/figure-gfm/unnamed-chunk-86-1.png)<!-- -->

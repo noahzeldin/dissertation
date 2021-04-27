@@ -926,7 +926,7 @@ toks_grouped <- toks_grouped %>%
 
 Coding for boxplot:
 
-```{r}
+```{r, fig.width = 10, fig.height=8}
 toks_summary_boxplot <- 
     toks_grouped %>% 
     ggplot(aes(x = Piece, y = tokens, 
@@ -995,7 +995,7 @@ corp_reduced_summary %>%
 
 Grouped by Piece:
 
-```{r}
+```{r, fig.width=10, fig.height=10}
 # must rename groups in English for word cloud
 piece_dfm_no_erfurt_english <- dfm_group(piece_dfm_no_erfurt, groups = c("Measures Taken", "Mother"))
 
@@ -1009,7 +1009,7 @@ textplot_wordcloud(piece_dfm_no_erfurt_english,
 
 *Mother* - Grouped by GPO (no unknown):
 
-```{r, results='hide'}
+```{r, results='hide', fig.width=10, fig.height=10}
 wordcloud_mutter_gpo <- 
   textplot_wordcloud(mutter_dfm_gpo_no_unknown,
                    max_words = 100, # 125 or 100 is probably best
@@ -1024,7 +1024,7 @@ wordcloud_mutter_gpo <-
 
 By Piece:
 
-```{r}
+```{r, fig.width=10, fig.height=9}
 # grouped by piece (weighted)
 freq_piece <- dfm_weight(gen_dfm_reduced, scheme = "prop") %>% # 12.21.20 applying dfm_weight seems to make no difference
     textstat_frequency(n = 15, groups = "Piece")
@@ -1058,7 +1058,7 @@ freq_piece_plot
 
 By Piece + GPO:
 
-```{r}
+```{r, fig.width=11, fig.height=9}
 freq_grouped_wt <- dfm_weight(gen_dfm_reduced, scheme = "prop") %>% 
     textstat_frequency(n = 10, 
                        groups = c("Piece", "Generalized_Political_Orientation")) 
@@ -1107,8 +1107,8 @@ freq_piece_gpo_plot
 
 Main
 
-```{r}
-ca_main_english <- plot(grouped_ca_no_erfurt_or_unknown_english,
+```{r, fig.width=11, fig.height=11}
+ca_main <- plot(grouped_ca_no_erfurt_or_unknown_english,
                 invisible = "row",
                 col.quali.sup = "darkblue",
                 selectCol = "contrib 20",
@@ -1117,17 +1117,17 @@ ca_main_english <- plot(grouped_ca_no_erfurt_or_unknown_english,
                 unselect = 1,
                 cex = 0.85)
 
-ca_main_english <- ca_main_english + 
+ca_main <- ca_main + 
     labs(title = "The Political-Aesthetic Space of The Measures Taken and The Mother",
          subtitle = "(CA of pieces and political orientations with the top 20 contributing keywords.)") +
     theme_bw()
 
-ca_main_english
+ca_main
 ```
 
 *Measures Taken*
 
-```{r}
+```{r, fig.width=11, fig.height=11}
 ca_measures <- plot(grouped_ca_no_erfurt_or_unknown_english,
      invisible = "row",
      col.quali.sup = "darkblue",
@@ -1148,7 +1148,7 @@ ca_measures
 
 *Mother*
 
-```{r}
+```{r, fig.width=11, fig.height=11}
 ca_mother <- plot(grouped_ca_no_erfurt_or_unknown_english,
      invisible = "row",
      col.quali.sup = "darkblue",
