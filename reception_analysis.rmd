@@ -17,11 +17,17 @@ knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Desktop/Proposal/R materia
 # Introductory Remarks
 
 Below is the annotated set-up for my quantitative analysis of the Weimar-era 
-reception of Brecht and Eisler's *The Measures Taken* and *The Mother*, which is included in the second chapter of my dissertation. This analysis was conducted in R. (I have tried to use [tidyverse](https://www.tidyverse.org/) syntax as 
-consistently as possible.) Data sets will be made available to researchers upon 
-request.
+reception of Brecht and Eisler's *The Measures Taken* and *The Mother*, which is 
+included in the second chapter of my dissertation. This analysis was conducted 
+in R and relies heavily on the [quanteda](https://quanteda.io/) and 
+[FactoMineR](http://factominer.free.fr/index.html) packages. (Also, I have tried 
+to use [tidyverse](https://www.tidyverse.org/) syntax as consistently as 
+possible.) Data sets will be made available to researchers upon request.
 
-**NB: Further refinements to the coding are forthcoming.** 
+**NB: Further refinements to the coding are forthcoming.** This was my first 
+serious attempt at coding in R, so certain portions are still a bit clunky. 
+(Note too that many lines use the German titles for the two pieces. All 
+instances of this will be changed to English for consistency.)
 
 # Load Packages
 
@@ -152,7 +158,7 @@ dict_gen <- dictionary(list(revolution = "revolution*",
                             drama = "drama*",
                             politisch = "politi*",
                             kommunismus = "kommunis*",
-                            chor = c("chor*", "chöre*"), # amended 12.23.20
+                            chor = c("chor*", "chöre*"), 
                             proletarisch = "prolet*",
                             marxismus = "marx*",
                             primitiv = "primitiv*",
@@ -164,11 +170,11 @@ dict_gen <- dictionary(list(revolution = "revolution*",
                             propaganda = "propagand*",
                             kunst = c("kunst", "künstler*"),
                             lied = c("lied*", "song*"),
-                            arbeitersänger = "arbeitersänger*", # 12.23.20
-                            arbeiterchor = "arbeiterch*", # 12.23.20
+                            arbeitersänger = "arbeitersänger*", 
+                            arbeiterchor = "arbeiterch*", 
                             bolschewismus = c("bolschewis*",
-                                              "kulturbolschewis*"), # 12.18.20 - don't need
-                            langweilig = c("langweilig*", # 12.18.20
+                                              "kulturbolschewis*"), 
+                            langweilig = c("langweilig*", 
                                            "langeweile")))
 ```
 
@@ -176,26 +182,24 @@ Regex Dictionary
 
 ```{r}
 dict_regex <- dictionary(list(lehrlern = c("lehr(?!s)[a-z]+", 
-                                           "belehr(?!s)[a-z]+", # 12.18.20
+                                           "belehr(?!s)[a-z]+", 
                                            "lern[a-z]+",
-                                           "erlern[a-z]+", # 12.18.20
-                                           "gelern[a-z]+", # 12.18.20
-                                           "pädagog[a-z]+", # 12.18.20
-                                           "didakt[a-z]+"))) # 12.18.20
+                                           "erlern[a-z]+", 
+                                           "gelern[a-z]+", 
+                                           "pädagog[a-z]+", 
+                                           "didakt[a-z]+"))) 
 ```
 
 Additional Stopwords
 
 ```{r}
 sw_add <- c("dass", "wurde", "schon", "mehr", "ganz*", "immer", "gibt", "ja",
-            "müssen", "kommt", 
-            "sei", "tun" # 12.18.20
-            )
+            "müssen", "kommt", "sei", "tun")
 ```
 
 ## Tokenize and Filter Corpora
 
-Create Function for Tokenizing and Removing Stopwords
+Create function for tokenizing and removing stopwords:
 
 ```{r}
 tokenize_and_remove_stopwords <- function(i) {
@@ -209,7 +213,7 @@ tokenize_and_remove_stopwords <- function(i) {
 }
 ```
 
-Tokenize and Filter Corpora
+Tokenize and filter corpora:
 
 ```{r}
 # general / ungrouped
@@ -230,7 +234,7 @@ mutter_title_toks <- tokenize_and_remove_stopwords(mutter_corp_title)
 
 ## DFMs
 
-Create Function for Converting toks to dfm and Applying Dictionaries
+Create function for converting toks to dfm and applying dictionaries:
 
 ```{r}
 convert_to_dfm_and_apply_dictionaries <- function(i) {
@@ -240,7 +244,7 @@ convert_to_dfm_and_apply_dictionaries <- function(i) {
 }
 ```
 
-Convert and Apply Dictionaries to Corpora
+Convert and apply dictionaries to corpora:
 
 ```{r}
 # general / ungrouped
