@@ -18,7 +18,8 @@ knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Desktop/Proposal/R materia
 Below is the annotated set-up for my formal analysis of Hanns Eisler's music to
 *The Measures Taken*, which is included in the second chapter of my 
 dissertation. This analysis was conducted in R. (I have tried to use 
-[tidyverse](https://www.tidyverse.org/) syntax as consistently as possible.) 
+[tidyverse](https://www.tidyverse.org/) syntax as consistently as possible. I
+therefore refer to tables as ["tibbles"](https://tibble.tidyverse.org/).) 
 Data sets will be made available to researchers upon request.
 
 **NB: Further refinements to the coding are forthcoming.** 
@@ -455,9 +456,16 @@ knitr::kable(dur_subcategory)
 
 ## Meter and Tempo
 
+An important feature of Eisler's music for *The Measures Taken* are the frequent
+meter changes. These, along with the frequent tempo changes in a handful of 
+pieces, demonstrate the necessity of a professional conductor. (The reliance
+of the non-professional workers' choir on an array of professional musicians is 
+an important part of my argument in the dissertation, as it contradicts much of
+the previous, text-oriented scholarship on the work by Brecht scholars.) 
+
 ### Rates of Change
 
-Construct table with following stats for each piece:
+Construct tibble with following stats for each piece:
 
 * duration
 
@@ -473,6 +481,7 @@ Construct table with following stats for each piece:
 
 * rate of tempo changes in bars
 
+
 ```{r}
 dur_meter_tempo_piece <- dur_tib %>% 
     group_by(piece_no) %>% 
@@ -487,14 +496,9 @@ dur_meter_tempo_piece <- dur_tib %>%
     relocate(meter_ch_rate_sec, .after = meter_ch_count) %>% 
     relocate(tempo_ch_rate_sec, .after = tempo_ch_count)
 
-dur_meter_tempo_piece
-```
-
-Output of `dur_meter_tempo_piece`:
-
-```{r, echo=FALSE}
 knitr::kable(dur_meter_tempo_piece)
 ```
+
 
 <!-- sorted by **meter_ch_count**   -->
 
@@ -504,7 +508,7 @@ knitr::kable(dur_meter_tempo_piece)
 <!--     select(-tempo_ch_count, -tempo_ch_rate_sec) -->
 <!-- ``` -->
 
-5 pieces with greatest number of meter changes.
+5 pieces with greatest number of meter changes:
 
 ```{r}
 meter_ch_count_piece_top_5 <- dur_meter_tempo_piece %>% 
@@ -525,7 +529,7 @@ knitr::kable(meter_ch_count_piece_top_5)
 <!--     arrange(meter_ch_rate_sec) -->
 <!-- ``` -->
 
-5 pieces with quickest rates of meter changes.
+5 pieces with fastest rates of meter change:
 
 ```{r}
 meter_ch_rate_piece_top_5 <- dur_meter_tempo_piece %>% 
@@ -545,7 +549,7 @@ knitr::kable(meter_ch_rate_piece_top_5)
 <!--     arrange(desc(tempo_ch_count)) -->
 <!-- ``` -->
 
-3 pieces with greatest number of tempo changes.  
+3 pieces with greatest number of tempo changes:  
 
 ```{r}
 tempo_ch_count_and_rate_piece <- dur_meter_tempo_piece %>% 
@@ -558,7 +562,7 @@ knitr::kable(tempo_ch_count_and_rate_piece)
 
 ### Most Common Meters
 
-Create tibble with meter, number of meters and duration.
+Create tibble with meter, number of meters and duration:
 
 ```{r}
 dur_meter <- dur_tib %>% 
@@ -591,6 +595,13 @@ dur_meter %>%
 
 #### Grouped by Duple vs. Triple
 
+Exploring the proportion of duple vs. triple meters allows one to determine 
+Eisler's engagement with march-like anthems (duple meters) and subversion 
+thereof (triple meters). In short, while the music to *The Measures Taken* is
+undoubtedly highly political, Eisler, in his typical manner, used musical 
+materials in a critical fashion, rather than composing straightforward anthems.
+
+
 ```{r}
 dur_meter_groups <- dur_meter %>% 
     group_by(meter) %>% 
@@ -616,9 +627,10 @@ knitr::kable(dur_meter_groups)
 
 #### Special Case: 6/4
 
-**Need to account for 6/4, which is compound duple.**
+6/4 is compound duple and therefore a special case. NB: 6/4 is the only compound
+duple meter present in the work.
 
-Check which measures are in 6/4.
+Check which measures are in 6/4:
 
 ```{r}
 gen_tib %>% 
@@ -637,7 +649,7 @@ dur_6_4_perc <- round((dur_meter %>%
     sum()) * 100, digits = 1)
 ```
 
-`r dur_6_4_perc` % of work is in 6/4.
+`r dur_6_4_perc` % of the work is in 6/4.
 
 Compute percent of duration of duple that is 6/4:
 
@@ -676,9 +688,13 @@ dur_6_4_duple_perc <- round((dur_meter %>%
 
 ## Durations: Choir
 
+This section is very significant to my analysis, which focuses on the choral
+material. The calculations here determine the proportions of choral material 
+that are sung (with and without instrumental accompaniment) or spoken.
+
 ### Choir Total Durations
 
-Create tibble containing only measures with choir.
+Create tibble containing only measures with choir:
 
 ```{r}
 choir_tib <- gen_tib %>% 
@@ -692,7 +708,7 @@ dur_choir_total_sec <- sum(choir_tib$dur_choir)
 dur_choir_total_min <- sum(choir_tib$dur_choir) / 60
 ```
 
-The choir sings for `r round(dur_choir_total_min, digits = 2)` minutes.
+The choir is active for `r round(dur_choir_total_min, digits = 2)` minutes.
 
 Duration of choir as proportion of total duration:
 
@@ -701,7 +717,7 @@ dur_choir_prop <- round((dur_choir_total_min / dur_total_min), digits = 4)*100
 print(dur_choir_prop)
 ```
 
-The choir sings for `r dur_choir_prop` % of total duration of music.
+The choir is active for `r dur_choir_prop` % of total duration of music.
 
 
 ### Choir Sung Durations
@@ -781,6 +797,9 @@ gen_tib %>%
 
 #### Check for measures where duration of 1st and 2nd parts don't align.
 
+NB: As is typical for choral music, Eisler sometimes splits the part of one or 
+more of the four voices. The calculations below take account of this.
+
 1. Sopranos
 
 ```{r}
@@ -802,7 +821,8 @@ gen_tib_sung %>%
     filter(quarters_t1 != 0 & quarters_t2 != 0 & quarters_t1 != quarters_t2) 
 ```
 
-Only antiphonic passage at beginning of "Lob der Partei." Doesn't matter, because t1 and t2 overlap.
+Only antiphonic passage at beginning of "Lob der Partei." Doesn't matter, 
+because t1 and t2 overlap.
 
 4. Basses
 
@@ -815,6 +835,9 @@ Final measure of "Streiklied." Doesn't matter, because b1 and b2 overlap.
 
 
 #### Check for measures where 2nd sings but 1st doesn't
+
+NB: Similar goal as in previous section.
+
 
 1. Sopranos
 
@@ -893,7 +916,14 @@ gen_tib_sung %>%
 
 Again, doesn't matter because of overlap.
 
+
+
 #### Computations for male vs. female
+
+The introduction of mixed choirs into the German worker-singers' movement was a
+widely discussed and highly politicized topic in the Weimar Republic. These 
+calculations determine the extent to which Eisler used women's voices in 
+comparison to men's voices.
 
 <!-- Four voices - FIX - need to account for doublings, can't just add 1 and 2 -->
 
@@ -952,9 +982,9 @@ dur_male_sung_perc <- round((dur_male_sung/dur_sung_total)*100)
 ```
 
 
-Compute proportion of discrepancy resulting from 5 and 7a:
+Compute proportion of discrepancy resulting from pieces 5 and 7a:
 
-1. Get extra durations for tenors and basses.
+1. Get extra durations for tenors and basses:
 
 ```{r}
 dur_t1_sung_5_and_7a <- gen_tib_sung %>% 
@@ -968,30 +998,42 @@ dur_b1_sung_5_and_7a <-gen_tib_sung %>%
     sum()
 ```
 
-2. Amount by which dur_male is longer than dur_female.
+2. Amount by which dur_male is longer than dur_female:
 
 ```{r}
 dur_male_sung - dur_female_sung
 ```
 
-3. Extra duration from 5 and 7a.
+3. Extra duration from 5 and 7a:
 
 ```{r}
 dur_t1_sung_5_and_7a + dur_b1_sung_5_and_7a
 ```
 
-4. Compute proportion / percentage.
+4. Compute percentage:
 
 ```{r}
 dur_male_extra_from_5_and_7a_perc <- 
   round(((dur_t1_sung_5_and_7a + dur_b1_sung_5_and_7a) /
          (dur_male_sung - dur_female_sung)) * 100)
+
+dur_male_extra_from_5_and_7a_perc
 ```
 
 
 ## Texture
 
-Goal: measure amount of each texture in whole work and in each piece.
+The texture of the choral writing plays a pivotal role in my analysis. The 
+calculations in this section confirm implicitly statistical observations made in
+previous analyses of the work, most significantly the claim that homophony 
+dominates.
+
+Additionally, the results of the analysis here provide the foundation for my 
+claim that there is a strong relationship between choral texture and textual
+content. In short, Eisler tends to set texts with concrete political content to 
+sparser choral textures (monophony and reduced homophony). This claim is fully
+developed in ch. 2.
+
 
 ### Whole Work
 
@@ -1023,6 +1065,9 @@ texture_tib %>%
     geom_col(aes(x = texture, y = prop_of_sung, fill = texture))
 ```
 
+Homophony clearly dominates, followed by monophony.
+
+
 #### By Duration
 
 Create tibble:
@@ -1046,6 +1091,8 @@ dur_texture_work %>%
     geom_col(aes(x = texture, y = prop_of_sung, fill = texture))
 ```
 
+Again, homophony clearly dominates, followed by monophony.
+
 <!-- #### Table of Polyphonic Passages by Piece/Measure -->
 
 <!-- ```{r} -->
@@ -1059,7 +1106,7 @@ dur_texture_work %>%
 
 #### By Measure Count
 
-Generate basic table, grouped by piece.
+Generate basic tibble, grouped by piece:
 
 ```{r}
 texture_piece <- by_piece %>% 
@@ -1072,7 +1119,7 @@ texture_piece <- by_piece %>%
     mutate(prop_of_sung = (n_measures/sum(n_measures)*100)) 
 ```
 
-Relevel factors for piece_no, so that bars in barcharts below appear in correct order.
+Relevel factors for piece_no, so that bars in barcharts below appear in correct order:
 
 ```{r}
 texture_piece <- texture_piece %>% 
