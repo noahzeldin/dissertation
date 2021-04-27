@@ -1327,6 +1327,251 @@ pitch_no_piece
 ```
 
 
+## Groupings 
+
+### Goal and Preliminary Remarks
+
+UPDATE 12.08: changed source data from `gen_tib` to `gen_tib_sung`.
+* This should avoid pieces with no singing.
+
+Goal: Determine which groupings of voices are most common.  
+
+* directly related to homophony and voice reduction  
+
+Need to perform two separate calculations:  
+
+* 1. separate groupings  
+
+* 2. combinations of groupings  
+
+**2. combinations of groupings** will be much easier, because this is the 
+existing observation in the spreadsheet. Can calculate now.  
+
+Will need to put in some work for **1. separate groupings.**  
+
+* must separate groupings, probably into different columns and then count  
+
+### Combinations of Groupings   
+
+#### By number of measures  
+
+Generate basic table for whole work.
+
+```{r}
+groupings_tib <- gen_tib_sung %>% 
+    count(groupings) %>% # number of measures but not durations
+    as_tibble %>% 
+    rename(n_groupings = n) %>% 
+    filter(groupings != "na") %>% 
+    mutate(prop_of_groupings = n_groupings/sum(n_groupings))
+```
+
+Check to see if proportions add up to 1, in order to ensure that order of 
+previous step is correct.
+
+```{r}
+sum(groupings_tib$prop_of_groupings) == 1
+```
+
+Create a basic barplot of groupings for whole work.  
+
+* KIND OF STUPID
+
+```{r}
+groupings_tib %>% 
+    ggplot() +
+    geom_col(aes(x = groupings, y = prop_of_groupings, fill = groupings))
+```
+
+
+Create list of 5 most common groupings.
+* **Try to fix final line of code - base R syntax, not tidyverse.**
+
+```{r}
+groupings_5 <- groupings_tib %>% 
+    arrange(desc(prop_of_groupings)) %>%
+    select(groupings, prop_of_groupings) %>%
+    slice(1:5) %>% 
+    mutate(perc_of_groupings = round((prop_of_groupings*100), digits = 0)) %>% 
+    print()
+```
+
+
+Wow, really cool findings:   
+
+* The grouping **st_ab** is more common than no groupings.  
+
+* Only 18% of all measures with singing have no groupings.  
+
+
+#### By duration (of measures)  
+
+Generate table with groupings, duration and proportion.  
+
+```{r}
+groupings_dur_tib <- gen_tib_sung %>% 
+    select(groupings, duration) %>% 
+    filter(groupings != "na") %>% 
+    group_by(groupings) %>%
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_of_dur = (duration/sum(duration)))
+```
+
+Create list of 5 most common groupings by duration.
+
+```{r}
+groupings_5_dur <- groupings_dur_tib %>% 
+    arrange(desc(prop_of_dur)) %>%
+    select(groupings, prop_of_dur) %>%
+    slice(1:5) %>%  
+    mutate(perc_of_dur = round(prop_of_dur*100))
+
+groupings_5_dur 
+```
+
+Only a little different from   
+Top 3 and no. 5 are same as `groupings_5` but 4th place now **satb** (rather than st). 
+
+##### And separated by Texture
+
+```{r}
+groupings_texture_dur <- gen_tib_sung %>% 
+    select(groupings, texture, duration) %>% 
+    filter(groupings != "na",
+           texture != "na") %>% 
+    group_by(groupings, texture) %>%
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_of_dur_text = (duration/sum(duration)),
+           perc_of_dur_text = round(prop_of_dur_text*100)) %>%
+    arrange(groupings, desc(duration))
+
+groupings_texture_dur
+```
+
+With top 5 groupings
+
+```{r}
+groupings_texture_dur_5 <- semi_join(groupings_texture_dur, groupings_5_dur)
+
+groupings_texture_dur_5
+```
+
+Compute percentages of each texture.
+
+```{r}
+groupings_texture_dur_5 %>% 
+    group_by(texture) %>% 
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_dur = duration / sum(duration),
+           perc_dur = round(prop_dur * 100))
+```
+
+Just homophony
+
+```{r}
+groupings_homophony_dur <- gen_tib_sung %>% 
+    filter(texture == "h") %>% 
+    select(groupings, duration) %>% 
+    group_by(groupings) %>% 
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_of_dur = (duration/sum(duration)),
+           perc_of_dur = round(prop_of_dur*100
+                               # , digits = 1 # not sure how hard I can round,
+                               # really only need top 3/4, so doesn't matter
+                               )) %>% 
+    arrange(desc(duration))
+
+groupings_homophony_dur
+```
+
+Show that all instances of homophony with no groupings are just two voices.
+* Need for write-up.
+
+```{r}
+gen_tib_sung %>% 
+    filter(texture == "h" & groupings == "none") %>% 
+    select(voices, duration) %>% 
+    group_by(voices) %>% 
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_of_dur = (duration/sum(duration)),
+           perc_of_dur = round(prop_of_dur*100)) 
+```
+
+
+### Separate Groupings  
+
+#### By number of measures   
+
+Generate basic table for whole work.  
+
+```{r}
+groupings_separate_tib <- gen_tib_sung %>% 
+    separate(groupings, sep = "_", 
+             into = c("grouping_1", "grouping_2", "grouping_3")) %>% 
+    gather("grouping_1", "grouping_2", "grouping_3", key = "old_column", 
+           value = "groupings") %>% 
+    select(groupings) %>% 
+    filter(groupings != "na") %>% 
+    count(groupings) %>% 
+    mutate(prop_of_groupings = (n/sum(n)*100)) 
+```
+
+Create list of 10 most common separate groupings.
+
+```{r}
+groupings_separate_10 <- groupings_separate_tib %>% 
+    arrange(desc(prop_of_groupings)) %>%
+    select(groupings, prop_of_groupings) %>%
+    slice(1:10) 
+
+groupings_separate_10
+```
+
+
+Also quite interesting!   
+
+* Like `groupings_tib`, shows that **st** and **ab** are most common, though
+interesting that **st** appears a little more frequently.  
+
+* **tb** is almost as common as **none** and far more common than **sa**.  
+
+** This makes sense, since male voices sing much more than female voices.  
+
+
+#### By duration (of measures)  
+
+Generate table with each separate grouping and its total duration.  
+
+```{r}
+groupings_separate_dur_tib <- gen_tib %>% 
+    separate(groupings, sep = "_", 
+             into = c("grouping_1", "grouping_2", "grouping_3")) %>% 
+    gather("grouping_1", "grouping_2", "grouping_3", key = "old_column", 
+           value = "groupings") %>% 
+    select(groupings, duration) %>% 
+    filter(groupings != "na") %>% 
+    group_by(groupings) %>% 
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_of_dur = duration/sum(duration)) 
+```
+
+Create list of 10 most common separate groupings by duration.
+
+```{r}
+groupings_separate_10_dur <- groupings_separate_dur_tib %>% 
+    arrange(desc(prop_of_dur)) %>%
+    select(groupings, prop_of_dur) %>%
+    slice(1:10) %>%  
+    mutate(perc_of_dur = round(prop_of_dur*100))
+
+groupings_separate_10_dur
+```
+
+Pretty interesting - factoring in duration seems to make basically no 
+difference.  
+
+
+
 
 
 
