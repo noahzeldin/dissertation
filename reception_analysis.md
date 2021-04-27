@@ -1,0 +1,436 @@
+The Reception of The Measures Taken and The Mother in the
+Political-Aesthetic Space of the Weimar Republic
+================
+Noah Zeldin
+4/27/2021
+
+  - [Introductory Remarks](#introductory-remarks)
+  - [Load Packages](#load-packages)
+  - [Importation](#importation)
+  - [Quanteda Set-Up](#quanteda-set-up)
+      - [Create Corpora](#create-corpora)
+          - [General Corpora](#general-corpora)
+          - [Piece Corpora](#piece-corpora)
+          - [Title Corpora - NO MASSNAHME
+            YET](#title-corpora---no-massnahme-yet)
+      - [Corpus Summary - Article Lengths,
+        etc.](#corpus-summary---article-lengths-etc.)
+      - [Dictionaries and Additional
+        Stopwords](#dictionaries-and-additional-stopwords)
+      - [Tokenize and Filter Corpora](#tokenize-and-filter-corpora)
+      - [DFMs](#dfms)
+          - [Add GPO to general/ungrouped dfm - PROB NEED TO CLEAN
+            UP](#add-gpo-to-generalungrouped-dfm---prob-need-to-clean-up)
+          - [create GPO grouped dfm’s for each
+            piece](#create-gpo-grouped-dfms-for-each-piece)
+          - [Less Specific Groupings](#less-specific-groupings)
+          - [By each GPO](#by-each-gpo)
+          - [By Piece](#by-piece)
+      - [create corpus, dfm, ca, etc. of each piece w/o
+        unknown](#create-corpus-dfm-ca-etc.-of-each-piece-wo-unknown)
+
+# Introductory Remarks
+
+Below is the annotated set-up for my quantitative analysis of the
+Weimar-era reception of Brecht and Eisler’s *The Measures Taken* and
+*The Mother*, which is included in the second chapter of my
+dissertation. This analysis was conducted in R and relies heavily on the
+[quanteda](https://quanteda.io/) and
+[FactoMineR](http://factominer.free.fr/index.html) packages. (Also, I
+have tried to use [tidyverse](https://www.tidyverse.org/) syntax as
+consistently as possible.) Data sets will be made available to
+researchers upon request.
+
+**NB: Further refinements to the coding are forthcoming.** This was my
+first serious attempt at coding in R, so certain portions are still a
+bit clunky. (Note too that many lines use the German titles for the two
+pieces. All instances of this will be changed to English for
+consistency.)
+
+# Load Packages
+
+``` r
+library(tidyverse)
+library(readxl)
+library(quanteda)
+library(quanteda.textmodels)
+library(readtext)
+library(tidytext)
+library(ggplot2)
+library(scales)
+library(igraph)
+library(ggraph)
+library(FactoMineR)
+library(RColorBrewer)
+library(lubridate)
+```
+
+# Importation
+
+NB: Several articles had to be removed because of their distortionary
+effects. This resulted in multiple versions of the data, as shown below.
+(This will be cleaned up in the near future.)
+
+Main Spreadsheet
+
+``` r
+spreadsheet <- read_excel("all_documents_updated_9.10.xlsx", sheet = "All")
+```
+
+Spreadsheet w/o Massnahme Erfurt
+
+``` r
+spreadsheet_no_erfurt <- spreadsheet[-(c(38:45, 49)),]
+```
+
+Spreadshet w/or Massnahme Erfurt or “Kartenhaus”
+
+``` r
+spreadsheet_reduced <- spreadsheet[-(c(38:45, 49, 65)),]
+```
+
+# Quanteda Set-Up
+
+## Create Corpora
+
+### General Corpora
+
+General Corpus
+
+``` r
+corp <- corpus(spreadsheet, text_field = "Text")
+```
+
+General Corpus w/o Massnahme Erfurt
+
+``` r
+corp_no_erfurt <- corpus(spreadsheet_no_erfurt, text_field = "Text")
+```
+
+General Corpus Reduced
+
+``` r
+corp_reduced <- corpus(spreadsheet_reduced, text_field = "Text")
+```
+
+### Piece Corpora
+
+Massnahme Corpus
+
+``` r
+mass_corp <- corpus_subset(corp, Piece == "Massnahme")
+```
+
+Massnahme Corpus No Erfurt
+
+``` r
+mass_corp_no_erfurt <- corpus_subset(corp_no_erfurt, Piece == "Massnahme")
+```
+
+Mutter Corpus
+
+``` r
+mutter_corp <- corpus_subset(corp, Piece == "Mutter")
+```
+
+### Title Corpora - NO MASSNAHME YET
+
+Title Corpus
+
+``` r
+corp_title <- corpus(spreadsheet, text_field = "Title")
+```
+
+Mutter Title Corpus
+
+``` r
+mutter_corp_title <- corpus_subset(corp_title, Piece == "Mutter")
+```
+
+## Corpus Summary - Article Lengths, etc.
+
+``` r
+corp_reduced_summary <- textstat_summary(corp_reduced) %>% 
+  as_tibble
+
+corp_reduced_summary$document <- corp_reduced_summary$document %>% 
+        str_replace("text", "") 
+    
+corp_reduced_summary <- corp_reduced_summary %>% mutate(document = as.numeric(document)) %>% 
+        rename(Article = document) %>% # this seems to work better than including in above step
+        left_join(spreadsheet, by = "Article") %>% 
+        select(-c(Text, Other_Metadata:Comp_Doc))
+```
+
+## Dictionaries and Additional Stopwords
+
+General Dictionary
+
+``` r
+dict_gen <- dictionary(list(revolution = "revolution*",
+                            bertolt = c("bert*", "bertolt*"),
+                            theater = c("theater*", "theatralisch*"),
+                            episch = "episch*",
+                            musik = "musik*",
+                            drama = "drama*",
+                            politisch = "politi*",
+                            kommunismus = "kommunis*",
+                            chor = c("chor*", "chöre*"), 
+                            proletarisch = "prolet*",
+                            marxismus = "marx*",
+                            primitiv = "primitiv*",
+                            lehrstück = "lehrstück*",
+                            brecht = "brecht*",
+                            eisler = "eisler*",
+                            gorki = "gorki*",
+                            bürgerlich = "bürgerlich*",
+                            propaganda = "propagand*",
+                            kunst = c("kunst", "künstler*"),
+                            lied = c("lied*", "song*"),
+                            arbeitersänger = "arbeitersänger*", 
+                            arbeiterchor = "arbeiterch*", 
+                            bolschewismus = c("bolschewis*",
+                                              "kulturbolschewis*"), 
+                            langweilig = c("langweilig*", 
+                                           "langeweile")))
+```
+
+Regex Dictionary
+
+``` r
+dict_regex <- dictionary(list(lehrlern = c("lehr(?!s)[a-z]+", 
+                                           "belehr(?!s)[a-z]+", 
+                                           "lern[a-z]+",
+                                           "erlern[a-z]+", 
+                                           "gelern[a-z]+", 
+                                           "pädagog[a-z]+", 
+                                           "didakt[a-z]+"))) 
+```
+
+Additional Stopwords
+
+``` r
+sw_add <- c("dass", "wurde", "schon", "mehr", "ganz*", "immer", "gibt", "ja",
+            "müssen", "kommt", "sei", "tun")
+```
+
+## Tokenize and Filter Corpora
+
+Create function for tokenizing and removing stopwords:
+
+``` r
+tokenize_and_remove_stopwords <- function(i) {
+    tokens(i,
+           remove_punct = TRUE,
+           remove_numbers = TRUE,
+           remove_symbols = TRUE) %>% 
+        tokens_remove(c(stopwords("de"), sw_add)) %>% 
+        tokens_remove(valuetype = "regex", "[0-9]+") %>% 
+        tokens_keep(min_nchar = 3) 
+}
+```
+
+Tokenize and filter corpora:
+
+``` r
+# general / ungrouped
+gen_toks <- tokenize_and_remove_stopwords(corp)
+# general / ungrouped NO ERFURT
+gen_toks_no_erfurt <- tokenize_and_remove_stopwords(corp_no_erfurt)
+# general / ungrouped REDUCED
+gen_toks_reduced <- tokenize_and_remove_stopwords(corp_reduced)
+# Massnahme
+mass_toks <- tokenize_and_remove_stopwords(mass_corp)
+# Massnahme NO ERFURT
+mass_toks_no_erfurt <- tokenize_and_remove_stopwords(mass_corp_no_erfurt)
+# Mutter
+mutter_toks <- tokenize_and_remove_stopwords(mutter_corp)
+# ADDITION 12.17.20 - Mutter TITLE
+mutter_title_toks <- tokenize_and_remove_stopwords(mutter_corp_title)
+```
+
+## DFMs
+
+Create function for converting toks to dfm and applying dictionaries:
+
+``` r
+convert_to_dfm_and_apply_dictionaries <- function(i) {
+    dfm(i) %>% 
+        dfm_lookup(dict_gen, exclusive = FALSE) %>% 
+        dfm_lookup(dict_regex, valuetype = "regex", exclusive = FALSE)
+}
+```
+
+Convert and apply dictionaries to corpora:
+
+``` r
+# general / ungrouped
+gen_dfm <- convert_to_dfm_and_apply_dictionaries(gen_toks)
+# general / ungrouped NO ERFURT
+gen_dfm_no_erfurt <- convert_to_dfm_and_apply_dictionaries(gen_toks_no_erfurt)
+# general / ungrouped REDUCD
+gen_dfm_reduced <- convert_to_dfm_and_apply_dictionaries(gen_toks_reduced)
+# Massnahme 
+mass_dfm <- convert_to_dfm_and_apply_dictionaries(mass_toks)
+# Massnahme NO ERFURT
+mass_dfm_no_erfurt <- convert_to_dfm_and_apply_dictionaries(mass_toks_no_erfurt)
+# Mutter
+mutter_dfm <- convert_to_dfm_and_apply_dictionaries(mutter_toks)
+# ADDITION 12.17.20: Mutter TITLE
+mutter_title_dfm <- convert_to_dfm_and_apply_dictionaries(mutter_title_toks)
+```
+
+### Add GPO to general/ungrouped dfm - PROB NEED TO CLEAN UP
+
+``` r
+# from exp_7.24 --> look at notes in original script; needs some refinement
+
+# convert gen_dfm[_reduced] to dataframe
+gen_datafr_reduced <- convert(gen_dfm_reduced, to = "data.frame")
+# convert corp_reduced to dataframe - this has GPOs + other metadata
+corp_reduced_datafr <- convert(corp_reduced, to = "data.frame")
+
+
+# add GPO column to gen_datafr_reduced
+gen_datafr_reduced_gpo <- left_join(gen_datafr_reduced, 
+                                    corp_reduced_datafr[ , c("doc_id",    "Generalized_Political_Orientation")], 
+                                    by = "doc_id", # 8.01 - now do this
+                                    # by = c("document" = "doc_id"), # used to work
+                                    copy = TRUE)
+
+
+# eliminate doc col to perform CA (otherwise 2 quali.sup)
+gen_datafr_reduced_gpo_2 <- gen_datafr_reduced_gpo[ , -1]
+
+
+# ** group dfm's ####
+
+# create grouped dfm: piece.gpo = 8 groups
+grouped_dfm <- dfm_group(gen_dfm,
+                         groups = c("Piece",
+                                    "Generalized_Political_Orientation"))
+# same but NO ERFURT
+grouped_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
+                                   groups = c("Piece",
+                                              "Generalized_Political_Orientation"))
+```
+
+### create GPO grouped dfm’s for each piece
+
+``` r
+# Massnahme
+mass_dfm_gpo <- dfm_group(mass_dfm,
+                          groups = "Generalized_Political_Orientation")
+# Massnahme NO ERFURT
+mass_dfm_gpo_no_erfurt <- dfm_group(mass_dfm_no_erfurt,
+                                    groups = "Generalized_Political_Orientation")
+# Mutter
+mutter_dfm_gpo <- dfm_group(mutter_dfm,
+                            groups = "Generalized_Political_Orientation")
+```
+
+### Less Specific Groupings
+
+``` r
+# by piece
+piece_dfm <- dfm_group(gen_dfm,
+                       groups = "Piece")
+# by GPO
+gpo_dfm <- dfm_group(gen_dfm,
+                     groups = "Generalized_Political_Orientation")
+
+# less specific groupings NO ERFURT
+# by piece
+piece_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
+                                 groups = "Piece")
+# by GPO
+gpo_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
+                               groups = "Generalized_Political_Orientation")
+```
+
+### By each GPO
+
+``` r
+# Left
+left_sub <- dfm_subset(grouped_dfm, 
+                       Generalized_Political_Orientation == "Left")
+# Right
+right_sub <- dfm_subset(grouped_dfm, 
+                        Generalized_Political_Orientation == "Right")
+# Center
+center_sub <- dfm_subset(grouped_dfm, 
+                         Generalized_Political_Orientation == "Center")
+# Unknown
+unknown_sub <- dfm_subset(grouped_dfm,
+                          Generalized_Political_Orientation == "Unknown")
+```
+
+### By Piece
+
+``` r
+# Massnahme
+massnahme_sub <- dfm_subset(grouped_dfm,
+                            Piece == "Massnahme")
+# Mutter
+mutter_sub <- dfm_subset(grouped_dfm,
+                         Piece == "Mutter")
+```
+
+## create corpus, dfm, ca, etc. of each piece w/o unknown
+
+from exp\_7.24 –\> need to integrate better, just being lazy
+
+General - just GPO
+
+``` r
+corp_no_erfurt_or_unknown <- corpus_subset(corp_no_erfurt, 
+                                           ! Generalized_Political_Orientation == "Unknown" )
+
+toks_no_erfurt_or_unknown <- tokenize_and_remove_stopwords(corp_no_erfurt_or_unknown)
+
+dfm_no_erfurt_or_unknown <- convert_to_dfm_and_apply_dictionaries(toks_no_erfurt_or_unknown)
+```
+
+Just GPO, not piece
+
+``` r
+gpo_dfm_no_erfurt_or_unknown <- dfm_group(dfm_no_erfurt_or_unknown,
+                                          groups = "Generalized_Political_Orientation")
+```
+
+General - Piece + GPO
+
+``` r
+grouped_dfm_no_erfurt_or_unknown <- dfm_group(dfm_no_erfurt_or_unknown,
+                                              groups = c("Piece", "Generalized_Political_Orientation"))
+```
+
+Massnahme
+
+``` r
+mass_corp_no_erfurt_or_unknown <- corpus_subset(corp_no_erfurt, 
+                                                Piece == "Massnahme" &! Generalized_Political_Orientation == "Unknown" )
+
+
+mass_toks_no_erfurt_or_unknown <- tokenize_and_remove_stopwords(mass_corp_no_erfurt_or_unknown)
+
+mass_dfm_no_erfurt_or_unknown <- convert_to_dfm_and_apply_dictionaries(mass_toks_no_erfurt_or_unknown)
+
+mass_dfm_gpo_no_erfurt_or_unknown <- dfm_group(mass_dfm_no_erfurt_or_unknown,
+                                               groups = "Generalized_Political_Orientation")
+```
+
+Mutter
+
+``` r
+mutter_corp_no_unknown <- corpus_subset(corp, 
+                                        Piece == "Mutter" &! Generalized_Political_Orientation == "Unknown" )
+
+
+mutter_toks_no_unknown <- tokenize_and_remove_stopwords(mutter_corp_no_unknown)
+
+mutter_dfm_no_unknown <- convert_to_dfm_and_apply_dictionaries(mutter_toks_no_unknown)
+
+mutter_dfm_gpo_no_unknown <- dfm_group(mutter_dfm_no_unknown,
+                                       groups = "Generalized_Political_Orientation")
+```
