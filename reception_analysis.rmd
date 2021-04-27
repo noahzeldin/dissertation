@@ -3,7 +3,9 @@ title: The Reception of The Measures Taken and The Mother in the Political-Aesth
   Space of the Weimar Republic
 author: "Noah Zeldin"
 date: "4/27/2021"
-output: github_document
+output: 
+  github_document:
+    toc: true
 ---
 
 
@@ -12,10 +14,16 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Desktop/Proposal/R materials for dissertation/data")
 ```
 
-# 1. Preliminaries
+# Introductory Remarks
 
+Below is the annotated set-up for my quantitative analysis of the Weimar-era 
+reception of Brecht and Eisler's *The Measures Taken* and *The Mother*, which is included in the second chapter of my dissertation. This analysis was conducted in R. (I have tried to use [tidyverse](https://www.tidyverse.org/) syntax as 
+consistently as possible.) Data sets will be made available to researchers upon 
+request.
 
-## Load Packages
+**NB: Further refinements to the coding are forthcoming.** 
+
+# Load Packages
 
 ```{r}
 library(tidyverse)
@@ -33,7 +41,11 @@ library(RColorBrewer)
 library(lubridate)
 ```
 
-# 2. Data Import
+# Importation
+
+NB: Several articles had to be removed because of their distortionary effects.
+This resulted in multiple versions of the data, as shown below. (This will be 
+cleaned up in the near future.)
 
 Main Spreadsheet
 
@@ -52,3 +64,7 @@ Spreadshet w/or Massnahme Erfurt or "Kartenhaus"
 ```{r}
 spreadsheet_reduced <- spreadsheet[-(c(38:45, 49, 65)),]
 ```
+
+
+
+
