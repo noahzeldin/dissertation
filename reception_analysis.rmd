@@ -5,3 +5,57 @@ author: "Noah Zeldin"
 date: "4/27/2021"
 output: github_document
 ---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Desktop/Proposal/R materials for dissertation/data")
+```
+
+# 1. Preliminaries
+
+## set working directory to "data" folder
+
+May not be necessary, because I do this above in r setup, knitr::opts.
+
+```{r}
+setwd("C:/Users/Noah Zeldin/Desktop/Proposal/R materials for dissertation/data")
+```
+
+## Load Packages
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(quanteda)
+library(quanteda.textmodels)
+library(readtext)
+library(tidytext)
+library(ggplot2)
+library(scales)
+library(igraph)
+library(ggraph)
+library(FactoMineR)
+library(RColorBrewer)
+library(lubridate)
+```
+
+# 2. Data Import
+
+Main Spreadsheet
+
+```{r}
+spreadsheet <- read_excel("all_documents_updated_9.10.xlsx", sheet = "All")
+```
+
+Spreadsheet w/o Massnahme Erfurt
+
+```{r}
+spreadsheet_no_erfurt <- spreadsheet[-(c(38:45, 49)),]
+```
+
+Spreadshet w/or Massnahme Erfurt or "Kartenhaus"
+
+```{r}
+spreadsheet_reduced <- spreadsheet[-(c(38:45, 49, 65)),]
+```
