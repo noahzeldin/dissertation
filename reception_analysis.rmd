@@ -19,10 +19,12 @@ knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Desktop/Proposal/R materia
 Below is the annotated set-up for my quantitative analysis of the Weimar-era 
 reception of Brecht and Eisler's *The Measures Taken* and *The Mother*, which is 
 included in the second chapter of my dissertation. This analysis was conducted 
-in R and relies heavily on the [quanteda](https://quanteda.io/) and 
-[FactoMineR](http://factominer.free.fr/index.html) packages. (Also, I have tried 
-to use [tidyverse](https://www.tidyverse.org/) syntax as consistently as 
-possible.) Data sets will be made available to researchers upon request.
+in R and relies heavily on the [quanteda](https://quanteda.io/) package (for 
+general manipulation, word counts, etc.) and
+[FactoMineR](http://factominer.free.fr/index.html) package (for correspondence 
+analysis). (Also, I have tried to use [tidyverse](https://www.tidyverse.org/) 
+syntax as consistently as possible.) Data sets will be made available to 
+researchers upon request.
 
 **NB: Further refinements to the coding are forthcoming.** This was my first 
 serious attempt at coding in R, so certain portions are still a bit clunky. 
@@ -424,9 +426,7 @@ mutter_dfm_gpo_no_unknown <- dfm_group(mutter_dfm_no_unknown,
 
 # FactoMineR Set-Up
 
-REVISIT - may be dumb if I also want to perform PCA, etc. --> would need dataframes
-
-## Create Function for Converting dfm to dataframe and Performing CA
+## Create function for converting dfm to dataframe and performing CA
 
 ```{r}
 convert_to_dataframe_and_perform_ca <- function(i) {
@@ -435,7 +435,7 @@ convert_to_dataframe_and_perform_ca <- function(i) {
 }
 ```
 
-## Do This with Each dfm
+## Use this function on each dfm
 
 I think this is the only one I need
 
