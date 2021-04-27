@@ -1,0 +1,7 @@
+---
+title: The Reception of The Measures Taken and The Mother in the Political-Aesthetic
+  Space of the Weimar Republic
+author: "Noah Zeldin"
+date: "4/27/2021"
+output: github_document
+---
