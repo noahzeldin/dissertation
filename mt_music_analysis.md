@@ -1560,3 +1560,324 @@ dur_male_extra_from_5_and_7a_perc <-
   round(((dur_t1_sung_5_and_7a + dur_b1_sung_5_and_7a) /
          (dur_male_sung - dur_female_sung)) * 100)
 ```
+
+## Texture
+
+Goal: measure amount of each texture in whole work and in each piece.
+
+### Whole Work
+
+#### By Measure Count
+
+Generate tibble for whole work:
+
+``` r
+texture_tib <- gen_tib %>% 
+    count(texture) %>% 
+    as_tibble %>% 
+    rename(n_measures = n) %>% 
+    filter(texture != "na") %>% 
+    mutate(prop_of_sung = (n_measures/sum(n_measures)*100))
+```
+
+<!-- Check to see if proportions add up to 100, in order to ensure that order of  -->
+
+<!-- previous step is correct. -->
+
+<!-- ```{r} -->
+
+<!-- sum(texture_tib$prop_of_sung) == 100  -->
+
+<!-- ``` -->
+
+Create a basic barplot of textures for whole work:
+
+``` r
+texture_tib %>% 
+    ggplot() +
+    geom_col(aes(x = texture, y = prop_of_sung, fill = texture))
+```
+
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-67-1.png)<!-- -->
+
+#### By Duration
+
+Create tibble:
+
+``` r
+dur_texture_work <- gen_tib %>% 
+    filter(texture != "na") %>% 
+    group_by(texture) %>% 
+    summarize(duration = dur_choir) %>% 
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_of_sung = round((duration/sum(duration)), 
+                                digits = 2),
+           perc_of_sung = prop_of_sung*100) 
+```
+
+Create barplot:
+
+``` r
+dur_texture_work %>% 
+    ggplot() +
+    geom_col(aes(x = texture, y = prop_of_sung, fill = texture))
+```
+
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-69-1.png)<!-- -->
+
+<!-- #### Table of Polyphonic Passages by Piece/Measure -->
+
+<!-- ```{r} -->
+
+<!-- gen_tib_sung %>%  -->
+
+<!--     filter(texture == "p") %>%  -->
+
+<!--     select(id:texture)  -->
+
+<!-- ``` -->
+
+### Individual Pieces
+
+#### By Measure Count
+
+Generate basic table, grouped by piece.
+
+``` r
+texture_piece <- by_piece %>% 
+    count(texture) %>% 
+    as_tibble %>% 
+    rename(n_measures = n) %>% 
+    filter(texture != "na") %>%
+    group_by(piece_no) %>% 
+    mutate(mm_sung = sum(n_measures)) %>% 
+    mutate(prop_of_sung = (n_measures/sum(n_measures)*100)) 
+```
+
+Relevel factors for piece\_no, so that bars in barcharts below appear in
+correct order.
+
+``` r
+texture_piece <- texture_piece %>% 
+    mutate(piece_no = fct_relevel(piece_no, 
+                                  c("1", "2b", "4", "5", "6c", "7a", "8b", 
+                                    "9","10", "11", "12b","13a", "13b", "14")))
+```
+
+<!-- Create a stacked bar chart displaying the proportions of each texture in each -->
+
+<!-- piece. **MAY NEED TO CHANGE** `width = 0.3`. -->
+
+<!-- ```{r} -->
+
+<!-- bar_texture_piece <- texture_piece %>%  -->
+
+<!--     ggplot(aes(fill = texture, y = prop_of_sung, x = piece_no)) + -->
+
+<!--     geom_bar(position = "stack", stat = "identity",  -->
+
+<!--              width = 0.45 # play with this -->
+
+<!--              ) + -->
+
+<!--     xlab("Piece Number") + -->
+
+<!--     scale_fill_discrete(name = "Texture", -->
+
+<!--                         labels = c("Antiphony", "Homophony",  -->
+
+<!--                                    "Monophony", "Polyphony")) + -->
+
+<!--     theme(axis.title.y = element_blank(), -->
+
+<!--           axis.ticks.y = element_blank(), -->
+
+<!--           axis.text.y = element_blank(), -->
+
+<!--           axis.ticks.x = element_blank() -->
+
+<!--          ) + -->
+
+<!--     ggtitle("Proportion of Texture by Piece") -->
+
+<!-- bar_texture_piece -->
+
+<!-- ``` -->
+
+#### By Duration
+
+Create table.
+
+``` r
+dur_texture_piece <- gen_tib %>% 
+    filter(texture != "na") %>% 
+    group_by(piece_no, texture) %>% 
+    summarize(duration = dur_choir) %>% 
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_of_piece = round((duration/sum(duration)), 
+                                 digits = 2)) %>% 
+    group_by(piece_no) %>% 
+    mutate(dur_piece = sum(duration)
+           ) %>% 
+    relocate(dur_piece, .after = duration) %>% 
+    ungroup() %>% 
+    mutate(prop_of_work = round((duration / sum(duration)), 
+                                digits = 3),
+           prop_piece_of_work = dur_piece/sum(dur_piece)) # added this for variable width bar plot but gave up b/c too complicated
+```
+
+Mosaic plot, displaying proportion of each texture in each piece.
+
+``` r
+# create new table just for this plot
+dur_texture_piece_mosaic_table <- gen_tib %>% 
+    filter(texture != "na") %>% 
+    group_by(piece_no, texture) %>% 
+    summarize(duration = dur_choir) %>% 
+    summarize(duration = sum(duration)) %>% 
+    mutate(prop_of_piece = duration/sum(duration)) %>% 
+    group_by(piece_no) %>% 
+    mutate(dur_piece = sum(duration)) %>% 
+    ungroup()
+
+# eliminate 13a for readability
+dur_texture_piece_mosaic_table <- dur_texture_piece_mosaic_table %>% 
+    filter(piece_no != "13a")
+
+# code for plot
+dur_texture_piece_mosaic_plot <- ggplot(dur_texture_piece_mosaic_table, 
+       aes(x = piece_no, y = prop_of_piece, 
+           width = dur_piece, fill = texture)) +
+    geom_bar(stat = "identity", position = "fill", color = "black") +
+    facet_grid(~piece_no, scales = "free_x", space = "free_x") +
+    scale_fill_brewer(palette = "RdYlGn") +
+    xlab("Piece Number") +
+    scale_fill_discrete(name = "Texture",
+                        labels = c("Antiphony", "Homophony", 
+                                   "Monophony", "Polyphony")) +
+    scale_y_continuous(expand = c(0,0)) + 
+    theme(axis.title.y = element_blank(),
+          axis.ticks.y = element_blank(),
+          axis.text.y = element_blank(),
+          axis.ticks.x = element_blank(),
+          strip.background = element_blank(),
+          strip.text.x = element_blank(),
+          panel.border = element_rect(colour = "black", fill = NA),
+          panel.background = element_rect(fill = NA, color = "white")
+          ) +
+    labs(title = "Proportion of Choral Texture by Piece",
+         subtitle = "Bar width corresponds to duration of choral material in each piece. \n13a removed for readability.")
+
+dur_texture_piece_mosaic_plot
+```
+
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-73-1.png)<!-- -->
+
+#### Presence of Each Texture by Piece
+
+Create table:
+
+``` r
+texture_piece_presence <- dur_texture_piece %>% 
+    group_by(piece_no, texture) %>% 
+    count(texture) %>% 
+    spread(texture, n, fill = 0) %>% 
+    mutate(no_of_textures = sum(c_across(a:p)))
+
+texture_piece_presence
+```
+
+    ## # A tibble: 14 x 6
+    ## # Groups:   piece_no [14]
+    ##    piece_no     a     h     m     p no_of_textures
+    ##    <fct>    <dbl> <dbl> <dbl> <dbl>          <dbl>
+    ##  1 1            0     1     1     0              2
+    ##  2 2b           0     1     1     1              3
+    ##  3 4            0     1     1     1              3
+    ##  4 5            0     1     1     1              3
+    ##  5 6c           0     1     1     1              3
+    ##  6 7a           0     1     1     0              2
+    ##  7 8b           0     1     0     0              1
+    ##  8 9            0     1     1     1              3
+    ##  9 10           1     1     1     0              3
+    ## 10 11           0     1     0     0              1
+    ## 11 12b          0     1     1     0              2
+    ## 12 13a          0     1     0     0              1
+    ## 13 13b          0     1     1     0              2
+    ## 14 14           0     1     0     0              1
+
+<!-- ##### Pieces grouped by number of textures -->
+
+<!-- Pieces with 3 textures. -->
+
+<!-- ```{r} -->
+
+<!-- texture_piece_presence %>%  -->
+
+<!--     filter(no_of_textures == 3) -->
+
+<!-- ``` -->
+
+<!-- Pieces with 1 texture. -->
+
+<!-- ```{r} -->
+
+<!-- texture_piece_presence %>%  -->
+
+<!--     filter(no_of_textures == 1) -->
+
+<!-- ``` -->
+
+<!-- Really interesting - all homophonic. -->
+
+<!-- ##### Grouped by type of texture -->
+
+<!-- 1. with antiphony -->
+
+<!-- ```{r} -->
+
+<!-- texture_piece_presence %>%  -->
+
+<!--     filter(a == 1) -->
+
+<!-- ``` -->
+
+<!-- Yep, only start of "Lob der Partei". -->
+
+<!-- 2. with homophony -->
+
+<!-- ```{r} -->
+
+<!-- texture_piece_presence %>%  -->
+
+<!--     filter(h == 1) -->
+
+<!-- ``` -->
+
+<!-- So, every single piece. -->
+
+<!-- 3. with monophony -->
+
+<!-- ```{r} -->
+
+<!-- texture_piece_presence %>%  -->
+
+<!--     filter(m == 1) -->
+
+<!-- ``` -->
+
+<!-- ###### CONSIDER CHANGING - MAY NOT NEED VALUE -->
+
+<!-- 4. with polyphony -->
+
+<!-- ```{r} -->
+
+<!-- no_pieces_with_polyphony <- texture_piece_presence %>%  -->
+
+<!--     filter(p == 1) %>%  -->
+
+<!--     print() %>%  -->
+
+<!--     nrow() -->
+
+<!-- ``` -->
