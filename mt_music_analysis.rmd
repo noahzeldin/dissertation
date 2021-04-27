@@ -1205,6 +1205,201 @@ dur_texture_piece_mosaic_plot
 <!-- ``` -->
 
 
+## Pitch
+
+### Create pitch_long
+
+Create new, elongated table.
+
+```{r}
+pitch_long <- pitch_tib %>% 
+    # this first step may be unnecessary if factors work
+    mutate(c = c*1, # unnecessary but included for clarity
+           c_sharp_d_flat = c_sharp_d_flat*2,
+           d = d*3,
+           d_sharp_e_flat = d_sharp_e_flat*4,
+           e = e*5,
+           f = f*6,
+           f_sharp_g_flat = f_sharp_g_flat*7,
+           g = g*8,
+           g_sharp_a_flat = g_sharp_a_flat*9,
+           a = a*10,
+           a_sharp_b_flat = a_sharp_b_flat*11,
+           b = b*12) %>% 
+    pivot_longer(c:b, names_to = "pitch", values_to = "value") %>% 
+    filter(value != 0) %>% 
+    mutate(pitch = as.factor(pitch),
+           value = as.factor(value)
+           ) %>% 
+    mutate(pitch = fct_relevel(pitch,
+                             levels = c("c",
+                                        "c_sharp_d_flat",
+                                        "d",
+                                        "d_sharp_e_flat",
+                                        "e",
+                                        "f",
+                                        "f_sharp_g_flat",
+                                        "g",
+                                        "g_sharp_a_flat",
+                                        "a",
+                                        "a_sharp_b_flat",
+                                        "b")))
+
+# check if pitches are correctly factored
+levels(pitch_long$pitch)
+```
+
+### Scatterplot of pitches - FIX! BUT LOW PRIORITY
+
+Lots to fix:  
+* fix overlapping
+* also, one piece, maybe 6c is in wrong order
+* add label for each piece
+
+```{r}
+ggplot(pitch_long, aes(x = id, y = value
+               # y = as.factor(value) # no longer necessary
+               # , 
+               # color = piece_no, 
+               # size = dur_choir
+               # , alpha = 0.01
+               )) +
+    geom_mark_rect(aes(fill = piece_no,
+                       alpha = 0.01)) +
+    geom_point(aes(color = pitch,
+                   alpha = dur_choir)) +
+    ylab("pitch") +
+    # ylim(0, 13) + # seems unnecessary / not doing anything
+    scale_y_discrete(breaks = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+                     labels = c("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#",
+                                "A", "A#", "B")) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_blank(),
+          panel.grid.major.y = element_line(color = "grey", 
+                                            linetype = "dashed"),
+          panel.background = element_rect(fill = "transparent"), # may not quite be what I want
+          axis.title.x = element_blank(),
+          axis.text.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          legend.position = "none"
+          )
+```
+
+### Barplots 
+
+CONSIDER WEIGHTING BY DURATION - currently unweighted
+
+entire work by number of measures
+
+```{r}
+ggplot(pitch_long, aes(x = pitch)) +
+    geom_bar(aes(group = pitch,
+                 fill = pitch
+                 # ,
+                 # y = ..prop..
+                 )) +
+    theme(legend.position = "none", 
+          axis.title.x = element_blank()) +
+    ylab("Number of Measures")
+```
+
+```{r}
+ggplot(pitch_long, aes(x = pitch)) +
+    geom_bar(aes(group = pitch,
+                 fill = pitch,
+                 # y = ..prop..)) +
+    y = ..count../sum(..count..))) +
+    scale_y_continuous(labels = percent_format()) +
+        theme(legend.position = "none", 
+          axis.title.x = element_blank())
+```
+
+
+#### PITCH DISTRIBUTION - 12.10
+
+##### FIX YLAB!
+
+```{r}
+pitch_distribution_plot <- pitch_long %>% 
+    group_by(piece_no) %>% 
+    mutate(prop_piece = dur_choir / sum(dur_choir)) %>% 
+    select(piece_no, pitch, prop_piece) %>% 
+    ggplot(aes(x = pitch,
+                 fill = pitch, y = prop_piece)) +
+    geom_col(
+        # color = "black" # want to add outline to entire bar but this splits for each obs.
+        ) +
+    scale_x_discrete(labels = c("C ", "C#", "D ", "D#", "E ", "F ", "F#",
+                                "G ", "G#", "A ", "A#", "B " )) +
+    scale_y_continuous(
+        breaks = c(0.25, 0.5), labels = c("25%", "50%") # gives same as automated in next line
+        # labels = percent_format()
+        ) +
+    ylab("Proportion of Appearances of all Pitches per Number of Measures") + # FIX
+    facet_wrap(~piece_no, ncol = 7) +
+    coord_flip() +
+    theme(legend.position = "none", 
+          axis.title.y = element_blank(),
+          panel.background = element_rect(fill = "white", colour = 'black'),
+          panel.grid.major.y = element_line(color = "grey", linetype = 3),
+          panel.grid.major.x = element_line(color = "grey", linetype = 3),
+          strip.background = element_rect(fill = "gray89", 
+                                          color = "black")) +
+    labs(title = "Distribution of Choir's Pitches"
+         # , subtitle = "Based on number of measures, in which each pitch appears."
+         )
+
+pitch_distribution_plot
+```
+
+**OLD**
+
+```{r, eval=FALSE}
+# pitch_long %>% 
+#     ggplot() +
+#     geom_bar(aes(x = pitch,
+#                  fill = pitch,
+#                  y = ..count../sum(..count..))) +
+#     scale_y_continuous(labels = percent_format()) +
+#     scale_x_discrete(labels = c("C", "C#", "D", "D#", "E", "F", "F-sh",
+#                                 "G", "G-sh", "A", "A-sh", "B")) +
+#     facet_wrap(~piece_no, ncol = 5) +
+#     coord_flip() +
+#     theme(legend.position = "none", 
+#           axis.title.x = element_blank(),
+#           axis.title = element_blank(),
+#           axis.text.x = element_blank(),
+#           axis.ticks.x = element_blank(),
+#           panel.background = element_rect(fill = "white", colour = 'black'),
+#           panel.grid.major.y = element_line(color = "grey", linetype = 3),
+#           strip.background = element_rect(fill = "gray89", 
+#                                           color = "black")) +
+#     labs(title = "Distribution of Choir's Pitches",
+#          subtitle = "Based on number of measures, in which each pitch appears. \nBar length corresponds to proportion of whole.")
+```
+
+### Chromaticism of Each Piece
+
+Sort pieces by number of pitches that appear in choral writing.
+
+```{r}
+pitch_no_piece <- pitch_long %>% 
+    group_by(piece_no) %>% 
+    count(pitch) %>% 
+    count(piece_no) %>% 
+    rename(no_of_pitches = n) %>% 
+    arrange(desc(no_of_pitches))
+
+pitch_no_piece
+```
+
+Might be interesting to compute distribution but probably unnecessary.
+
+
+
+
+
+
 
 
 
