@@ -1104,29 +1104,29 @@ Again, homophony clearly dominates, followed by monophony.
 
 ### Individual Pieces
 
-#### By Measure Count
+<!-- #### By Measure Count -->
 
-Generate basic tibble, grouped by piece:
+<!-- Generate basic tibble, grouped by piece: -->
 
-```{r}
-texture_piece <- by_piece %>% 
-    count(texture) %>% 
-    as_tibble %>% 
-    rename(n_measures = n) %>% 
-    filter(texture != "na") %>%
-    group_by(piece_no) %>% 
-    mutate(mm_sung = sum(n_measures)) %>% 
-    mutate(prop_of_sung = (n_measures/sum(n_measures)*100)) 
-```
+<!-- ```{r} -->
+<!-- texture_piece <- by_piece %>%  -->
+<!--     count(texture) %>%  -->
+<!--     as_tibble %>%  -->
+<!--     rename(n_measures = n) %>%  -->
+<!--     filter(texture != "na") %>% -->
+<!--     group_by(piece_no) %>%  -->
+<!--     mutate(mm_sung = sum(n_measures)) %>%  -->
+<!--     mutate(prop_of_sung = (n_measures/sum(n_measures)*100))  -->
+<!-- ``` -->
 
-Relevel factors for piece_no, so that bars in barcharts below appear in correct order:
+<!-- Relevel factors for piece_no, so that bars in barcharts below appear in correct order: -->
 
-```{r}
-texture_piece <- texture_piece %>% 
-    mutate(piece_no = fct_relevel(piece_no, 
-                                  c("1", "2b", "4", "5", "6c", "7a", "8b", 
-                                    "9","10", "11", "12b","13a", "13b", "14")))
-```
+<!-- ```{r} -->
+<!-- texture_piece <- texture_piece %>%  -->
+<!--     mutate(piece_no = fct_relevel(piece_no,  -->
+<!--                                   c("1", "2b", "4", "5", "6c", "7a", "8b",  -->
+<!--                                     "9","10", "11", "12b","13a", "13b", "14"))) -->
+<!-- ``` -->
 
 <!-- Create a stacked bar chart displaying the proportions of each texture in each -->
 <!-- piece. **MAY NEED TO CHANGE** `width = 0.3`. -->
