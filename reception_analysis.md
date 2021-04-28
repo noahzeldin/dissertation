@@ -76,26 +76,18 @@ possible.) Data sets will be made available to researchers upon request.
 The **main goals** of this analysis are:
 
 1.  to determine the most-discussed aspects of each work
-
-<!-- end list -->
-
-  - In the dissertation, I compare these results to the works’ postwar
-    reception.
-
-<!-- end list -->
+    
+      - In the dissertation, I compare these results to the works’
+        postwar reception.
 
 2.  to determine if there is a measurable correspondence between
     aesthetics and politics
+    
+      - Hence the notion of the “political-aesthetic space.”
 
-<!-- end list -->
-
-  - Hence the notion of the “political-aesthetic space.”
-
-**NB: Further refinements to the coding are forthcoming.** This was my
+**NB: Further refinements to the code are forthcoming.** This was my
 first serious attempt at coding in R, so certain portions are still a
-bit clunky. (Note too that many lines use the German titles for the two
-pieces. All instances of this will be changed to English for
-consistency.) The final version will be included in the supplementary
+bit clunky. The final version will be included in the supplementary
 materials of the dissertation.
 
 In the near future, I will upload the corresponding write-up included in
