@@ -4,7 +4,7 @@ Noah Zeldin
 4/26/2021
 
   - [Introductory Remarks](#introductory-remarks)
-  - [Load packages](#load-packages)
+  - [Load Packages](#load-packages)
   - [Importation](#importation)
       - [Duration](#duration)
       - [Voice Analysis](#voice-analysis)
@@ -56,9 +56,9 @@ possible. I therefore refer to tables as
 [“tibbles”](https://tibble.tidyverse.org/).) Data sets will be made
 available to researchers upon request.
 
-**NB: Further refinements to the coding are forthcoming.**
+**NB: Further refinements to the code are forthcoming.**
 
-# Load packages
+# Load Packages
 
 ``` r
 library(tidyverse)

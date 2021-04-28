@@ -22,7 +22,7 @@ dissertation. This analysis was conducted in R. (I have tried to use
 therefore refer to tables as ["tibbles"](https://tibble.tidyverse.org/).) 
 Data sets will be made available to researchers upon request.
 
-**NB: Further refinements to the coding are forthcoming.** 
+**NB: Further refinements to the code are forthcoming.** 
 
 # Load Packages  
 
