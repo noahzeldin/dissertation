@@ -6,7 +6,7 @@
 upload proper lab reports in the near future, as well as the write-ups included
 in the dissertation
 
-This repository holds the coding related to the statistical analyses included in 
+This repository holds the code related to the statistical analyses included in 
 the second chapter of my dissertation: "Agitation and Intervention: *[The Measures Taken](https://en.wikipedia.org/wiki/The_Decision_(play))* and 
 *[The Mother](https://en.wikipedia.org/wiki/The_Mother_(Brecht_play))*." These 
 two major works were collaborations between German dramatist 
