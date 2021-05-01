@@ -101,13 +101,8 @@ library(readxl)
 library(quanteda)
 library(quanteda.textmodels)
 library(readtext)
-library(tidytext)
 library(ggplot2)
-library(scales)
-library(igraph)
-library(ggraph)
 library(FactoMineR)
-library(RColorBrewer)
 library(lubridate)
 ```
 
