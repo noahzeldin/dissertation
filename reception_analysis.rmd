@@ -69,13 +69,13 @@ Main data_main
 data_main <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs")
 ```
 
-data_main w/o Massnahme Erfurt
+data_main w/o Measures Taken Erfurt
 
 ```{r}
 data_no_erfurt <- data_main[-(c(38:45, 49)),]
 ```
 
-Spreadshet w/or Massnahme Erfurt or "Kartenhaus"
+Spreadshet w/or Measures Taken Erfurt or "Kartenhaus"
 
 ```{r}
 data_reduced <- data_main[-(c(38:45, 49, 65)),]
@@ -93,7 +93,7 @@ General Corpus
 corp <- corpus(data_main, text_field = "Text")
 ```
 
-General Corpus w/o Massnahme Erfurt
+General Corpus w/o Measures Taken Erfurt
 
 ```{r}
 corp_no_erfurt <- corpus(data_no_erfurt, text_field = "Text")
@@ -107,19 +107,19 @@ corp_reduced <- corpus(data_reduced, text_field = "Text")
 
 ### Piece Corpora
 
-Massnahme Corpus
+Measures Taken Corpus
 
 ```{r}
 mt_corp <- corpus_subset(corp, Piece == "Massnahme")
 ```
 
-Massnahme Corpus No Erfurt
+Measures Taken Corpus No Erfurt
 
 ```{r}
 mt_corp_no_erfurt <- corpus_subset(corp_no_erfurt, Piece == "Massnahme")
 ```
 
-Mutter Corpus
+Mother Corpus
 
 ```{r}
 mother_corp <- corpus_subset(corp, Piece == "Mutter")
@@ -232,13 +232,13 @@ gen_toks <- tokenize_and_remove_stopwords(corp)
 gen_toks_no_erfurt <- tokenize_and_remove_stopwords(corp_no_erfurt)
 # general / ungrouped REDUCED
 gen_toks_reduced <- tokenize_and_remove_stopwords(corp_reduced)
-# Massnahme
+# Measures Taken
 mt_toks <- tokenize_and_remove_stopwords(mt_corp)
-# Massnahme NO ERFURT
+# Measures Taken NO ERFURT
 mt_toks_no_erfurt <- tokenize_and_remove_stopwords(mt_corp_no_erfurt)
-# Mutter
+# Mother
 mother_toks <- tokenize_and_remove_stopwords(mother_corp)
-# ADDITION 12.17.20 - Mutter TITLE
+# ADDITION 12.17.20 - Mother TITLE
 mother_title_toks <- tokenize_and_remove_stopwords(mother_corp_title)
 ```
 
@@ -263,13 +263,13 @@ gen_dfm <- convert_to_dfm_and_apply_dictionaries(gen_toks)
 gen_dfm_no_erfurt <- convert_to_dfm_and_apply_dictionaries(gen_toks_no_erfurt)
 # general / ungrouped REDUCD
 gen_dfm_reduced <- convert_to_dfm_and_apply_dictionaries(gen_toks_reduced)
-# Massnahme 
+# Measures Taken 
 mt_dfm <- convert_to_dfm_and_apply_dictionaries(mt_toks)
-# Massnahme NO ERFURT
+# Measures Taken NO ERFURT
 mt_dfm_no_erfurt <- convert_to_dfm_and_apply_dictionaries(mt_toks_no_erfurt)
-# Mutter
+# Mother
 mother_dfm <- convert_to_dfm_and_apply_dictionaries(mother_toks)
-# ADDITION 12.17.20: Mutter TITLE
+# ADDITION 12.17.20: Mother TITLE
 mother_title_dfm <- convert_to_dfm_and_apply_dictionaries(mother_title_toks)
 ```
 
@@ -314,13 +314,13 @@ grouped_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
 ### Create GPO grouped dfm's for each piece 
 
 ```{r}
-# Massnahme
+# Measures Taken
 mt_dfm_gpo <- dfm_group(mt_dfm,
                           groups = "Generalized_Political_Orientation")
-# Massnahme NO ERFURT
+# Measures Taken NO ERFURT
 mt_dfm_gpo_no_erfurt <- dfm_group(mt_dfm_no_erfurt,
                                     groups = "Generalized_Political_Orientation")
-# Mutter
+# Mother
 mother_dfm_gpo <- dfm_group(mother_dfm,
                             groups = "Generalized_Political_Orientation")
 ```
@@ -364,10 +364,10 @@ unknown_sub <- dfm_subset(grouped_dfm,
 ### By Piece
 
 ```{r}
-# Massnahme
-massnahme_sub <- dfm_subset(grouped_dfm,
+# Measures Taken
+mt_sub <- dfm_subset(grouped_dfm,
                             Piece == "Massnahme")
-# Mutter
+# Mother
 mother_sub <- dfm_subset(grouped_dfm,
                          Piece == "Mutter")
 ```
@@ -548,7 +548,7 @@ wissen_kwic <-
   combine_kwic_with_data(corp, "wissen*", 10)
 ```
 
-* lehrstück MUTTER
+* lehrstück Mother
 
 ```{r}
 lehrstueck_mother_kwic <- 
@@ -556,7 +556,7 @@ lehrstueck_mother_kwic <-
   filter(Piece == "Mutter")
 ```
 
-* Oratorium MASSNAHME
+* Oratorium Measures Taken
 
 ```{r}
 oratorium_mt_kwic <- 
@@ -564,7 +564,7 @@ oratorium_mt_kwic <-
   filter(Piece == "Massnahme")
 ```
 
-* Arbeitersänger MASSNAHME
+* Arbeitersänger Measures Taken
 
 ```{r}
 arbeitersaenger_mt_kwic <- 
@@ -579,7 +579,7 @@ combine_kwic_with_data(corp, "stalin*", 30) %>%
   print()
 ```
 
-Only 3 articles on Mutter.
+Only 3 articles on Mother.
 
 * Cantata
 
@@ -611,7 +611,7 @@ lehrlern_kwic <- lehrlern_kwic %>% mutate(docname = as.numeric(docname)) %>%
     select(-c(Text, Other_Metadata:Comp_Doc))
 ```
 
-2. filter for Mutter & Right
+2. filter for Mother & Right
 
 ```{r}
 lehrlern_kwic_mother_right <- lehrlern_kwic %>% 
@@ -630,7 +630,7 @@ langweilig_primitiv_kwic <-
 
 ## Additional Terms Post-Processing (DFMs)
 
-LEHRLERN in Mutter
+LEHRLERN in Mother
 
 ```{r}
 lehrlern_mother_gpo_count <-  
@@ -740,7 +740,7 @@ dates_tib_lubridate %>%
 All
 
 ```{r}
-dates_mutter <- dates_tib %>% 
+dates_mother <- dates_tib %>% 
   filter(Piece == "Mutter") %>% 
   ungroup %>% 
   select(-Piece)

@@ -110,22 +110,22 @@ NB: Several articles had to be removed because of their distortionary
 effects. This resulted in multiple versions of the data, as shown below.
 (This will be cleaned up in the near future.)
 
-Main Spreadsheet
+Main data\_main
 
 ``` r
-spreadsheet <- read_excel("all_documents_updated_9.10.xlsx", sheet = "All")
+data_main <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs")
 ```
 
-Spreadsheet w/o Massnahme Erfurt
+data\_main w/o Measures Taken Erfurt
 
 ``` r
-spreadsheet_no_erfurt <- spreadsheet[-(c(38:45, 49)),]
+data_no_erfurt <- data_main[-(c(38:45, 49)),]
 ```
 
-Spreadshet w/or Massnahme Erfurt or “Kartenhaus”
+Spreadshet w/or Measures Taken Erfurt or “Kartenhaus”
 
 ``` r
-spreadsheet_reduced <- spreadsheet[-(c(38:45, 49, 65)),]
+data_reduced <- data_main[-(c(38:45, 49, 65)),]
 ```
 
 # Quanteda Set-Up
@@ -137,39 +137,39 @@ spreadsheet_reduced <- spreadsheet[-(c(38:45, 49, 65)),]
 General Corpus
 
 ``` r
-corp <- corpus(spreadsheet, text_field = "Text")
+corp <- corpus(data_main, text_field = "Text")
 ```
 
-General Corpus w/o Massnahme Erfurt
+General Corpus w/o Measures Taken Erfurt
 
 ``` r
-corp_no_erfurt <- corpus(spreadsheet_no_erfurt, text_field = "Text")
+corp_no_erfurt <- corpus(data_no_erfurt, text_field = "Text")
 ```
 
 General Corpus Reduced
 
 ``` r
-corp_reduced <- corpus(spreadsheet_reduced, text_field = "Text")
+corp_reduced <- corpus(data_reduced, text_field = "Text")
 ```
 
 ### Piece Corpora
 
-Massnahme Corpus
+Measures Taken Corpus
 
 ``` r
-mass_corp <- corpus_subset(corp, Piece == "Massnahme")
+mt_corp <- corpus_subset(corp, Piece == "Massnahme")
 ```
 
-Massnahme Corpus No Erfurt
+Measures Taken Corpus No Erfurt
 
 ``` r
-mass_corp_no_erfurt <- corpus_subset(corp_no_erfurt, Piece == "Massnahme")
+mt_corp_no_erfurt <- corpus_subset(corp_no_erfurt, Piece == "Massnahme")
 ```
 
-Mutter Corpus
+Mother Corpus
 
 ``` r
-mutter_corp <- corpus_subset(corp, Piece == "Mutter")
+mother_corp <- corpus_subset(corp, Piece == "Mutter")
 ```
 
 ### Title Corpora
@@ -177,13 +177,13 @@ mutter_corp <- corpus_subset(corp, Piece == "Mutter")
 Title Corpus
 
 ``` r
-corp_title <- corpus(spreadsheet, text_field = "Title")
+corp_title <- corpus(data_main, text_field = "Title")
 ```
 
 Mother Title Corpus
 
 ``` r
-mutter_corp_title <- corpus_subset(corp_title, Piece == "Mutter")
+mother_corp_title <- corpus_subset(corp_title, Piece == "Mutter")
 ```
 
 ## Corpus Summary - Article Lengths, etc.
@@ -197,7 +197,7 @@ corp_reduced_summary$document <- corp_reduced_summary$document %>%
     
 corp_reduced_summary <- corp_reduced_summary %>% mutate(document = as.numeric(document)) %>% 
         rename(Article = document) %>% # this seems to work better than including in above step
-        left_join(spreadsheet, by = "Article") %>% 
+        left_join(data_main, by = "Article") %>% 
         select(-c(Text, Other_Metadata:Comp_Doc))
 ```
 
@@ -278,14 +278,14 @@ gen_toks <- tokenize_and_remove_stopwords(corp)
 gen_toks_no_erfurt <- tokenize_and_remove_stopwords(corp_no_erfurt)
 # general / ungrouped REDUCED
 gen_toks_reduced <- tokenize_and_remove_stopwords(corp_reduced)
-# Massnahme
-mass_toks <- tokenize_and_remove_stopwords(mass_corp)
-# Massnahme NO ERFURT
-mass_toks_no_erfurt <- tokenize_and_remove_stopwords(mass_corp_no_erfurt)
-# Mutter
-mutter_toks <- tokenize_and_remove_stopwords(mutter_corp)
-# ADDITION 12.17.20 - Mutter TITLE
-mutter_title_toks <- tokenize_and_remove_stopwords(mutter_corp_title)
+# Measures Taken
+mt_toks <- tokenize_and_remove_stopwords(mt_corp)
+# Measures Taken NO ERFURT
+mt_toks_no_erfurt <- tokenize_and_remove_stopwords(mt_corp_no_erfurt)
+# Mother
+mother_toks <- tokenize_and_remove_stopwords(mother_corp)
+# ADDITION 12.17.20 - Mother TITLE
+mother_title_toks <- tokenize_and_remove_stopwords(mother_corp_title)
 ```
 
 ## DFMs
@@ -309,14 +309,14 @@ gen_dfm <- convert_to_dfm_and_apply_dictionaries(gen_toks)
 gen_dfm_no_erfurt <- convert_to_dfm_and_apply_dictionaries(gen_toks_no_erfurt)
 # general / ungrouped REDUCD
 gen_dfm_reduced <- convert_to_dfm_and_apply_dictionaries(gen_toks_reduced)
-# Massnahme 
-mass_dfm <- convert_to_dfm_and_apply_dictionaries(mass_toks)
-# Massnahme NO ERFURT
-mass_dfm_no_erfurt <- convert_to_dfm_and_apply_dictionaries(mass_toks_no_erfurt)
-# Mutter
-mutter_dfm <- convert_to_dfm_and_apply_dictionaries(mutter_toks)
-# ADDITION 12.17.20: Mutter TITLE
-mutter_title_dfm <- convert_to_dfm_and_apply_dictionaries(mutter_title_toks)
+# Measures Taken 
+mt_dfm <- convert_to_dfm_and_apply_dictionaries(mt_toks)
+# Measures Taken NO ERFURT
+mt_dfm_no_erfurt <- convert_to_dfm_and_apply_dictionaries(mt_toks_no_erfurt)
+# Mother
+mother_dfm <- convert_to_dfm_and_apply_dictionaries(mother_toks)
+# ADDITION 12.17.20: Mother TITLE
+mother_title_dfm <- convert_to_dfm_and_apply_dictionaries(mother_title_toks)
 ```
 
 ### Add GPO to general/ungrouped dfm -
@@ -359,14 +359,14 @@ grouped_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
 ### Create GPO grouped dfm’s for each piece
 
 ``` r
-# Massnahme
-mass_dfm_gpo <- dfm_group(mass_dfm,
+# Measures Taken
+mt_dfm_gpo <- dfm_group(mt_dfm,
                           groups = "Generalized_Political_Orientation")
-# Massnahme NO ERFURT
-mass_dfm_gpo_no_erfurt <- dfm_group(mass_dfm_no_erfurt,
+# Measures Taken NO ERFURT
+mt_dfm_gpo_no_erfurt <- dfm_group(mt_dfm_no_erfurt,
                                     groups = "Generalized_Political_Orientation")
-# Mutter
-mutter_dfm_gpo <- dfm_group(mutter_dfm,
+# Mother
+mother_dfm_gpo <- dfm_group(mother_dfm,
                             groups = "Generalized_Political_Orientation")
 ```
 
@@ -409,11 +409,11 @@ unknown_sub <- dfm_subset(grouped_dfm,
 ### By Piece
 
 ``` r
-# Massnahme
-massnahme_sub <- dfm_subset(grouped_dfm,
+# Measures Taken
+mt_sub <- dfm_subset(grouped_dfm,
                             Piece == "Massnahme")
-# Mutter
-mutter_sub <- dfm_subset(grouped_dfm,
+# Mother
+mother_sub <- dfm_subset(grouped_dfm,
                          Piece == "Mutter")
 ```
 
@@ -449,29 +449,29 @@ grouped_dfm_no_erfurt_or_unknown <- dfm_group(dfm_no_erfurt_or_unknown,
 Measures Taken
 
 ``` r
-mass_corp_no_erfurt_or_unknown <- corpus_subset(corp_no_erfurt, 
+mt_corp_no_erfurt_or_unknown <- corpus_subset(corp_no_erfurt, 
                                                 Piece == "Massnahme" &! Generalized_Political_Orientation == "Unknown" )
 
 
-mass_toks_no_erfurt_or_unknown <- tokenize_and_remove_stopwords(mass_corp_no_erfurt_or_unknown)
+mt_toks_no_erfurt_or_unknown <- tokenize_and_remove_stopwords(mt_corp_no_erfurt_or_unknown)
 
-mass_dfm_no_erfurt_or_unknown <- convert_to_dfm_and_apply_dictionaries(mass_toks_no_erfurt_or_unknown)
+mt_dfm_no_erfurt_or_unknown <- convert_to_dfm_and_apply_dictionaries(mt_toks_no_erfurt_or_unknown)
 
-mass_dfm_gpo_no_erfurt_or_unknown <- dfm_group(mass_dfm_no_erfurt_or_unknown,
+mt_dfm_gpo_no_erfurt_or_unknown <- dfm_group(mt_dfm_no_erfurt_or_unknown,
                                                groups = "Generalized_Political_Orientation")
 ```
 
 Mother
 
 ``` r
-mutter_corp_no_unknown <- corpus_subset(corp, 
+mother_corp_no_unknown <- corpus_subset(corp, 
                                         Piece == "Mutter" &! Generalized_Political_Orientation == "Unknown" )
 
-mutter_toks_no_unknown <- tokenize_and_remove_stopwords(mutter_corp_no_unknown)
+mother_toks_no_unknown <- tokenize_and_remove_stopwords(mother_corp_no_unknown)
 
-mutter_dfm_no_unknown <- convert_to_dfm_and_apply_dictionaries(mutter_toks_no_unknown)
+mother_dfm_no_unknown <- convert_to_dfm_and_apply_dictionaries(mother_toks_no_unknown)
 
-mutter_dfm_gpo_no_unknown <- dfm_group(mutter_dfm_no_unknown,
+mother_dfm_gpo_no_unknown <- dfm_group(mother_dfm_no_unknown,
                                        groups = "Generalized_Political_Orientation")
 ```
 
@@ -523,7 +523,7 @@ combine_kwic_with_data <- function(corpus, words, window) {
     i <- i %>% mutate(docname = as.numeric(docname)) %>% 
         rename(Article = docname) %>% # this seems to work better than including in above step
         left_join(
-          spreadsheet_reduced, # CHECKING 12.29.20 - seems to have worked better than normal spreadsheet with corp_reduced
+          data_reduced, # CHECKING 12.29.20 - seems to have worked better than normal data_main with corp_reduced
           by = "Article") %>% 
         select(-c(Text, Other_Metadata:Comp_Doc))
 
@@ -606,32 +606,32 @@ wissen_kwic <-
   combine_kwic_with_data(corp, "wissen*", 10)
 ```
 
-  - lehrstück MUTTER
+  - lehrstück Mother
 
 <!-- end list -->
 
 ``` r
-lehrstueck_mutter_kwic <- 
+lehrstueck_mother_kwic <- 
   combine_kwic_with_data(corp, "lehrstück*", 10) %>% 
   filter(Piece == "Mutter")
 ```
 
-  - Oratorium MASSNAHME
+  - Oratorium Measures Taken
 
 <!-- end list -->
 
 ``` r
-oratorium_mass_kwic <- 
+oratorium_mt_kwic <- 
   combine_kwic_with_data(corp, "oratori*", 30) %>% 
   filter(Piece == "Massnahme")
 ```
 
-  - Arbeitersänger MASSNAHME
+  - Arbeitersänger Measures Taken
 
 <!-- end list -->
 
 ``` r
-arbeitersaenger_mass_kwic <- 
+arbeitersaenger_mt_kwic <- 
   combine_kwic_with_data(corp, "arbeitersänger*", 30) %>% 
   filter(Piece == "Massnahme")
 ```
@@ -655,7 +655,7 @@ combine_kwic_with_data(corp, "stalin*", 30) %>%
     ## #   Generalized_Political_Orientation <chr>, Date <chr>, Author <chr>,
     ## #   Complete_or_Incomplete <chr>, Piece <chr>
 
-Only 3 articles on Mutter.
+Only 3 articles on Mother.
 
   - Cantata
 
@@ -693,16 +693,16 @@ lehrlern_kwic$docname <- lehrlern_kwic$docname %>%
 
 lehrlern_kwic <- lehrlern_kwic %>% mutate(docname = as.numeric(docname)) %>% 
     rename(Article = docname) %>% # this seems to work better than including in above step
-    left_join(spreadsheet, by = "Article") %>% 
+    left_join(data_main, by = "Article") %>% 
     select(-c(Text, Other_Metadata:Comp_Doc))
 ```
 
-2.  filter for Mutter & Right
+2.  filter for Mother & Right
 
 <!-- end list -->
 
 ``` r
-lehrlern_kwic_mutter_right <- lehrlern_kwic %>% 
+lehrlern_kwic_mother_right <- lehrlern_kwic %>% 
   filter(Piece == "Mutter" & 
                Generalized_Political_Orientation == "Right")
 ```
@@ -718,14 +718,14 @@ langweilig_primitiv_kwic <-
 
 ## Additional Terms Post-Processing (DFMs)
 
-LEHRLERN in Mutter
+LEHRLERN in Mother
 
 ``` r
-lehrlern_mutter_gpo_count <-  
-  dfm_select(mutter_dfm_gpo, pattern = "LEHRLERN") %>% 
+lehrlern_mother_gpo_count <-  
+  dfm_select(mother_dfm_gpo, pattern = "LEHRLERN") %>% 
   as_tibble()
 
-lehrlern_mutter_gpo_count
+lehrlern_mother_gpo_count
 ```
 
     ## # A tibble: 4 x 2
@@ -814,7 +814,7 @@ Edited, Lubridate
 <!-- end list -->
 
 ``` r
-dates_mass_lubridate <- 
+dates_mt_lubridate <- 
   dates_tib_lubridate %>% 
   filter(Piece == "Massnahme") %>% 
   arrange(date)
@@ -860,7 +860,7 @@ dates_tib_lubridate %>%
 All
 
 ``` r
-dates_mutter <- dates_tib %>% 
+dates_mother <- dates_tib %>% 
   filter(Piece == "Mutter") %>% 
   ungroup %>% 
   select(-Piece)
@@ -873,7 +873,7 @@ Edited, Lubridate
 <!-- end list -->
 
 ``` r
-dates_mutter_lubridate <- 
+dates_mother_lubridate <- 
   dates_tib_lubridate %>% 
   filter(Piece == "Mutter") %>% 
   arrange(date)
@@ -931,8 +931,8 @@ difftime(tail(dates_tib_lubridate$date, 1),
 Measures Taken
 
 ``` r
-difftime(tail(dates_mass_lubridate$date, 1),
-         head(dates_mass_lubridate$date, 1)) %>% 
+difftime(tail(dates_mt_lubridate$date, 1),
+         head(dates_mt_lubridate$date, 1)) %>% 
   time_length(unit = "year")
 ```
 
@@ -941,8 +941,8 @@ difftime(tail(dates_mass_lubridate$date, 1),
 Mother
 
 ``` r
-difftime(tail(dates_mutter_lubridate$date, 1),
-         head(dates_mutter_lubridate$date, 1)) %>% 
+difftime(tail(dates_mother_lubridate$date, 1),
+         head(dates_mother_lubridate$date, 1)) %>% 
   time_length(unit = "year")
 ```
 
@@ -971,8 +971,8 @@ interval(start = articles_first_date,
 #### Measures Taken
 
 ``` r
-interval(start = head(dates_mass_lubridate$date, 1),
-         end = tail(dates_mass_lubridate$date, 1))
+interval(start = head(dates_mt_lubridate$date, 1),
+         end = tail(dates_mt_lubridate$date, 1))
 ```
 
     ## [1] 1930-06-04 UTC--1932-11-25 UTC
@@ -980,8 +980,8 @@ interval(start = head(dates_mass_lubridate$date, 1),
 #### Mother
 
 ``` r
-interval(start = head(dates_mutter_lubridate$date, 1),
-         end = tail(dates_mutter_lubridate$date, 1))
+interval(start = head(dates_mother_lubridate$date, 1),
+         end = tail(dates_mother_lubridate$date, 1))
 ```
 
     ## [1] 1931-12-23 UTC--1932-12-09 UTC
@@ -993,23 +993,23 @@ interval(start = head(dates_mutter_lubridate$date, 1),
 Save date of premiere as variable (cf. BFA 3: 431):
 
 ``` r
-mass_premiere_date <- ymd("1930-12-13")
+mt_premiere_date <- ymd("1930-12-13")
 ```
 
 Create interval for 1 week after premiere:
 
 ``` r
-mass_premiere_week <- interval(start = mass_premiere_date,
-         end = mass_premiere_date + dweeks(x = 1))
+mt_premiere_week <- interval(start = mt_premiere_date,
+         end = mt_premiere_date + dweeks(x = 1))
 ```
 
 Percentage of articles within 1 week of premiere:
 
 ``` r
-articles_mass_premiere_week_perc <- 
-  round(((dates_mass_lubridate %>% 
-    filter(date %within% mass_premiere_week) %>% 
-    nrow()) / nrow(dates_mass_lubridate)) * 100)
+articles_mt_premiere_week_perc <- 
+  round(((dates_mt_lubridate %>% 
+    filter(date %within% mt_premiere_week) %>% 
+    nrow()) / nrow(dates_mt_lubridate)) * 100)
 ```
 
 #### Mother
@@ -1017,23 +1017,23 @@ articles_mass_premiere_week_perc <-
 Save date of premiere (cf. BFA 3: 478):
 
 ``` r
-mutter_premiere_date <- ymd("1932-01-17")
+mother_premiere_date <- ymd("1932-01-17")
 ```
 
 Create interval for 1 week after premiere:
 
 ``` r
-mutter_premiere_week <- interval(start = mutter_premiere_date,
-         end = mutter_premiere_date + dweeks(x = 1))
+mother_premiere_week <- interval(start = mother_premiere_date,
+         end = mother_premiere_date + dweeks(x = 1))
 ```
 
 Percentage of articles within 1 week of premiere:
 
 ``` r
-articles_mutter_premiere_week_perc <- 
-  round(((dates_mutter_lubridate %>% 
-    filter(date %within% mutter_premiere_week) %>% 
-    nrow()) / nrow(dates_mutter_lubridate)) * 100)
+articles_mother_premiere_week_perc <- 
+  round(((dates_mother_lubridate %>% 
+    filter(date %within% mother_premiere_week) %>% 
+    nrow()) / nrow(dates_mother_lubridate)) * 100)
 ```
 
 ## 1932 articles for Measures Taken
@@ -1042,7 +1042,7 @@ articles_mutter_premiere_week_perc <-
 dates_tib_lubridate %>% 
     filter(Piece == "Massnahme" &
             year(date) == 1932) %>% 
-    left_join(spreadsheet)
+    left_join(data_main)
 ```
 
     ## # A tibble: 5 x 17
@@ -1199,8 +1199,8 @@ textplot_wordcloud(piece_dfm_no_erfurt_english,
 *Mother* - Grouped by GPO (no unknown):
 
 ``` r
-wordcloud_mutter_gpo <- 
-  textplot_wordcloud(mutter_dfm_gpo_no_unknown,
+wordcloud_mother_gpo <- 
+  textplot_wordcloud(mother_dfm_gpo_no_unknown,
                    max_words = 100, # 125 or 100 is probably best
                    rotation = FALSE,
                    color = colors_four,
