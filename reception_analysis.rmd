@@ -11,7 +11,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
-knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Desktop/Proposal/R materials for dissertation/data")
+knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Documents/R stuff/R projects/dissertation")
 ```
 
 # Introductory Remarks
@@ -66,7 +66,7 @@ cleaned up in the near future.)
 Main Spreadsheet
 
 ```{r}
-spreadsheet <- read_excel("all_documents_updated_9.10.xlsx", sheet = "All")
+spreadsheet <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs")
 ```
 
 Spreadsheet w/o Massnahme Erfurt
