@@ -98,10 +98,8 @@ ch. 2 of my dissertation to this repository.
 ``` r
 library(tidyverse)
 library(readxl)
-library(quanteda)
-library(quanteda.textmodels)
-library(readtext)
 library(ggplot2)
+library(quanteda)
 library(FactoMineR)
 library(lubridate)
 ```
