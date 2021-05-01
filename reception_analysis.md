@@ -110,19 +110,19 @@ NB: Several articles had to be removed because of their distortionary
 effects. This resulted in multiple versions of the data, as shown below.
 (This will be cleaned up in the near future.)
 
-Main data\_main
+Main
 
 ``` r
 data_main <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs")
 ```
 
-data\_main w/o Measures Taken Erfurt
+`data_main` w/o Measures Taken Erfurt
 
 ``` r
 data_no_erfurt <- data_main[-(c(38:45, 49)),]
 ```
 
-Spreadshet w/or Measures Taken Erfurt or “Kartenhaus”
+`data_main` w/or Measures Taken Erfurt or “Kartenhaus”
 
 ``` r
 data_reduced <- data_main[-(c(38:45, 49, 65)),]
@@ -140,13 +140,13 @@ General Corpus
 corp <- corpus(data_main, text_field = "Text")
 ```
 
-General Corpus w/o Measures Taken Erfurt
+`corp` w/o Measures Taken Erfurt
 
 ``` r
 corp_no_erfurt <- corpus(data_no_erfurt, text_field = "Text")
 ```
 
-General Corpus Reduced
+`corp` Reduced
 
 ``` r
 corp_reduced <- corpus(data_reduced, text_field = "Text")
