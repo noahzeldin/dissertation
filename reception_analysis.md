@@ -10,8 +10,8 @@ Noah Zeldin
   - [Quanteda Set-Up](#quanteda-set-up)
       - [Create Corpora](#create-corpora)
           - [General Corpora](#general-corpora)
-          - [Piece Corpora](#piece-corpora)
-          - [Title Corpora](#title-corpora)
+          - [Corpora Grouped by Piece](#corpora-grouped-by-piece)
+          - [Corpora of Title Texts](#corpora-of-title-texts)
       - [Corpus Summary - Article Lengths,
         etc.](#corpus-summary---article-lengths-etc.)
       - [Dictionaries and Additional
@@ -144,6 +144,11 @@ data_reduced <- data_no_erfurt %>%
 
 ## Create Corpora
 
+In addition to the main corpora, I create additional corpora, based
+e.g. on piece, to provide greater flexibility for later analysis, for
+instance, finding and/or counting instances of a keyword in articles on
+*The Mother*.
+
 ### General Corpora
 
 General Corpus
@@ -164,7 +169,7 @@ corp_no_erfurt <- corpus(data_no_erfurt, text_field = "Text")
 corp_reduced <- corpus(data_reduced, text_field = "Text")
 ```
 
-### Piece Corpora
+### Corpora Grouped by Piece
 
 *Measures Taken* Corpus
 
@@ -173,6 +178,11 @@ mt_corp <- corpus_subset(corp, Piece == "Massnahme")
 ```
 
 *Measures Taken* Corpus No Erfurt
+
+  - Again, the articles on the Erfurt performance were removed because
+    of their distortionary effect.
+
+<!-- end list -->
 
 ``` r
 mt_corp_no_erfurt <- corpus_subset(corp_no_erfurt, Piece == "Massnahme")
@@ -184,7 +194,10 @@ mt_corp_no_erfurt <- corpus_subset(corp_no_erfurt, Piece == "Massnahme")
 mother_corp <- corpus_subset(corp, Piece == "Mutter")
 ```
 
-### Title Corpora
+### Corpora of Title Texts
+
+This allows for later analysis of the texts of the titles, e.g. keyword
+frequencies.
 
 Title Corpus
 
@@ -207,15 +220,22 @@ corp_reduced_summary <- textstat_summary(corp_reduced) %>%
 corp_reduced_summary$document <- corp_reduced_summary$document %>% 
         str_replace("text", "") 
     
-corp_reduced_summary <- corp_reduced_summary %>% mutate(document = as.numeric(document)) %>% 
-        rename(Article = document) %>% # this seems to work better than including in above step
-        left_join(data_main, by = "Article") %>% 
-        select(-c(Text, Other_Metadata:Comp_Doc))
+corp_reduced_summary <- corp_reduced_summary %>% 
+  mutate(document = as.numeric(document)) %>% 
+  rename(Article = document) %>% 
+  left_join(data_main, by = "Article") %>% 
+  select(-c(Text, Other_Metadata:Comp_Doc))
 ```
 
 ## Dictionaries and Additional Stopwords
 
 General Dictionary
+
+  - This dictionary contains what I perceived to be the most important
+    keywords in the corpus and those on which I wished to focus in my
+    analysis.
+
+<!-- end list -->
 
 ``` r
 dict_gen <- dictionary(list(revolution = "revolution*",
@@ -246,7 +266,12 @@ dict_gen <- dictionary(list(revolution = "revolution*",
                                            "langeweile")))
 ```
 
-Regex Dictionary
+Regular Expressions Dictionary
+
+  - In some cases, it was necessary to use regular expressions rather
+    than the simple wildcard option provided in **quanteda**.
+
+<!-- end list -->
 
 ``` r
 dict_regex <- dictionary(list(lehrlern = c("lehr(?!s)[a-z]+", 
@@ -259,6 +284,11 @@ dict_regex <- dictionary(list(lehrlern = c("lehr(?!s)[a-z]+",
 ```
 
 Additional Stopwords
+
+  - These stopwords are not part of the set of German stopwords provided
+    in **quanteda**.
+
+<!-- end list -->
 
 ``` r
 sw_add <- c("dass", "wurde", "schon", "mehr", "ganz*", "immer", "gibt", "ja",
@@ -286,17 +316,23 @@ Tokenize and filter corpora:
 ``` r
 # general / ungrouped
 gen_toks <- tokenize_and_remove_stopwords(corp)
+
 # general / ungrouped NO ERFURT
 gen_toks_no_erfurt <- tokenize_and_remove_stopwords(corp_no_erfurt)
+
 # general / ungrouped REDUCED
 gen_toks_reduced <- tokenize_and_remove_stopwords(corp_reduced)
+
 # Measures Taken
 mt_toks <- tokenize_and_remove_stopwords(mt_corp)
+
 # Measures Taken NO ERFURT
 mt_toks_no_erfurt <- tokenize_and_remove_stopwords(mt_corp_no_erfurt)
+
 # Mother
 mother_toks <- tokenize_and_remove_stopwords(mother_corp)
-# ADDITION 12.17.20 - Mother TITLE
+
+# Mother TITLE
 mother_title_toks <- tokenize_and_remove_stopwords(mother_corp_title)
 ```
 
