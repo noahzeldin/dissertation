@@ -109,7 +109,7 @@ library(lubridate)
 NB: Several articles had to be removed because of their distortionary
 effects. This resulted in multiple versions of the data, as shown below.
 Although I ultimately only use the third of these (`data_reduced`), I
-have left the excluded articles in the dataset for the sake of
+have left the excluded articles in the data set for the sake of
 transparency and because other researchers may find them useful.
 
 Main Data Set (all articles)
@@ -118,7 +118,7 @@ Main Data Set (all articles)
 data_main <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs")
 ```
 
-`data_main` w/o Measures Taken Erfurt
+`data_main` w/o *Measures Taken* articles on Erfurt performance
 
 ``` r
 data_no_erfurt <- data_main %>% 
@@ -129,7 +129,9 @@ data_no_erfurt <- data_main %>%
     filter(Newspaper != "Internationaler_Revolutionärer_Theater-Bund_(Bulletin)")
 ```
 
-`data_main` w/or Measures Taken Erfurt or “Kartenhaus”
+`data_main` w/o *Measures Taken* articles on Erfurt performance or
+Ferdinand Junghans, “Das Kartenhaus stürzt\!,” *Neue Preussische
+Kreuz-Zeitung*, n.d.
 
 ``` r
 data_reduced <- data_no_erfurt %>% 
@@ -150,7 +152,7 @@ General Corpus
 corp <- corpus(data_main, text_field = "Text")
 ```
 
-`corp` w/o Measures Taken Erfurt
+`corp` w/o *Measures Taken* Erfurt
 
 ``` r
 corp_no_erfurt <- corpus(data_no_erfurt, text_field = "Text")
@@ -164,19 +166,19 @@ corp_reduced <- corpus(data_reduced, text_field = "Text")
 
 ### Piece Corpora
 
-Measures Taken Corpus
+*Measures Taken* Corpus
 
 ``` r
 mt_corp <- corpus_subset(corp, Piece == "Massnahme")
 ```
 
-Measures Taken Corpus No Erfurt
+*Measures Taken* Corpus No Erfurt
 
 ``` r
 mt_corp_no_erfurt <- corpus_subset(corp_no_erfurt, Piece == "Massnahme")
 ```
 
-Mother Corpus
+*Mother* Corpus
 
 ``` r
 mother_corp <- corpus_subset(corp, Piece == "Mutter")
@@ -190,7 +192,7 @@ Title Corpus
 corp_title <- corpus(data_main, text_field = "Title")
 ```
 
-Mother Title Corpus
+*Mother* Title Corpus
 
 ``` r
 mother_corp_title <- corpus_subset(corp_title, Piece == "Mutter")
