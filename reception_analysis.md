@@ -50,9 +50,10 @@ Noah Zeldin
         etc.](#date-ranges-time-lengths-etc.)
           - [Time Length in Years](#time-length-in-years)
           - [Range / Interval](#range-interval)
-          - [Proportion of Articles near
-            Premieres](#proportion-of-articles-near-premieres)
-      - [1932 articles for Measures Taken](#articles-for-measures-taken)
+          - [Proportion of Articles Published near
+            Premieres](#proportion-of-articles-published-near-premieres)
+      - [Articles on The Measures Taken published in
+        1932](#articles-on-the-measures-taken-published-in-1932)
   - [Visualizations](#visualizations)
       - [Visual Summary of Reduced
         Corpus](#visual-summary-of-reduced-corpus)
@@ -772,8 +773,8 @@ No results.
 As I explain in ch. 2, **LEHRLERN** is the only term in the keyword
 diction (see above) that can be considered an interpretative combination
 of different words, rather than a mere grouping of synonyms.
-**LEHRLERN** groups together words relating to “teaching”
-\[*lehren*\],“learning” \[*lernen*\] and “pedagogy.”
+**LEHRLERN** groups together words relating to “teaching” \[*lehren*\],
+“learning” \[*lernen*\] and “pedagogy.”
 
 Create tibble:
 
@@ -824,7 +825,7 @@ lehrlern_mother_gpo_count
 
 ### General
 
-All Articles
+All articles:
 
 ``` r
 dates_tib <- corp_reduced_datafr %>% 
@@ -845,7 +846,8 @@ dates_tib_separate <- corp_reduced_datafr %>%
     separate(Date, sep = "\\.", into = c("day", "month", "year"))
 ```
 
-Make compatible with Lubridate package:
+Make compatible with [Lubridate](https://lubridate.tidyverse.org/)
+package:
 
 ``` r
 dates_tib_lubridate <- dates_tib_separate %>% 
@@ -860,7 +862,7 @@ dates_tib_lubridate <- dates_tib_separate %>%
   arrange(date)
 ```
 
-Percent of articles *without* full dates (i.e. excluded from lubridate):
+Percent of articles *without* full dates (i.e. excluded from Lubridate):
 
 ``` r
 articles_perc_without_full_dates <- 
@@ -868,30 +870,41 @@ articles_perc_without_full_dates <-
      nrow(dates_tib_lubridate)) 
   / nrow(dates_tib_lubridate)) * 100) %>% 
   round() 
+
+articles_perc_without_full_dates
 ```
 
-Percent of articles *with* full dates (i.e. included for lubridate):
+    ## [1] 12
+
+Percent of articles *with* full dates (i.e. included for Lubridate):
 
 ``` r
 articles_perc_with_full_dates <- 100 - articles_perc_without_full_dates
+
+articles_perc_with_full_dates
 ```
+
+    ## [1] 88
 
 ### By Piece
 
 #### Measures Taken
 
+<!-- may not need this first one (non-Lubridate) -->
+
 All
 
 ``` r
-dates_mass <- dates_tib %>% 
+dates_mt <- dates_tib %>% 
   filter(Piece == "Massnahme") %>% 
   ungroup %>% 
   select(-Piece)
 ```
 
-Edited, Lubridate
+Edited, for Lubridate
 
-  - Chronological, w/o counts - saved for computing range, length, etc.
+  - Chronological, w/o counts (saved for computing range, length, etc.
+    for write-up):
 
 <!-- end list -->
 
@@ -902,7 +915,7 @@ dates_mt_lubridate <-
   arrange(date)
 ```
 
-  - Counted and Sorted Descending
+  - Counted and sorted descending:
 
 <!-- end list -->
 
@@ -948,9 +961,10 @@ dates_mother <- dates_tib %>%
   select(-Piece)
 ```
 
-Edited, Lubridate
+Edited, for Lubridate
 
-  - Chronological, w/o counts - saved for computing range, length, etc.
+  - Chronological, w/o counts (saved for computing range, length, etc.
+    for write-up):
 
 <!-- end list -->
 
@@ -961,7 +975,7 @@ dates_mother_lubridate <-
   arrange(date)
 ```
 
-  - Counted and Sorted Descending
+  - Counted and sorted descending:
 
 <!-- end list -->
 
@@ -1000,7 +1014,7 @@ dates_tib_lubridate %>%
 
 ### Time Length in Years
 
-All Articles (Edited for Lubridate)
+All Articles (edited for Lubridate):
 
 ``` r
 difftime(tail(dates_tib_lubridate$date, 1),
@@ -1010,7 +1024,7 @@ difftime(tail(dates_tib_lubridate$date, 1),
 
     ## [1] 2.516085
 
-Measures Taken
+*The Measures Taken*
 
 ``` r
 difftime(tail(dates_mt_lubridate$date, 1),
@@ -1020,7 +1034,7 @@ difftime(tail(dates_mt_lubridate$date, 1),
 
     ## [1] 2.477755
 
-Mother
+*The Mother*
 
 ``` r
 difftime(tail(dates_mother_lubridate$date, 1),
@@ -1038,6 +1052,7 @@ Save general start and end dates as variables for write-up:
 
 ``` r
 articles_first_date <- head(dates_tib_lubridate$date, 1)
+
 articles_last_date <- tail(dates_tib_lubridate$date, 1)
 ```
 
@@ -1050,7 +1065,7 @@ interval(start = articles_first_date,
 
     ## [1] 1930-06-04 UTC--1932-12-09 UTC
 
-#### Measures Taken
+#### The Measures Taken
 
 ``` r
 interval(start = head(dates_mt_lubridate$date, 1),
@@ -1059,7 +1074,7 @@ interval(start = head(dates_mt_lubridate$date, 1),
 
     ## [1] 1930-06-04 UTC--1932-11-25 UTC
 
-#### Mother
+#### The Mother
 
 ``` r
 interval(start = head(dates_mother_lubridate$date, 1),
@@ -1068,11 +1083,13 @@ interval(start = head(dates_mother_lubridate$date, 1),
 
     ## [1] 1931-12-23 UTC--1932-12-09 UTC
 
-### Proportion of Articles near Premieres
+### Proportion of Articles Published near Premieres
 
-#### Measures Taken
+#### The Measures Taken
 
-Save date of premiere as variable (cf. BFA 3: 431):
+Save date of premiere as variable (cf.
+[GBA](https://www.suhrkamp.de/werkausgabe/werke_grosse_kommentierte_berliner_und_frankfurter_ausgabe_30_baende_in_32_teilbaenden_und_ein_registerband_leinen_24.html)
+3: 431):
 
 ``` r
 mt_premiere_date <- ymd("1930-12-13")
@@ -1085,7 +1102,7 @@ mt_premiere_week <- interval(start = mt_premiere_date,
          end = mt_premiere_date + dweeks(x = 1))
 ```
 
-Percentage of articles within 1 week of premiere:
+Percentage of articles published within 1 week of premiere:
 
 ``` r
 articles_mt_premiere_week_perc <- 
@@ -1096,7 +1113,9 @@ articles_mt_premiere_week_perc <-
 
 #### Mother
 
-Save date of premiere (cf. BFA 3: 478):
+Save date of premiere (cf.
+[GBA](https://www.suhrkamp.de/werkausgabe/werke_grosse_kommentierte_berliner_und_frankfurter_ausgabe_30_baende_in_32_teilbaenden_und_ein_registerband_leinen_24.html)
+3: 478):
 
 ``` r
 mother_premiere_date <- ymd("1932-01-17")
@@ -1109,7 +1128,7 @@ mother_premiere_week <- interval(start = mother_premiere_date,
          end = mother_premiere_date + dweeks(x = 1))
 ```
 
-Percentage of articles within 1 week of premiere:
+Percentage of articles published within 1 week of premiere:
 
 ``` r
 articles_mother_premiere_week_perc <- 
@@ -1118,7 +1137,7 @@ articles_mother_premiere_week_perc <-
     nrow()) / nrow(dates_mother_lubridate)) * 100)
 ```
 
-## 1932 articles for Measures Taken
+## Articles on The Measures Taken published in 1932
 
 ``` r
 dates_tib_lubridate %>% 
