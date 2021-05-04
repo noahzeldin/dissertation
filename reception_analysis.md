@@ -26,8 +26,9 @@ Noah Zeldin
           - [Less Specific Groupings](#less-specific-groupings)
           - [By GPO](#by-gpo)
           - [By Piece](#by-piece)
-      - [Convert general corpus and dfm to dataframe for later
-        use](#convert-general-corpus-and-dfm-to-dataframe-for-later-use)
+      - [Convert general (reduced) corpus and dfm to dataframe sfor
+        later
+        use](#convert-general-reduced-corpus-and-dfm-to-dataframe-sfor-later-use)
       - [Create corpus, dfm, ca, etc. of each piece w/o
         unknown](#create-corpus-dfm-ca-etc.-of-each-piece-wo-unknown)
   - [FactoMineR Set-Up](#factominer-set-up)
@@ -394,6 +395,9 @@ grouped_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
 
 ### Create GPO grouped dfm’s for each piece
 
+NB: Only the third of these (`mother_dfm_gpo`) is used in the analysis
+but all three have been kept for consistency.
+
 ``` r
 # Measures Taken
 mt_dfm_gpo <- dfm_group(mt_dfm,
@@ -409,6 +413,10 @@ mother_dfm_gpo <- dfm_group(mother_dfm,
 ```
 
 ### Less Specific Groupings
+
+NB: The first two, which contain articles related to the Erfurt
+performance of *The Measures Taken*, have been created for the sake of
+consistency but are not used in the later analyses.
 
 ``` r
 # by piece
@@ -433,6 +441,8 @@ gpo_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
 
 ### By GPO
 
+Not currently used in the analysis but leaving for the moment.
+
 ``` r
 # Left
 left_sub <- dfm_subset(grouped_dfm, 
@@ -453,6 +463,8 @@ unknown_sub <- dfm_subset(grouped_dfm,
 
 ### By Piece
 
+Not currently used in the analysis but leaving for the moment.
+
 ``` r
 # Measures Taken
 mt_sub <- dfm_subset(grouped_dfm,
@@ -463,7 +475,7 @@ mother_sub <- dfm_subset(grouped_dfm,
                          Piece == "Mutter")
 ```
 
-## Convert general corpus and dfm to dataframe for later use
+## Convert general (reduced) corpus and dfm to dataframe sfor later use
 
 ``` r
 # convert gen_dfm_reduced to dataframe
