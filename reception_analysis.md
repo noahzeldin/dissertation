@@ -19,14 +19,15 @@ Noah Zeldin
       - [Tokenize and Filter Corpora](#tokenize-and-filter-corpora)
       - [Document-Feature Matrices
         (dfm)](#document-feature-matrices-dfm)
-          - [Add General Political Orientation (GPO) to
-            general/ungrouped
-            dfm](#add-general-political-orientation-gpo-to-generalungrouped-dfm)
+          - [Group dfm’s by General Political Orientation
+            (GPO)](#group-dfms-by-general-political-orientation-gpo)
           - [Create GPO grouped dfm’s for each
             piece](#create-gpo-grouped-dfms-for-each-piece)
           - [Less Specific Groupings](#less-specific-groupings)
           - [By GPO](#by-gpo)
           - [By Piece](#by-piece)
+      - [Convert general corpus and dfm to dataframe for later
+        use](#convert-general-corpus-and-dfm-to-dataframe-for-later-use)
       - [Create corpus, dfm, ca, etc. of each piece w/o
         unknown](#create-corpus-dfm-ca-etc.-of-each-piece-wo-unknown)
   - [FactoMineR Set-Up](#factominer-set-up)
@@ -370,36 +371,21 @@ mother_dfm <- convert_to_dfm_and_apply_dictionaries(mother_toks)
 mother_title_dfm <- convert_to_dfm_and_apply_dictionaries(mother_title_toks)
 ```
 
-### Add General Political Orientation (GPO) to general/ungrouped dfm
+### Group dfm’s by General Political Orientation (GPO)
 
 **GPO** or “general political orientation” is a variable included in the
-original data set, which was removed in the process of converting the
-data to corpora and **dfm**’s. It must therefore be added back in.
-However, the corpora and **dfm**’s must first be converted to
-dataframes.
+original data set and is used extensively in the later analyses. Since
+it is lost in the creation of **dfm**’s, it must be added back in, using
+the `groups` function in **quanteda**.
+
+Here, we group the data by both piece and GPO, which results in 8 groups
+total.
 
 ``` r
-# convert gen_dfm_reduced to dataframe
-gen_datafr_reduced <- convert(gen_dfm_reduced, to = "data.frame")
-
-# convert corp_reduced to dataframe - this has GPOs + other metadata
-corp_reduced_datafr <- convert(corp_reduced, to = "data.frame")
-
-
-# add GPO column to gen_datafr_reduced
-gen_datafr_reduced_gpo <- 
-  left_join(gen_datafr_reduced, 
-            corp_reduced_datafr[ , c("doc_id",
-                                     "Generalized_Political_Orientation")], 
-                                    by = "doc_id", 
-                                    copy = TRUE)
-
-# ** group dfm's ####
-
-# create grouped dfm: piece.gpo = 8 groups
 grouped_dfm <- dfm_group(gen_dfm,
                          groups = c("Piece",
                                     "Generalized_Political_Orientation"))
+
 # same but NO ERFURT
 grouped_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
                                    groups = c("Piece",
@@ -412,9 +398,11 @@ grouped_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
 # Measures Taken
 mt_dfm_gpo <- dfm_group(mt_dfm,
                           groups = "Generalized_Political_Orientation")
+
 # Measures Taken NO ERFURT
 mt_dfm_gpo_no_erfurt <- dfm_group(mt_dfm_no_erfurt,
                                     groups = "Generalized_Political_Orientation")
+
 # Mother
 mother_dfm_gpo <- dfm_group(mother_dfm,
                             groups = "Generalized_Political_Orientation")
@@ -426,14 +414,18 @@ mother_dfm_gpo <- dfm_group(mother_dfm,
 # by piece
 piece_dfm <- dfm_group(gen_dfm,
                        groups = "Piece")
+
 # by GPO
 gpo_dfm <- dfm_group(gen_dfm,
                      groups = "Generalized_Political_Orientation")
 
+
 # less specific groupings NO ERFURT
+
 # by piece
 piece_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
                                  groups = "Piece")
+
 # by GPO
 gpo_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
                                groups = "Generalized_Political_Orientation")
@@ -445,12 +437,15 @@ gpo_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
 # Left
 left_sub <- dfm_subset(grouped_dfm, 
                        Generalized_Political_Orientation == "Left")
+
 # Right
 right_sub <- dfm_subset(grouped_dfm, 
                         Generalized_Political_Orientation == "Right")
+
 # Center
 center_sub <- dfm_subset(grouped_dfm, 
                          Generalized_Political_Orientation == "Center")
+
 # Unknown
 unknown_sub <- dfm_subset(grouped_dfm,
                           Generalized_Political_Orientation == "Unknown")
@@ -462,9 +457,20 @@ unknown_sub <- dfm_subset(grouped_dfm,
 # Measures Taken
 mt_sub <- dfm_subset(grouped_dfm,
                             Piece == "Massnahme")
+
 # Mother
 mother_sub <- dfm_subset(grouped_dfm,
                          Piece == "Mutter")
+```
+
+## Convert general corpus and dfm to dataframe for later use
+
+``` r
+# convert gen_dfm_reduced to dataframe
+gen_datafr_reduced <- convert(gen_dfm_reduced, to = "data.frame")
+
+# convert corp_reduced to dataframe (contains GPOs + other metadata)
+corp_reduced_datafr <- convert(corp_reduced, to = "data.frame")
 ```
 
 ## Create corpus, dfm, ca, etc. of each piece w/o unknown
@@ -1197,7 +1203,7 @@ toks_summary_boxplot <-
 toks_summary_boxplot
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-80-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-81-1.png)<!-- -->
 
 ### Very Long Articles
 
@@ -1244,7 +1250,7 @@ textplot_wordcloud(piece_dfm_no_erfurt_english,
                    labelcolor = "black")
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-82-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-83-1.png)<!-- -->
 
 *Mother* - Grouped by GPO (no unknown):
 
@@ -1258,7 +1264,7 @@ wordcloud_mother_gpo <-
                    labelcolor = "black")
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-83-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-84-1.png)<!-- -->
 
 ## Word Frequency
 
@@ -1296,7 +1302,7 @@ freq_piece_plot <-
 freq_piece_plot
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-84-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-85-1.png)<!-- -->
 
 By Piece + GPO:
 
@@ -1344,7 +1350,7 @@ freq_piece_gpo_plot <- ggplot(freq_grouped_wt,
 freq_piece_gpo_plot
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-85-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-86-1.png)<!-- -->
 
 ## Correspondence Analysis
 
@@ -1368,7 +1374,7 @@ ca_main <- ca_main +
 ca_main
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-86-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-87-1.png)<!-- -->
 
 *Measures Taken*
 
@@ -1391,7 +1397,7 @@ ca_measures <- ca_measures +
 ca_measures
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-87-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-88-1.png)<!-- -->
 
 *Mother*
 
@@ -1414,4 +1420,4 @@ ca_mother <- ca_mother +
 ca_mother
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-88-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-89-1.png)<!-- -->
