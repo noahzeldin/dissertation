@@ -323,19 +323,19 @@ corpora and **dfm**'s must first be converted to dataframes.
 # convert gen_dfm_reduced to dataframe
 gen_datafr_reduced <- convert(gen_dfm_reduced, to = "data.frame")
 
-# convert corp_reduced to dataframe - this has GPOs + other metadata
+# convert corp_reduced to dataframe (contains GPOs + other metadata)
 corp_reduced_datafr <- convert(corp_reduced, to = "data.frame")
 
+# add GPO column from corp_reduced to gen_datafr_reduced
+# gen_datafr_reduced_gpo <- 
+#   left_join(gen_datafr_reduced, 
+#             corp_reduced_datafr[ , c("doc_id",
+#                                      "Generalized_Political_Orientation")], 
+#                                     by = "doc_id", 
+#                                     copy = TRUE)
 
-# add GPO column to gen_datafr_reduced
-gen_datafr_reduced_gpo <- 
-  left_join(gen_datafr_reduced, 
-            corp_reduced_datafr[ , c("doc_id",
-                                     "Generalized_Political_Orientation")], 
-                                    by = "doc_id", 
-                                    copy = TRUE)
 
-# ** group dfm's ####
+# grouped dfm's
 
 # create grouped dfm: piece.gpo = 8 groups
 grouped_dfm <- dfm_group(gen_dfm,
@@ -354,9 +354,11 @@ grouped_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
 # Measures Taken
 mt_dfm_gpo <- dfm_group(mt_dfm,
                           groups = "Generalized_Political_Orientation")
+
 # Measures Taken NO ERFURT
 mt_dfm_gpo_no_erfurt <- dfm_group(mt_dfm_no_erfurt,
                                     groups = "Generalized_Political_Orientation")
+
 # Mother
 mother_dfm_gpo <- dfm_group(mother_dfm,
                             groups = "Generalized_Political_Orientation")
@@ -368,14 +370,18 @@ mother_dfm_gpo <- dfm_group(mother_dfm,
 # by piece
 piece_dfm <- dfm_group(gen_dfm,
                        groups = "Piece")
+
 # by GPO
 gpo_dfm <- dfm_group(gen_dfm,
                      groups = "Generalized_Political_Orientation")
 
+
 # less specific groupings NO ERFURT
+
 # by piece
 piece_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
                                  groups = "Piece")
+
 # by GPO
 gpo_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
                                groups = "Generalized_Political_Orientation")
@@ -387,12 +393,15 @@ gpo_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
 # Left
 left_sub <- dfm_subset(grouped_dfm, 
                        Generalized_Political_Orientation == "Left")
+
 # Right
 right_sub <- dfm_subset(grouped_dfm, 
                         Generalized_Political_Orientation == "Right")
+
 # Center
 center_sub <- dfm_subset(grouped_dfm, 
                          Generalized_Political_Orientation == "Center")
+
 # Unknown
 unknown_sub <- dfm_subset(grouped_dfm,
                           Generalized_Political_Orientation == "Unknown")
@@ -404,6 +413,7 @@ unknown_sub <- dfm_subset(grouped_dfm,
 # Measures Taken
 mt_sub <- dfm_subset(grouped_dfm,
                             Piece == "Massnahme")
+
 # Mother
 mother_sub <- dfm_subset(grouped_dfm,
                          Piece == "Mutter")
