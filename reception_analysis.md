@@ -1224,7 +1224,7 @@ toks_summary_boxplot <- toks_grouped %>%
     ggplot(aes(x = Piece, y = toks_sum, 
                fill = Generalized_Political_Orientation)) +
     geom_boxplot(alpha = 0.7,
-                 varwidth = TRUE) +
+                 varwidth = FALSE) +
     stat_summary(fun = median, geom = "point", 
                  shape = 21, size = 4, color = "black", fill = "yellow2", 
                  alpha = 0.6) +
@@ -1232,21 +1232,20 @@ toks_summary_boxplot <- toks_grouped %>%
                  size = 1.2, color = "yellow2", alpha = 0.5, aes(group = 1)) +
     scale_fill_brewer(type = "seq", palette = "Set1") +
     geom_jitter(color = "darkgrey",
-        size = 1.25, alpha = 0.95,
-        show.legend = FALSE) + 
+                size = 1.25, alpha = 0.95,
+                show.legend = FALSE) + 
     coord_cartesian(xlim = NULL, ylim = c(0, 900)) +
     ylab("Tokens") + 
     scale_x_discrete(labels = c("Measures Taken", "Mother")) +
     xlab(NULL) +
     labs(fill = "Political Orientation",
          title = "Tokens per Article (Post-Processing)",
-         subtitle = "Scaled for readability. Several outliers excluded. Box width corresponds to number of articles.",
+         subtitle = "Scaled for readability. Several outliers excluded.", 
          caption = "Yellow points denote the median tokens per article for each piece. NB: The positions of the scatter points do not correspond to political orientation.") +
     geom_text(aes(label = ..count.., 
-                  y = ..prop..)
-              , stat = "count",
-              # vjust = 1, # confusing - probably don't need
-              position = position_dodge2(width = 0.5)) +
+                  y = ..prop..), 
+              stat = "count",
+              position = position_dodge(0.75)) +
     theme(axis.title.x = element_blank(),
           axis.ticks.x = element_blank(),
           panel.grid.major.x = element_blank(),
