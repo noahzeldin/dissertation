@@ -372,12 +372,11 @@ mother_title_dfm <- convert_to_dfm_and_apply_dictionaries(mother_title_toks)
 
 ### Add General Political Orientation (GPO) to general/ungrouped dfm
 
-<!-- PROB NEED TO CLEAN UP -->
-
 **GPO** or “general political orientation” is a variable included in the
 original data set, which was removed in the process of converting the
-data to a **dfm**. It must therefore be added back in. However, the
-**dfm**’s must first be converted to dataframes.
+data to corpora and **dfm**’s. It must therefore be added back in.
+However, the corpora and **dfm**’s must first be converted to
+dataframes.
 
 ``` r
 # convert gen_dfm_reduced to dataframe
@@ -394,11 +393,6 @@ gen_datafr_reduced_gpo <-
                                      "Generalized_Political_Orientation")], 
                                     by = "doc_id", 
                                     copy = TRUE)
-
-
-# eliminate doc col to perform CA (otherwise 2 quali.sup)
-gen_datafr_reduced_gpo_2 <- gen_datafr_reduced_gpo[ , -1]
-
 
 # ** group dfm's ####
 
