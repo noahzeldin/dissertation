@@ -1312,9 +1312,10 @@ textplot_wordcloud(piece_dfm_no_erfurt_english,
 ``` r
 wordcloud_mother_gpo <- 
   textplot_wordcloud(mother_dfm_gpo_no_unknown,
-                   max_words = 100, # 125 or 100 is probably best
+                   max_words = 100,
                    rotation = FALSE,
-                   color = colors_four,
+                   # must do manual order for colors, so that Left is red
+                   color = c("#377EB8", "#E41A1C", "#4DAF4A", "#984EA3"),
                    comparison = TRUE,
                    labelcolor = "black")
 ```
