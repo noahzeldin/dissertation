@@ -108,9 +108,11 @@ library(lubridate)
 
 NB: Several articles had to be removed because of their distortionary
 effects. This resulted in multiple versions of the data, as shown below.
-(This will be cleaned up in the near future.)
+Although I ultimately only use the third of these (`data_reduced`), I
+have left the excluded articles in the dataset for the sake of
+transparency and because other researchers may find them useful.
 
-Main
+Main Data Set (all articles)
 
 ``` r
 data_main <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs")
@@ -133,6 +135,8 @@ data_no_erfurt <- data_main %>%
 data_reduced <- data_no_erfurt %>% 
     filter(Author != "Ferdinand Junghans")
 ```
+
+10 articles removed from original data set (`data_main`).
 
 # Quanteda Set-Up
 
