@@ -514,16 +514,12 @@ convert_to_dataframe_and_perform_ca <- function(i) {
 }
 ```
 
-## Use this function on each dfm
+* NB: I originally created this function, because I performed the CA on 
+multiple versions of the data set. I may delete it in the future and integrate 
+the necessary code in the step below.
 
-I think this is the only one I need
-
-```{r}
-# piece + GPO = 8 groups NO ERFURT OR UNKNOWN
-# grouped_ca_no_erfurt_or_unknown <- convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown)
-```
-
-NEW with English - 1.02.21
+Create dfm with proper group names (will appear in CA graph) and apply 
+above-defined function:
 
 ```{r}
 grouped_dfm_no_erfurt_or_unknown <- 

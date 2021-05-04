@@ -31,10 +31,7 @@ Noah Zeldin
         use](#convert-general-reduced-corpus-and-dfm-to-dataframe-sfor-later-use)
       - [Create corpus, dfm, ca, etc. of each piece w/o unknown
         GPO](#create-corpus-dfm-ca-etc.-of-each-piece-wo-unknown-gpo)
-  - [FactoMineR Set-Up](#factominer-set-up)
-      - [Create function for converting dfm to dataframe and performing
-        CA](#create-function-for-converting-dfm-to-dataframe-and-performing-ca)
-      - [Use this function on each dfm](#use-this-function-on-each-dfm)
+  - [FactoMineR Set-Up (for CA)](#factominer-set-up-for-ca)
   - [Keywords In Context and Keyword
     Exploration](#keywords-in-context-and-keyword-exploration)
       - [Create function to link KWIC with
@@ -563,9 +560,9 @@ mother_dfm_gpo_no_unknown <-
             groups = "Generalized_Political_Orientation")
 ```
 
-# FactoMineR Set-Up
+# FactoMineR Set-Up (for CA)
 
-## Create function for converting dfm to dataframe and performing CA
+Create function for converting dfm to dataframe and performing CA:
 
 ``` r
 convert_to_dataframe_and_perform_ca <- function(i) {
@@ -574,25 +571,21 @@ convert_to_dataframe_and_perform_ca <- function(i) {
 }
 ```
 
-## Use this function on each dfm
+  - NB: I originally created this function, because I performed the CA
+    on multiple versions of the data set. I may delete it in the future
+    and integrate the necessary code in the step below.
 
-I think this is the only one I need
-
-``` r
-# piece + GPO = 8 groups NO ERFURT OR UNKNOWN
-grouped_ca_no_erfurt_or_unknown <- convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown)
-```
-
-NEW with English - 1.02.21
+Create dfm with proper group names (will appear in CA graph) and apply
+above-defined function:
 
 ``` r
-grouped_dfm_no_erfurt_or_unknown_english <- 
+grouped_dfm_no_erfurt_or_unknown <- 
   dfm_group(grouped_dfm_no_erfurt_or_unknown,
             groups = c("Measures.Center", "Mother.Center", "Measures.Left",
                        "Mother.Left", "Measures.Right", "Mother.Right"))
 
-grouped_ca_no_erfurt_or_unknown_english <- 
-  convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown_english)
+grouped_ca_no_erfurt_or_unknown <- 
+  convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown)
 ```
 
 # Keywords In Context and Keyword Exploration
@@ -1235,7 +1228,7 @@ toks_summary_boxplot <-
 toks_summary_boxplot
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-81-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-80-1.png)<!-- -->
 
 ### Very Long Articles
 
@@ -1282,7 +1275,7 @@ textplot_wordcloud(piece_dfm_no_erfurt_english,
                    labelcolor = "black")
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-83-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-82-1.png)<!-- -->
 
 *Mother* - Grouped by GPO (no unknown):
 
@@ -1296,7 +1289,7 @@ wordcloud_mother_gpo <-
                    labelcolor = "black")
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-84-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-83-1.png)<!-- -->
 
 ## Word Frequency
 
@@ -1334,7 +1327,7 @@ freq_piece_plot <-
 freq_piece_plot
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-85-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-84-1.png)<!-- -->
 
 By Piece + GPO:
 
@@ -1382,14 +1375,14 @@ freq_piece_gpo_plot <- ggplot(freq_grouped_wt,
 freq_piece_gpo_plot
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-86-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-85-1.png)<!-- -->
 
 ## Correspondence Analysis
 
 Main
 
 ``` r
-ca_main <- plot(grouped_ca_no_erfurt_or_unknown_english,
+ca_main <- plot(grouped_ca_no_erfurt_or_unknown,
                 invisible = "row",
                 col.quali.sup = "darkblue",
                 selectCol = "contrib 20",
@@ -1406,12 +1399,12 @@ ca_main <- ca_main +
 ca_main
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-87-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-86-1.png)<!-- -->
 
 *Measures Taken*
 
 ``` r
-ca_measures <- plot(grouped_ca_no_erfurt_or_unknown_english,
+ca_measures <- plot(grouped_ca_no_erfurt_or_unknown,
      invisible = "row",
      col.quali.sup = "darkblue",
      selectCol = "contrib 20",
@@ -1429,12 +1422,12 @@ ca_measures <- ca_measures +
 ca_measures
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-88-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-87-1.png)<!-- -->
 
 *Mother*
 
 ``` r
-ca_mother <- plot(grouped_ca_no_erfurt_or_unknown_english,
+ca_mother <- plot(grouped_ca_no_erfurt_or_unknown,
      invisible = "row",
      col.quali.sup = "darkblue",
      selectCol = "contrib 20",
@@ -1452,4 +1445,4 @@ ca_mother <- ca_mother +
 ca_mother
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-89-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-88-1.png)<!-- -->
