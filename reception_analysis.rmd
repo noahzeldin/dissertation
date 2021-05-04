@@ -503,9 +503,9 @@ mother_dfm_gpo_no_unknown <-
 ```
 
 
-# FactoMineR Set-Up
+# FactoMineR Set-Up (for CA)
 
-## Create function for converting dfm to dataframe and performing CA
+Create function for converting dfm to dataframe and performing CA:
 
 ```{r}
 convert_to_dataframe_and_perform_ca <- function(i) {
@@ -520,19 +520,19 @@ I think this is the only one I need
 
 ```{r}
 # piece + GPO = 8 groups NO ERFURT OR UNKNOWN
-grouped_ca_no_erfurt_or_unknown <- convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown)
+# grouped_ca_no_erfurt_or_unknown <- convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown)
 ```
 
 NEW with English - 1.02.21
 
 ```{r}
-grouped_dfm_no_erfurt_or_unknown_english <- 
+grouped_dfm_no_erfurt_or_unknown <- 
   dfm_group(grouped_dfm_no_erfurt_or_unknown,
             groups = c("Measures.Center", "Mother.Center", "Measures.Left",
                        "Mother.Left", "Measures.Right", "Mother.Right"))
 
-grouped_ca_no_erfurt_or_unknown_english <- 
-  convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown_english)
+grouped_ca_no_erfurt_or_unknown <- 
+  convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown)
 ```
 
 
@@ -1180,7 +1180,7 @@ freq_piece_gpo_plot
 Main
 
 ```{r, fig.width=11, fig.height=11}
-ca_main <- plot(grouped_ca_no_erfurt_or_unknown_english,
+ca_main <- plot(grouped_ca_no_erfurt_or_unknown,
                 invisible = "row",
                 col.quali.sup = "darkblue",
                 selectCol = "contrib 20",
@@ -1200,7 +1200,7 @@ ca_main
 *Measures Taken*
 
 ```{r, fig.width=10, fig.height=10}
-ca_measures <- plot(grouped_ca_no_erfurt_or_unknown_english,
+ca_measures <- plot(grouped_ca_no_erfurt_or_unknown,
      invisible = "row",
      col.quali.sup = "darkblue",
      selectCol = "contrib 20",
@@ -1221,7 +1221,7 @@ ca_measures
 *Mother*
 
 ```{r, fig.width=10, fig.height=10}
-ca_mother <- plot(grouped_ca_no_erfurt_or_unknown_english,
+ca_mother <- plot(grouped_ca_no_erfurt_or_unknown,
      invisible = "row",
      col.quali.sup = "darkblue",
      selectCol = "contrib 20",
