@@ -17,9 +17,11 @@ Noah Zeldin
       - [Dictionaries and Additional
         Stopwords](#dictionaries-and-additional-stopwords)
       - [Tokenize and Filter Corpora](#tokenize-and-filter-corpora)
-      - [DFMs](#dfms)
-          - [Add GPO to general/ungrouped dfm
-            -](#add-gpo-to-generalungrouped-dfm--)
+      - [Document-Feature Matrices
+        (dfm)](#document-feature-matrices-dfm)
+          - [Add General Political Orientation (GPO) to
+            general/ungrouped
+            dfm](#add-general-political-orientation-gpo-to-generalungrouped-dfm)
           - [Create GPO grouped dfm’s for each
             piece](#create-gpo-grouped-dfms-for-each-piece)
           - [Less Specific Groupings](#less-specific-groupings)
@@ -336,9 +338,10 @@ mother_toks <- tokenize_and_remove_stopwords(mother_corp)
 mother_title_toks <- tokenize_and_remove_stopwords(mother_corp_title)
 ```
 
-## DFMs
+## Document-Feature Matrices (dfm)
 
-Create function for converting toks to dfm and applying dictionaries:
+Create function for converting tokenized items from previous section
+(ending in `_toks`) to dfm and applying dictionaries:
 
 ``` r
 convert_to_dfm_and_apply_dictionaries <- function(i) {
@@ -348,7 +351,7 @@ convert_to_dfm_and_apply_dictionaries <- function(i) {
 }
 ```
 
-Convert and apply dictionaries to corpora:
+Convert and apply dictionaries to corpora, using above-defined function:
 
 ``` r
 # general / ungrouped
@@ -367,24 +370,29 @@ mother_dfm <- convert_to_dfm_and_apply_dictionaries(mother_toks)
 mother_title_dfm <- convert_to_dfm_and_apply_dictionaries(mother_title_toks)
 ```
 
-### Add GPO to general/ungrouped dfm -
+### Add General Political Orientation (GPO) to general/ungrouped dfm
 
 <!-- PROB NEED TO CLEAN UP -->
 
-NB: **GPO** stands for “general political orientation.”
+**GPO** or “general political orientation” is a variable included in the
+original data set, which was removed in the process of converting the
+data to a **dfm**. It must therefore be added back in. However, the
+**dfm**’s must first be converted to dataframes.
 
 ``` r
-# convert gen_dfm[_reduced] to dataframe
+# convert gen_dfm_reduced to dataframe
 gen_datafr_reduced <- convert(gen_dfm_reduced, to = "data.frame")
+
 # convert corp_reduced to dataframe - this has GPOs + other metadata
 corp_reduced_datafr <- convert(corp_reduced, to = "data.frame")
 
 
 # add GPO column to gen_datafr_reduced
-gen_datafr_reduced_gpo <- left_join(gen_datafr_reduced, 
-                                    corp_reduced_datafr[ , c("doc_id",    "Generalized_Political_Orientation")], 
-                                    by = "doc_id", # 8.01 - now do this
-                                    # by = c("document" = "doc_id"), # used to work
+gen_datafr_reduced_gpo <- 
+  left_join(gen_datafr_reduced, 
+            corp_reduced_datafr[ , c("doc_id",
+                                     "Generalized_Political_Orientation")], 
+                                    by = "doc_id", 
                                     copy = TRUE)
 
 
