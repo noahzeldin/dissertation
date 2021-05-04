@@ -426,62 +426,80 @@ corp_reduced_datafr <- convert(corp_reduced, to = "data.frame")
 ```
 
 
-## Create corpus, dfm, ca, etc. of each piece w/o unknown
+## Create corpus, dfm, ca, etc. of each piece w/o unknown GPO
 
-<!-- from exp_7.24 -> need to integrate better, just being lazy -->
+This is necessary for the CA, where I exclude those articles for which the GPO 
+is unknown.
 
-General - just GPO
+Create dfm w/o distortionary Erfurt articles or articles w/ unknown GPO:
 
 ```{r}
-corp_no_erfurt_or_unknown <- corpus_subset(corp_no_erfurt, 
-                                           ! Generalized_Political_Orientation == "Unknown" )
+# broken up into 3 separate steps for legibility
 
-toks_no_erfurt_or_unknown <- tokenize_and_remove_stopwords(corp_no_erfurt_or_unknown)
+corp_no_erfurt_or_unknown <- 
+  corpus_subset(corp_no_erfurt, 
+                ! Generalized_Political_Orientation == "Unknown" )
 
-dfm_no_erfurt_or_unknown <- convert_to_dfm_and_apply_dictionaries(toks_no_erfurt_or_unknown)
+toks_no_erfurt_or_unknown <- 
+  tokenize_and_remove_stopwords(corp_no_erfurt_or_unknown)
+
+dfm_no_erfurt_or_unknown <- 
+  convert_to_dfm_and_apply_dictionaries(toks_no_erfurt_or_unknown)
 ```
 
 Just GPO, not piece
+
+* not currently using
 
 ```{r}
 gpo_dfm_no_erfurt_or_unknown <- dfm_group(dfm_no_erfurt_or_unknown,
                                           groups = "Generalized_Political_Orientation")
 ```
 
-General - Piece + GPO
+Grouped by piece and GPO:
 
 ```{r}
-grouped_dfm_no_erfurt_or_unknown <- dfm_group(dfm_no_erfurt_or_unknown,
-                                              groups = c("Piece", "Generalized_Political_Orientation"))
+grouped_dfm_no_erfurt_or_unknown <- 
+  dfm_group(dfm_no_erfurt_or_unknown, 
+            groups = c("Piece", "Generalized_Political_Orientation"))
 ```
 
-Measures Taken
+Only articles on *The Measures Taken*:
 
 ```{r}
-mt_corp_no_erfurt_or_unknown <- corpus_subset(corp_no_erfurt, 
-                                                Piece == "Massnahme" &! Generalized_Political_Orientation == "Unknown" )
+mt_corp_no_erfurt_or_unknown <- 
+  corpus_subset(corp_no_erfurt,
+                Piece == "Massnahme" &! 
+                  Generalized_Political_Orientation == "Unknown" )
 
 
-mt_toks_no_erfurt_or_unknown <- tokenize_and_remove_stopwords(mt_corp_no_erfurt_or_unknown)
+mt_toks_no_erfurt_or_unknown <- 
+  tokenize_and_remove_stopwords(mt_corp_no_erfurt_or_unknown)
 
-mt_dfm_no_erfurt_or_unknown <- convert_to_dfm_and_apply_dictionaries(mt_toks_no_erfurt_or_unknown)
+mt_dfm_no_erfurt_or_unknown <- 
+  convert_to_dfm_and_apply_dictionaries(mt_toks_no_erfurt_or_unknown)
 
-mt_dfm_gpo_no_erfurt_or_unknown <- dfm_group(mt_dfm_no_erfurt_or_unknown,
-                                               groups = "Generalized_Political_Orientation")
+mt_dfm_gpo_no_erfurt_or_unknown <- 
+  dfm_group(mt_dfm_no_erfurt_or_unknown, 
+            groups = "Generalized_Political_Orientation")
 ```
 
-Mother
+Only articles on *The Mother*:
 
 ```{r}
-mother_corp_no_unknown <- corpus_subset(corp, 
-                                        Piece == "Mutter" &! Generalized_Political_Orientation == "Unknown" )
+mother_corp_no_unknown <- 
+  corpus_subset(corp, 
+                Piece == "Mutter" &! 
+                  Generalized_Political_Orientation == "Unknown" )
 
 mother_toks_no_unknown <- tokenize_and_remove_stopwords(mother_corp_no_unknown)
 
-mother_dfm_no_unknown <- convert_to_dfm_and_apply_dictionaries(mother_toks_no_unknown)
+mother_dfm_no_unknown <- 
+  convert_to_dfm_and_apply_dictionaries(mother_toks_no_unknown)
 
-mother_dfm_gpo_no_unknown <- dfm_group(mother_dfm_no_unknown,
-                                       groups = "Generalized_Political_Orientation")
+mother_dfm_gpo_no_unknown <- 
+  dfm_group(mother_dfm_no_unknown, 
+            groups = "Generalized_Political_Orientation")
 ```
 
 
