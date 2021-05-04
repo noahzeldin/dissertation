@@ -1207,6 +1207,8 @@ toks_grouped <-
 toks_grouped <- toks_grouped %>% 
     add_count(Piece, Generalized_Political_Orientation)
 
+# STEP 4
+# must save GPO as factor and relevel, so that Left appears first
 toks_grouped <- toks_grouped %>% 
     mutate(Generalized_Political_Orientation = 
                as.factor(Generalized_Political_Orientation))
@@ -1218,8 +1220,7 @@ toks_grouped$Generalized_Political_Orientation <-
 Code for boxplot:
 
 ``` r
-toks_summary_boxplot <- 
-    toks_grouped %>% 
+toks_summary_boxplot <- toks_grouped %>% 
     ggplot(aes(x = Piece, y = toks_sum, 
                fill = Generalized_Political_Orientation)) +
     geom_boxplot(alpha = 0.7,
@@ -1246,7 +1247,7 @@ toks_summary_boxplot <-
               , stat = "count",
               # vjust = 1, # confusing - probably don't need
               position = position_dodge2(width = 0.5)) +
-  theme(axis.title.x = element_blank(),
+    theme(axis.title.x = element_blank(),
           axis.ticks.x = element_blank(),
           panel.grid.major.x = element_blank(),
           panel.grid.major.y = element_line(color = "grey", linetype = 3),
@@ -1361,32 +1362,38 @@ freq_piece_plot
 By Piece + GPO:
 
 ``` r
+# create weighted frequency table
 freq_grouped_wt <- dfm_weight(gen_dfm_reduced, scheme = "prop") %>% 
     textstat_frequency(n = 10, 
                        groups = c("Piece", "Generalized_Political_Orientation")) 
 
+# rename groups
 freq_grouped_wt <- freq_grouped_wt %>% 
     mutate(group = str_replace_all(group, 
-                                   c("Massnahme.Center" = 
-                                       "Measures Taken | Center",
-                                     "Massnahme.Left" = "Measures Taken | Left",
+                                   c("Massnahme.Left" = "Measures Taken | Left", 
+                                     "Massnahme.Center" = 
+                                       "Measures Taken | Center", 
                                      "Massnahme.Right" = 
                                        "Measures Taken | Right",
                                      "Massnahme.Unknown" = 
                                        "Measures Taken | Unknown",
-                                     "Mutter.Center" = "Mother | Center",
                                      "Mutter.Left" = "Mother | Left",
+                                     "Mutter.Center" = "Mother | Center",
                                      "Mutter.Right" = "Mother | Right",
                                      "Mutter.Unknown" = "Mother | Unknown")))
 
-# good but would want to rearrange cols
-# currently: C - L - R - U
+# save group column as factor and reorder
+freq_grouped_wt$group <- freq_grouped_wt$group %>% as.factor() 
+
+freq_grouped_wt$group <- freq_grouped_wt$group %>% 
+    fct_relevel("Measures Taken | Left") %>% 
+    fct_relevel("Mother | Left", after = 4)
+
+# code for graph
 freq_piece_gpo_plot <- ggplot(freq_grouped_wt, 
        aes(x = nrow(freq_grouped_wt):1, y = frequency, fill = group)) +
     geom_col() +
-    facet_wrap(~ group, scales = "free", nrow = 2,
-               # labeller = labeller(group = labels_english
-               ) +
+    facet_wrap(~ group, scales = "free", nrow = 2) +
     coord_flip() +
     scale_x_continuous(breaks = nrow(freq_grouped_wt):1, 
                        labels = freq_grouped_wt$feature) +
