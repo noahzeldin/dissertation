@@ -1259,6 +1259,18 @@ toks_summary_boxplot
 
 ![](reception_analysis_files/figure-gfm/unnamed-chunk-80-1.png)<!-- -->
 
+A couple of quick points, which I review in the write-up in greater
+detail:
+
+  - There are far more articles on *The Mother* than on *The Measures
+    Taken*.
+
+  - Articles on *The Measures Taken* tend to be longer than those on
+    *The Mother*.
+
+  - Articles on *The Measures Taken* are overwhelmingly from leftwing
+    publications.
+
 ### Very Long Articles
 
 The goal is to identify the very long articles in *Measures - Unknown*
@@ -1294,7 +1306,8 @@ Grouped by Piece:
 
 ``` r
 # must rename groups in English for word cloud
-piece_dfm_no_erfurt_english <- dfm_group(piece_dfm_no_erfurt, groups = c("Measures Taken", "Mother"))
+piece_dfm_no_erfurt_english <- dfm_group(piece_dfm_no_erfurt, 
+                                         groups = c("Measures Taken", "Mother"))
 
 textplot_wordcloud(piece_dfm_no_erfurt_english,
                    max_words = 100,
