@@ -533,7 +533,7 @@ grouped_ca_no_erfurt_or_unknown <-
 
 
 
-# Keywords In Context and Keyword Exploration
+# Keywords In Context (KWIC) and Keyword Exploration
 
 ## Create function to link KWIC with data
 
@@ -547,48 +547,49 @@ combine_kwic_with_data <- function(corpus, words, window) {
         str_replace("text", "") 
     
     i <- i %>% mutate(docname = as.numeric(docname)) %>% 
-        rename(Article = docname) %>% # this seems to work better than including in above step
+        rename(Article = docname) %>% 
         left_join(
-          data_reduced, # CHECKING 12.29.20 - seems to have worked better than normal data_main with corp_reduced
+          data_reduced, 
           by = "Article") %>% 
         select(-c(Text, Other_Metadata:Comp_Doc))
-
+    
     }
 ```
 
 ## Explore various KWIC 
 
-All of these keywords relate to claims made in ch. 2.
+All of these keywords relate to claims made in ch. 2 of the dissertation. (All 
+words are written lowercase to reflect how they appear post-processing.)
 
-* primitiv
+* primitiv [primitive]
 
 ```{r}
 primitiv_kwic <- 
   combine_kwic_with_data(corp, "primitiv*", 15)
 ```
 
-* langweilig
+* langweilig [boring]
 
 ```{r}
 langweilig_kwic <- 
   combine_kwic_with_data(corp, c("langeweile", "langweilig*"), 10)
 ```
 
-* proletarisch
+* proletarisch [proletarian]
 
 ```{r}
 proletarisch_kwic <- 
   combine_kwic_with_data(corp, "proletarisch*", 10)
 ```
 
-* pudowkin
+* pudowkin [[Pudovkin](https://en.wikipedia.org/wiki/Vsevolod_Pudovkin)]
 
 ```{r}
 pudowkin_kwic <- 
   combine_kwic_with_data(corp, "pudowkin*", 10)
 ```
 
-* kunst
+* kunst [art]
 
 ```{r}
 kunst_kwic <- 
@@ -609,14 +610,14 @@ bildung_kwic <-
   combine_kwic_with_data(corp, "bildung", 10)
 ```
 
-* wissen
+* wissen [knowledge]
 
 ```{r}
 wissen_kwic <- 
   combine_kwic_with_data(corp, "wissen*", 10)
 ```
 
-* lehrstück Mother
+* lehrstück [learning-piece] - *The Mother*
 
 ```{r}
 lehrstueck_mother_kwic <- 
@@ -624,7 +625,7 @@ lehrstueck_mother_kwic <-
   filter(Piece == "Mutter")
 ```
 
-* Oratorium Measures Taken
+* oratorium [oratorio] - *The Measures Taken*
 
 ```{r}
 oratorium_mt_kwic <- 
@@ -632,7 +633,7 @@ oratorium_mt_kwic <-
   filter(Piece == "Massnahme")
 ```
 
-* Arbeitersänger Measures Taken
+* arbeitersänger [worker-singer(s)] - *The Measures Taken*
 
 ```{r}
 arbeitersaenger_mt_kwic <- 
@@ -640,7 +641,7 @@ arbeitersaenger_mt_kwic <-
   filter(Piece == "Massnahme")
 ```
 
-* Stalin and Stalinismus
+* stalin and stalinismus [Stalinism]
 
 ```{r}
 combine_kwic_with_data(corp, "stalin*", 30) %>% 
@@ -649,7 +650,7 @@ combine_kwic_with_data(corp, "stalin*", 30) %>%
 
 Only 3 articles on Mother.
 
-* Cantata
+* cantata
 
 ```{r}
 combine_kwic_with_data(corp, "Kantate*", 25) %>% 

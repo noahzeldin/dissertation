@@ -32,8 +32,8 @@ Noah Zeldin
       - [Create corpus, dfm, ca, etc. of each piece w/o unknown
         GPO](#create-corpus-dfm-ca-etc.-of-each-piece-wo-unknown-gpo)
   - [FactoMineR Set-Up (for CA)](#factominer-set-up-for-ca)
-  - [Keywords In Context and Keyword
-    Exploration](#keywords-in-context-and-keyword-exploration)
+  - [Keywords In Context (KWIC) and Keyword
+    Exploration](#keywords-in-context-kwic-and-keyword-exploration)
       - [Create function to link KWIC with
         data](#create-function-to-link-kwic-with-data)
       - [Explore various KWIC](#explore-various-kwic)
@@ -588,7 +588,7 @@ grouped_ca_no_erfurt_or_unknown <-
   convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown)
 ```
 
-# Keywords In Context and Keyword Exploration
+# Keywords In Context (KWIC) and Keyword Exploration
 
 ## Create function to link KWIC with data
 
@@ -602,20 +602,22 @@ combine_kwic_with_data <- function(corpus, words, window) {
         str_replace("text", "") 
     
     i <- i %>% mutate(docname = as.numeric(docname)) %>% 
-        rename(Article = docname) %>% # this seems to work better than including in above step
+        rename(Article = docname) %>% 
         left_join(
-          data_reduced, # CHECKING 12.29.20 - seems to have worked better than normal data_main with corp_reduced
+          data_reduced, 
           by = "Article") %>% 
         select(-c(Text, Other_Metadata:Comp_Doc))
-
+    
     }
 ```
 
 ## Explore various KWIC
 
-All of these keywords relate to claims made in ch. 2.
+All of these keywords relate to claims made in ch. 2 of the
+dissertation. (All words are written lowercase to reflect how they
+appear post-processing.)
 
-  - primitiv
+  - primitiv \[primitive\]
 
 <!-- end list -->
 
@@ -624,7 +626,7 @@ primitiv_kwic <-
   combine_kwic_with_data(corp, "primitiv*", 15)
 ```
 
-  - langweilig
+  - langweilig \[boring\]
 
 <!-- end list -->
 
@@ -633,7 +635,7 @@ langweilig_kwic <-
   combine_kwic_with_data(corp, c("langeweile", "langweilig*"), 10)
 ```
 
-  - proletarisch
+  - proletarisch \[proletarian\]
 
 <!-- end list -->
 
@@ -643,6 +645,7 @@ proletarisch_kwic <-
 ```
 
   - pudowkin
+    \[[Pudovkin](https://en.wikipedia.org/wiki/Vsevolod_Pudovkin)\]
 
 <!-- end list -->
 
@@ -651,7 +654,7 @@ pudowkin_kwic <-
   combine_kwic_with_data(corp, "pudowkin*", 10)
 ```
 
-  - kunst
+  - kunst \[art\]
 
 <!-- end list -->
 
@@ -678,7 +681,7 @@ bildung_kwic <-
   combine_kwic_with_data(corp, "bildung", 10)
 ```
 
-  - wissen
+  - wissen \[knowledge\]
 
 <!-- end list -->
 
@@ -687,7 +690,7 @@ wissen_kwic <-
   combine_kwic_with_data(corp, "wissen*", 10)
 ```
 
-  - lehrstück Mother
+  - lehrstück \[learning-piece\] - *The Mother*
 
 <!-- end list -->
 
@@ -697,7 +700,7 @@ lehrstueck_mother_kwic <-
   filter(Piece == "Mutter")
 ```
 
-  - Oratorium Measures Taken
+  - oratorium \[oratorio\] - *The Measures Taken*
 
 <!-- end list -->
 
@@ -707,7 +710,7 @@ oratorium_mt_kwic <-
   filter(Piece == "Massnahme")
 ```
 
-  - Arbeitersänger Measures Taken
+  - arbeitersänger \[worker-singer(s)\] - *The Measures Taken*
 
 <!-- end list -->
 
@@ -717,7 +720,7 @@ arbeitersaenger_mt_kwic <-
   filter(Piece == "Massnahme")
 ```
 
-  - Stalin and Stalinismus
+  - stalin and stalinismus \[Stalinism\]
 
 <!-- end list -->
 
@@ -738,7 +741,7 @@ combine_kwic_with_data(corp, "stalin*", 30) %>%
 
 Only 3 articles on Mother.
 
-  - Cantata
+  - cantata
 
 <!-- end list -->
 
