@@ -312,20 +312,20 @@ mother_dfm <- convert_to_dfm_and_apply_dictionaries(mother_toks)
 mother_title_dfm <- convert_to_dfm_and_apply_dictionaries(mother_title_toks)
 ```
 
-### Add General Political Orientation (GPO) to general/ungrouped dfm 
+### Group dfm's by General Political Orientation (GPO) 
 
 **GPO** or "general political orientation" is a variable included in the 
-original data set, which was removed in the process of converting the data to 
-corpora and **dfm**'s. It must therefore be added back in. However, the 
-corpora and **dfm**'s must first be converted to dataframes. 
+original data set and is used extensively in the later analyses. Since it is 
+lost in the creation of **dfm**'s, it must be added back in, using the `groups` 
+function in **quanteda**. 
+
+Here, we group the data by both piece and GPO, which results in 8 groups total.
 
 ```{r}
-# grouped dfm's
-
-# create grouped dfm: piece.gpo = 8 groups
 grouped_dfm <- dfm_group(gen_dfm,
                          groups = c("Piece",
                                     "Generalized_Political_Orientation"))
+
 # same but NO ERFURT
 grouped_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
                                    groups = c("Piece",
