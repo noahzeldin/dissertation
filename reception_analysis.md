@@ -870,21 +870,17 @@ articles_perc_without_full_dates <-
      nrow(dates_tib_lubridate)) 
   / nrow(dates_tib_lubridate)) * 100) %>% 
   round() 
-
-articles_perc_without_full_dates
 ```
 
-    ## [1] 12
+12 % of articles do *not* have full dates.
 
 Percent of articles *with* full dates (i.e. included for Lubridate):
 
 ``` r
 articles_perc_with_full_dates <- 100 - articles_perc_without_full_dates
-
-articles_perc_with_full_dates
 ```
 
-    ## [1] 88
+88 % of articles have full dates.
 
 ### By Piece
 
@@ -1111,7 +1107,10 @@ articles_mt_premiere_week_perc <-
     nrow()) / nrow(dates_mt_lubridate)) * 100)
 ```
 
-#### Mother
+45 % of articles on *The Measures Taken* were published within one week
+of the premiere.
+
+#### The Mother
 
 Save date of premiere (cf.
 [GBA](https://www.suhrkamp.de/werkausgabe/werke_grosse_kommentierte_berliner_und_frankfurter_ausgabe_30_baende_in_32_teilbaenden_und_ein_registerband_leinen_24.html)
@@ -1136,6 +1135,9 @@ articles_mother_premiere_week_perc <-
     filter(date %within% mother_premiere_week) %>% 
     nrow()) / nrow(dates_mother_lubridate)) * 100)
 ```
+
+74 % of articles on *The Mother* were published within one week of the
+premiere.
 
 ## Articles on The Measures Taken published in 1932
 
@@ -1200,7 +1202,7 @@ toks_grouped <- toks_grouped %>%
     add_count(Piece, Generalized_Political_Orientation)
 ```
 
-Coding for boxplot:
+Code for boxplot:
 
 ``` r
 toks_summary_boxplot <- 
