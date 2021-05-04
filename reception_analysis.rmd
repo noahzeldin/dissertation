@@ -72,13 +72,19 @@ data_main <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs")
 `data_main` w/o Measures Taken Erfurt
 
 ```{r}
-data_no_erfurt <- data_main[-(c(38:45, 49)),]
+data_no_erfurt <- data_main %>% 
+    filter(Date != "24.01.1933") %>% 
+    filter(Date != "25.01.1933") %>% 
+    filter(Date != "26.01.1933") %>% 
+    filter(Date != "27.01.1933") %>% 
+    filter(Newspaper != "Internationaler_Revolutionärer_Theater-Bund_(Bulletin)")
 ```
 
 `data_main` w/or Measures Taken Erfurt or "Kartenhaus"
 
 ```{r}
-data_reduced <- data_main[-(c(38:45, 49, 65)),]
+data_reduced <- data_no_erfurt %>% 
+    filter(Author != "Ferdinand Junghans")
 ```
 
 # Quanteda Set-Up
