@@ -37,9 +37,8 @@ Noah Zeldin
       - [Create function to link KWIC with
         data](#create-function-to-link-kwic-with-data)
       - [Explore various KWIC](#explore-various-kwic)
-          - [Special Case: LEHRLERN in
-            Mother/Right](#special-case-lehrlern-in-motherright)
-          - [Combinations](#combinations)
+          - [Special Case: LEHRLERN in rightwing articles on The
+            Mother](#special-case-lehrlern-in-rightwing-articles-on-the-mother)
       - [Additional Terms Post-Processing
         (DFMs)](#additional-terms-post-processing-dfms)
   - [Dates of Publication with
@@ -635,6 +634,15 @@ langweilig_kwic <-
   combine_kwic_with_data(corp, c("langeweile", "langweilig*"), 10)
 ```
 
+  - langweilig + primitiv
+
+<!-- end list -->
+
+``` r
+langweilig_primitiv_kwic <- 
+  inner_join(langweilig_kwic, primitiv_kwic, by = "Article")
+```
+
   - proletarisch \[proletarian\]
 
 <!-- end list -->
@@ -759,45 +767,35 @@ combine_kwic_with_data(corp, "Kantate*", 25) %>%
 
 No results.
 
-### Special Case: LEHRLERN in Mother/Right
+### Special Case: LEHRLERN in rightwing articles on The Mother
 
-NB: Can’t use FN, b/c can’t specify valuetype Here, adaptation of FN
+As I explain in ch. 2, **LEHRLERN** is the only term in the keyword
+diction (see above) that can be considered an interpretative combination
+of different words, rather than a mere grouping of synonyms.
+**LEHRLERN** groups together words relating to “teaching”
+\[*lehren*\],“learning” \[*lernen*\] and “pedagogy.”
 
-1.  create tibble
-
-<!-- end list -->
+Create tibble:
 
 ``` r
-lehrlern_kwic <- kwic(corp, dict_regex, window = 20, 
-                      valuetype = "regex") %>% # must specify to used dict
+lehrlern_kwic <- kwic(corp, dict_regex, window = 20, valuetype = "regex") %>% 
   as_tibble()
 
 lehrlern_kwic$docname <- lehrlern_kwic$docname %>% 
     str_replace("text", "") 
 
-lehrlern_kwic <- lehrlern_kwic %>% mutate(docname = as.numeric(docname)) %>% 
-    rename(Article = docname) %>% # this seems to work better than including in above step
-    left_join(data_main, by = "Article") %>% 
-    select(-c(Text, Other_Metadata:Comp_Doc))
+lehrlern_kwic <- lehrlern_kwic %>% 
+  mutate(docname = as.numeric(docname)) %>% 
+  rename(Article = docname) %>% 
+  left_join(data_main, by = "Article") %>% 
+  select(-c(Text, Other_Metadata:Comp_Doc))
 ```
 
-2.  filter for Mother & Right
-
-<!-- end list -->
+Filter for *The Mother* and right GPO:
 
 ``` r
 lehrlern_kwic_mother_right <- lehrlern_kwic %>% 
-  filter(Piece == "Mutter" & 
-               Generalized_Political_Orientation == "Right")
-```
-
-### Combinations
-
-langweilig + primitiv
-
-``` r
-langweilig_primitiv_kwic <- 
-  inner_join(langweilig_kwic, primitiv_kwic, by = "Article")
+  filter(Piece == "Mutter" & Generalized_Political_Orientation == "Right")
 ```
 
 ## Additional Terms Post-Processing (DFMs)

@@ -575,6 +575,13 @@ langweilig_kwic <-
   combine_kwic_with_data(corp, c("langeweile", "langweilig*"), 10)
 ```
 
+* langweilig + primitiv
+
+```{r}
+langweilig_primitiv_kwic <- 
+  inner_join(langweilig_kwic, primitiv_kwic, by = "Article")
+```
+
 * proletarisch [proletarian]
 
 ```{r}
@@ -661,7 +668,10 @@ No results.
 
 ### Special Case: LEHRLERN in rightwing articles on The Mother
 
-As I explain in ch. 2, **LEHRLERN** is the only term in the keyword diction (see above) that can be considered an interpretative combination of different words, rather than a mere grouping of synonyms. **LEHRLERN** groups together words relating to "teaching" [*lehren*],"learning" [*lernen*] and "pedagogy."
+As I explain in ch. 2, **LEHRLERN** is the only term in the keyword diction (see
+above) that can be considered an interpretative combination of different words, 
+rather than a mere grouping of synonyms. **LEHRLERN** groups together words 
+relating to "teaching" [*lehren*],"learning" [*lernen*] and "pedagogy."
 
 Create tibble:
 
@@ -684,15 +694,6 @@ Filter for *The Mother* and right GPO:
 ```{r}
 lehrlern_kwic_mother_right <- lehrlern_kwic %>% 
   filter(Piece == "Mutter" & Generalized_Political_Orientation == "Right")
-```
-
-### Combinations
-
-langweilig + primitiv
-
-```{r}
-langweilig_primitiv_kwic <- 
-  inner_join(langweilig_kwic, primitiv_kwic, by = "Article")
 ```
 
 ## Additional Terms Post-Processing (DFMs)
