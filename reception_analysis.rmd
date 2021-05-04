@@ -320,21 +320,6 @@ corpora and **dfm**'s. It must therefore be added back in. However, the
 corpora and **dfm**'s must first be converted to dataframes. 
 
 ```{r}
-# convert gen_dfm_reduced to dataframe
-gen_datafr_reduced <- convert(gen_dfm_reduced, to = "data.frame")
-
-# convert corp_reduced to dataframe (contains GPOs + other metadata)
-corp_reduced_datafr <- convert(corp_reduced, to = "data.frame")
-
-# add GPO column from corp_reduced to gen_datafr_reduced
-# gen_datafr_reduced_gpo <- 
-#   left_join(gen_datafr_reduced, 
-#             corp_reduced_datafr[ , c("doc_id",
-#                                      "Generalized_Political_Orientation")], 
-#                                     by = "doc_id", 
-#                                     copy = TRUE)
-
-
 # grouped dfm's
 
 # create grouped dfm: piece.gpo = 8 groups
@@ -418,6 +403,17 @@ mt_sub <- dfm_subset(grouped_dfm,
 mother_sub <- dfm_subset(grouped_dfm,
                          Piece == "Mutter")
 ```
+
+## Convert general corpus and dfm to dataframe for later use
+
+```{r}
+# convert gen_dfm_reduced to dataframe
+gen_datafr_reduced <- convert(gen_dfm_reduced, to = "data.frame")
+
+# convert corp_reduced to dataframe (contains GPOs + other metadata)
+corp_reduced_datafr <- convert(corp_reduced, to = "data.frame")
+```
+
 
 ## Create corpus, dfm, ca, etc. of each piece w/o unknown
 
