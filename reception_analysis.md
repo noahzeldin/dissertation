@@ -872,7 +872,7 @@ articles_perc_without_full_dates <-
   round() 
 ```
 
-12 % of articles do *not* have full dates.
+12% of articles do *not* have full dates.
 
 Percent of articles *with* full dates (i.e. included for Lubridate):
 
@@ -880,7 +880,7 @@ Percent of articles *with* full dates (i.e. included for Lubridate):
 articles_perc_with_full_dates <- 100 - articles_perc_without_full_dates
 ```
 
-88 % of articles have full dates.
+88% of articles have full dates.
 
 ### By Piece
 
@@ -1107,7 +1107,7 @@ articles_mt_premiere_week_perc <-
     nrow()) / nrow(dates_mt_lubridate)) * 100)
 ```
 
-45 % of articles on *The Measures Taken* were published within one week
+45% of articles on *The Measures Taken* were published within one week
 of the premiere.
 
 #### The Mother
@@ -1136,7 +1136,7 @@ articles_mother_premiere_week_perc <-
     nrow()) / nrow(dates_mother_lubridate)) * 100)
 ```
 
-74 % of articles on *The Mother* were published within one week of the
+74% of articles on *The Mother* were published within one week of the
 premiere.
 
 ## Articles on The Measures Taken published in 1932
@@ -1180,21 +1180,27 @@ labels_english <- c(Massnahme = "Measures Taken", Mutter = "Mother")
 Set-up for boxplot:
 
 ``` r
-# 3 steps for set up
+# 3 steps for set-up
 
 # STEP 1
+# create table with total number of tokens for each article
 toks_grouped <- gen_datafr_reduced %>% 
-    mutate(rowSums(.[ ,2:9102]), .after = 1) %>% 
-    select(doc_id, `rowSums(.[, 2:9102])`) %>% 
-    rename(tokens = `rowSums(.[, 2:9102])`)
+    mutate(toks_sum = rowSums(.[ ,2:ncol(.)]), .after = 1) %>% 
+    select(doc_id, toks_sum)
+
+# NB: possible to use tidyverse syntax but much slower (including for reference)
+# gen_datafr_reduced %>%
+    # rowwise() %>% mutate(toks_sum = sum(c_across(2:9102)), .after = 1)
 
 # STEP 2
-# add GPO column to gen_datafr_reduced
-# can't combine with above for some reason
-toks_grouped <- left_join(toks_grouped, 
-                                    corp_reduced_datafr[ , c("doc_id",    "Generalized_Political_Orientation", "Piece")], 
-                                    by = "doc_id", 
-                                    copy = TRUE)
+# add GPO column to gen_datafr_reduced (can't combine with above)
+toks_grouped <- 
+  left_join(toks_grouped, 
+            corp_reduced_datafr[ , c("doc_id", 
+                                     "Generalized_Political_Orientation", 
+                                     "Piece")], 
+            by = "doc_id", 
+            copy = TRUE)
 
 # STEP 3
 # added for observation counts
@@ -1207,7 +1213,7 @@ Code for boxplot:
 ``` r
 toks_summary_boxplot <- 
     toks_grouped %>% 
-    ggplot(aes(x = Piece, y = tokens, 
+    ggplot(aes(x = Piece, y = toks_sum, 
                fill = Generalized_Political_Orientation)) +
     geom_boxplot(alpha = 0.7,
                  varwidth = TRUE) +

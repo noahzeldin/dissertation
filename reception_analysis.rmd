@@ -998,9 +998,8 @@ Set-up for boxplot:
 # STEP 1
 # create table with total number of tokens for each article
 toks_grouped <- gen_datafr_reduced %>% 
-    mutate(rowSums(.[ ,2:9102]), .after = 1) %>% 
-    select(doc_id, `rowSums(.[, 2:9102])`) %>% 
-    rename(tokens = `rowSums(.[, 2:9102])`)
+    mutate(toks_sum = rowSums(.[ ,2:ncol(.)]), .after = 1) %>% 
+    select(doc_id, toks_sum)
 
 # NB: possible to use tidyverse syntax but much slower (including for reference)
 # gen_datafr_reduced %>%
@@ -1027,7 +1026,7 @@ Code for boxplot:
 ```{r, fig.width = 9, fig.height=7}
 toks_summary_boxplot <- 
     toks_grouped %>% 
-    ggplot(aes(x = Piece, y = tokens, 
+    ggplot(aes(x = Piece, y = toks_sum, 
                fill = Generalized_Political_Orientation)) +
     geom_boxplot(alpha = 0.7,
                  varwidth = TRUE) +
