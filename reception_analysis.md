@@ -52,8 +52,8 @@ Noah Zeldin
           - [Range / Interval](#range-interval)
           - [Proportion of Articles Published near
             Premieres](#proportion-of-articles-published-near-premieres)
-      - [Articles on The Measures Taken published in
-        1932](#articles-on-the-measures-taken-published-in-1932)
+      - [Articles on The Measures Taken published in 1932 (with full
+        dates)](#articles-on-the-measures-taken-published-in-1932-with-full-dates)
   - [Visualizations](#visualizations)
       - [Visual Summary of Reduced
         Corpus](#visual-summary-of-reduced-corpus)
@@ -114,7 +114,7 @@ effects. This resulted in three versions of the data, as shown below.
 Main data set containing all articles (`data_main`):
 
 ``` r
-data_main <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs")
+data_main <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs_lowercase")
 ```
 
 `data_main` w/o articles on the Erfurt performance *The Measures Taken*
@@ -122,11 +122,11 @@ data_main <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs")
 
 ``` r
 data_no_erfurt <- data_main %>% 
-    filter(Date != "24.01.1933") %>% 
-    filter(Date != "25.01.1933") %>% 
-    filter(Date != "26.01.1933") %>% 
-    filter(Date != "27.01.1933") %>% 
-    filter(Newspaper != "Internationaler_Revolutionärer_Theater-Bund_(Bulletin)")
+    filter(date != "24.01.1933") %>% 
+    filter(date != "25.01.1933") %>% 
+    filter(date != "26.01.1933") %>% 
+    filter(date != "27.01.1933") %>% 
+    filter(newspaper != "Internationaler_Revolutionärer_Theater-Bund_(Bulletin)")
 ```
 
   - 9 articles removed from original data set
@@ -139,7 +139,7 @@ Kreuz-Zeitung*, n.d. (`data_reduced`):
 
 ``` r
 data_reduced <- data_no_erfurt %>% 
-    filter(Author != "Ferdinand Junghans")
+    filter(author != "Ferdinand Junghans")
 ```
 
   - 10 articles removed from original data set (`data_main`).
@@ -158,19 +158,19 @@ instance, finding and/or counting instances of a keyword in articles on
 General Corpus from `data_main` (`corp`):
 
 ``` r
-corp <- corpus(data_main, text_field = "Text")
+corp <- corpus(data_main, text_field = "text")
 ```
 
 Corpus from `data_no_erfurt` (`corp_no_erfurt`):
 
 ``` r
-corp_no_erfurt <- corpus(data_no_erfurt, text_field = "Text")
+corp_no_erfurt <- corpus(data_no_erfurt, text_field = "text")
 ```
 
 Corpus from `data_reduced` (`corp_reduced` ):
 
 ``` r
-corp_reduced <- corpus(data_reduced, text_field = "Text")
+corp_reduced <- corpus(data_reduced, text_field = "text")
 ```
 
 ### Corpora Grouped by Piece
@@ -178,14 +178,14 @@ corp_reduced <- corpus(data_reduced, text_field = "Text")
 *Measures Taken* Corpus (`mt_corp`):
 
 ``` r
-mt_corp <- corpus_subset(corp, Piece == "Massnahme")
+mt_corp <- corpus_subset(corp, piece == "Massnahme")
 ```
 
 *Measures Taken* Corpus without articles on Erfurt performance
 (`mt_corp_no_erfurt`):
 
 ``` r
-mt_corp_no_erfurt <- corpus_subset(corp_no_erfurt, Piece == "Massnahme")
+mt_corp_no_erfurt <- corpus_subset(corp_no_erfurt, piece == "Massnahme")
 ```
 
   - Again, the articles on the Erfurt performance were removed because
@@ -194,7 +194,7 @@ mt_corp_no_erfurt <- corpus_subset(corp_no_erfurt, Piece == "Massnahme")
 *Mother* Corpus (`mother_corp`):
 
 ``` r
-mother_corp <- corpus_subset(corp, Piece == "Mutter")
+mother_corp <- corpus_subset(corp, piece == "Mutter")
 ```
 
 ### Corpora of Title Texts
@@ -205,13 +205,13 @@ e.g. keyword frequencies.
 Title Corpus (all articles) (`corp_title`):
 
 ``` r
-corp_title <- corpus(data_main, text_field = "Title")
+corp_title <- corpus(data_main, text_field = "title")
 ```
 
 *Mother* Title Corpus (`mother_corp_title`):
 
 ``` r
-mother_corp_title <- corpus_subset(corp_title, Piece == "Mutter")
+mother_corp_title <- corpus_subset(corp_title, piece == "Mutter")
 ```
 
 ## Corpus Summary - Article Lengths, etc.
@@ -225,9 +225,9 @@ corp_reduced_summary$document <- corp_reduced_summary$document %>%
     
 corp_reduced_summary <- corp_reduced_summary %>% 
   mutate(document = as.numeric(document)) %>% 
-  rename(Article = document) %>% 
-  left_join(data_main, by = "Article") %>% 
-  select(-c(Text, Other_Metadata:Comp_Doc))
+  rename(article = document) %>% 
+  left_join(data_main, by = "article") %>% 
+  select(-c(text, other_metadata:Comp_Doc))
 ```
 
 ## Dictionaries and Additional Stopwords
@@ -402,13 +402,13 @@ total.
 
 ``` r
 grouped_dfm <- dfm_group(gen_dfm,
-                         groups = c("Piece",
-                                    "Generalized_Political_Orientation"))
+                         groups = c("piece",
+                                    "general_political_orientation"))
 
 # same but NO ERFURT
 grouped_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
-                                   groups = c("Piece",
-                                             "Generalized_Political_Orientation"))
+                                   groups = c("piece",
+                                             "general_political_orientation"))
 ```
 
 ### Create GPO grouped dfm’s for each piece
@@ -419,15 +419,15 @@ but all three have been kept for consistency.
 ``` r
 # Measures Taken
 mt_dfm_gpo <- dfm_group(mt_dfm,
-                          groups = "Generalized_Political_Orientation")
+                          groups = "general_political_orientation")
 
 # Measures Taken NO ERFURT
 mt_dfm_gpo_no_erfurt <- dfm_group(mt_dfm_no_erfurt,
-                                    groups = "Generalized_Political_Orientation")
+                                    groups = "general_political_orientation")
 
 # Mother
 mother_dfm_gpo <- dfm_group(mother_dfm,
-                            groups = "Generalized_Political_Orientation")
+                            groups = "general_political_orientation")
 ```
 
 ### Less Specific Groupings
@@ -439,22 +439,22 @@ consistency but are not used in the later analyses.
 ``` r
 # by piece
 piece_dfm <- dfm_group(gen_dfm,
-                       groups = "Piece")
+                       groups = "piece")
 
 # by GPO
 gpo_dfm <- dfm_group(gen_dfm,
-                     groups = "Generalized_Political_Orientation")
+                     groups = "general_political_orientation")
 
 
 # less specific groupings NO ERFURT
 
 # by piece
 piece_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
-                                 groups = "Piece")
+                                 groups = "piece")
 
 # by GPO
 gpo_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
-                               groups = "Generalized_Political_Orientation")
+                               groups = "general_political_orientation")
 ```
 
 ### By GPO
@@ -464,19 +464,19 @@ Not currently used in the analysis but leaving for the moment.
 ``` r
 # Left
 left_sub <- dfm_subset(grouped_dfm, 
-                       Generalized_Political_Orientation == "Left")
+                       general_political_orientation == "Left")
 
 # Right
 right_sub <- dfm_subset(grouped_dfm, 
-                        Generalized_Political_Orientation == "Right")
+                        general_political_orientation == "Right")
 
 # Center
 center_sub <- dfm_subset(grouped_dfm, 
-                         Generalized_Political_Orientation == "Center")
+                         general_political_orientation == "Center")
 
 # Unknown
 unknown_sub <- dfm_subset(grouped_dfm,
-                          Generalized_Political_Orientation == "Unknown")
+                          general_political_orientation == "Unknown")
 ```
 
 ### By Piece
@@ -486,11 +486,11 @@ Not currently used in the analysis but leaving for the moment.
 ``` r
 # Measures Taken
 mt_sub <- dfm_subset(grouped_dfm,
-                            Piece == "Massnahme")
+                            piece == "Massnahme")
 
 # Mother
 mother_sub <- dfm_subset(grouped_dfm,
-                         Piece == "Mutter")
+                         piece == "Mutter")
 ```
 
 ## Convert general (reduced) corpus and dfm to dataframes for later use
@@ -516,7 +516,7 @@ unknown GPO:
 
 corp_no_erfurt_or_unknown <- 
   corpus_subset(corp_no_erfurt, 
-                ! Generalized_Political_Orientation == "Unknown" )
+                ! general_political_orientation == "Unknown" )
 
 toks_no_erfurt_or_unknown <- 
   tokenize_and_remove_stopwords(corp_no_erfurt_or_unknown)
@@ -529,7 +529,7 @@ Just GPO, not piece (not currently using):
 
 ``` r
 gpo_dfm_no_erfurt_or_unknown <- dfm_group(dfm_no_erfurt_or_unknown,
-                                          groups = "Generalized_Political_Orientation")
+                                          groups = "general_political_orientation")
 ```
 
 Grouped by piece and GPO:
@@ -537,7 +537,7 @@ Grouped by piece and GPO:
 ``` r
 grouped_dfm_no_erfurt_or_unknown <- 
   dfm_group(dfm_no_erfurt_or_unknown, 
-            groups = c("Piece", "Generalized_Political_Orientation"))
+            groups = c("piece", "general_political_orientation"))
 ```
 
 Only articles on *The Measures Taken*:
@@ -545,8 +545,8 @@ Only articles on *The Measures Taken*:
 ``` r
 mt_corp_no_erfurt_or_unknown <- 
   corpus_subset(corp_no_erfurt,
-                Piece == "Massnahme" &! 
-                  Generalized_Political_Orientation == "Unknown" )
+                piece == "Massnahme" &! 
+                  general_political_orientation == "Unknown" )
 
 
 mt_toks_no_erfurt_or_unknown <- 
@@ -557,7 +557,7 @@ mt_dfm_no_erfurt_or_unknown <-
 
 mt_dfm_gpo_no_erfurt_or_unknown <- 
   dfm_group(mt_dfm_no_erfurt_or_unknown, 
-            groups = "Generalized_Political_Orientation")
+            groups = "general_political_orientation")
 ```
 
 Only articles on *The Mother*:
@@ -565,8 +565,8 @@ Only articles on *The Mother*:
 ``` r
 mother_corp_no_unknown <- 
   corpus_subset(corp, 
-                Piece == "Mutter" &! 
-                  Generalized_Political_Orientation == "Unknown" )
+                piece == "Mutter" &! 
+                  general_political_orientation == "Unknown" )
 
 mother_toks_no_unknown <- tokenize_and_remove_stopwords(mother_corp_no_unknown)
 
@@ -575,7 +575,7 @@ mother_dfm_no_unknown <-
 
 mother_dfm_gpo_no_unknown <- 
   dfm_group(mother_dfm_no_unknown, 
-            groups = "Generalized_Political_Orientation")
+            groups = "general_political_orientation")
 ```
 
 # FactoMineR Set-Up (for CA)
@@ -620,11 +620,11 @@ combine_kwic_with_data <- function(corpus, words, window) {
         str_replace("text", "") 
     
     i <- i %>% mutate(docname = as.numeric(docname)) %>% 
-        rename(Article = docname) %>% 
+        rename(article = docname) %>% 
         left_join(
           data_reduced, 
-          by = "Article") %>% 
-        select(-c(Text, Other_Metadata:Comp_Doc))
+          by = "article") %>% 
+        select(-c(text, other_metadata:Comp_Doc))
     
     }
 ```
@@ -659,7 +659,7 @@ langweilig_kwic <-
 
 ``` r
 langweilig_primitiv_kwic <- 
-  inner_join(langweilig_kwic, primitiv_kwic, by = "Article")
+  inner_join(langweilig_kwic, primitiv_kwic, by = "article")
 ```
 
   - proletarisch \[proletarian\]
@@ -724,7 +724,7 @@ wissen_kwic <-
 ``` r
 lehrstueck_mother_kwic <- 
   combine_kwic_with_data(corp, "lehrstück*", 10) %>% 
-  filter(Piece == "Mutter")
+  filter(piece == "Mutter")
 ```
 
   - oratorium \[oratorio\] - *The Measures Taken*
@@ -734,7 +734,7 @@ lehrstueck_mother_kwic <-
 ``` r
 oratorium_mt_kwic <- 
   combine_kwic_with_data(corp, "oratori*", 30) %>% 
-  filter(Piece == "Massnahme")
+  filter(piece == "Massnahme")
 ```
 
   - arbeitersänger \[worker-singer(s)\] - *The Measures Taken*
@@ -744,7 +744,7 @@ oratorium_mt_kwic <-
 ``` r
 arbeitersaenger_mt_kwic <- 
   combine_kwic_with_data(corp, "arbeitersänger*", 30) %>% 
-  filter(Piece == "Massnahme")
+  filter(piece == "Massnahme")
 ```
 
   - stalin and stalinismus \[Stalinism\]
@@ -757,14 +757,14 @@ combine_kwic_with_data(corp, "stalin*", 30) %>%
 ```
 
     ## # A tibble: 3 x 16
-    ##   Article  from    to pre   keyword post  pattern Title Newspaper Publisher
+    ##   article  from    to pre   keyword post  pattern title newspaper publisher
     ##     <dbl> <int> <int> <chr> <chr>   <chr> <fct>   <chr> <chr>     <chr>    
     ## 1      62    23    23 Gork~ Stalin  "- h~ stalin* "Die~ Germania  Zentrum  
     ## 2      66    55    55 Best~ Stalin  "und~ stalin* "Gor~ Sächsisc~ SPD      
     ## 3      83   662   662 und ~ Stalin~ "von~ stalin* "Ber~ Der_Aben~ SPD      
-    ## # ... with 6 more variables: Political_Affiliation_or_Orientation <chr>,
-    ## #   Generalized_Political_Orientation <chr>, Date <chr>, Author <chr>,
-    ## #   Complete_or_Incomplete <chr>, Piece <chr>
+    ## # ... with 6 more variables: political_affiliation <chr>,
+    ## #   general_political_orientation <chr>, date <chr>, author <chr>,
+    ## #   complete_or_incomplete <chr>, piece <chr>
 
 Only 3 articles on Mother.
 
@@ -778,11 +778,11 @@ combine_kwic_with_data(corp, "Kantate*", 25) %>%
 ```
 
     ## # A tibble: 0 x 16
-    ## # ... with 16 variables: Article <dbl>, from <int>, to <int>, pre <chr>,
-    ## #   keyword <chr>, post <chr>, pattern <fct>, Title <chr>, Newspaper <chr>,
-    ## #   Publisher <chr>, Political_Affiliation_or_Orientation <chr>,
-    ## #   Generalized_Political_Orientation <chr>, Date <chr>, Author <chr>,
-    ## #   Complete_or_Incomplete <chr>, Piece <chr>
+    ## # ... with 16 variables: article <dbl>, from <int>, to <int>, pre <chr>,
+    ## #   keyword <chr>, post <chr>, pattern <fct>, title <chr>, newspaper <chr>,
+    ## #   publisher <chr>, political_affiliation <chr>,
+    ## #   general_political_orientation <chr>, date <chr>, author <chr>,
+    ## #   complete_or_incomplete <chr>, piece <chr>
 
 No results.
 
@@ -805,16 +805,16 @@ lehrlern_kwic$docname <- lehrlern_kwic$docname %>%
 
 lehrlern_kwic <- lehrlern_kwic %>% 
   mutate(docname = as.numeric(docname)) %>% 
-  rename(Article = docname) %>% 
-  left_join(data_main, by = "Article") %>% 
-  select(-c(Text, Other_Metadata:Comp_Doc))
+  rename(article = docname) %>% 
+  left_join(data_main, by = "article") %>% 
+  select(-c(text, other_metadata:Comp_Doc))
 ```
 
 Filter for *The Mother* and right GPO:
 
 ``` r
 lehrlern_kwic_mother_right <- lehrlern_kwic %>% 
-  filter(Piece == "Mutter" & Generalized_Political_Orientation == "Right")
+  filter(piece == "Mutter" & general_political_orientation == "Right")
 ```
 
 ## Additional Terms Post-Processing (DFMs)
@@ -848,9 +848,9 @@ All articles:
 ``` r
 dates_tib <- corp_reduced_datafr %>% 
   as_tibble() %>% 
-  select(Article, Date, Piece) %>% 
-  group_by(Piece, Date) %>% 
-  count(Date) %>% 
+  select(article, date, piece) %>% 
+  group_by(piece, date) %>% 
+  count(date) %>% 
   arrange(desc(n))
 ```
 
@@ -859,9 +859,9 @@ Separate columns:
 ``` r
 dates_tib_separate <- corp_reduced_datafr %>% 
   as_tibble() %>% 
-    select(Article, Date, Piece) %>% 
-    filter(str_detect(Date, "\\S{2}\\.\\S{2}\\.[:digit:]{4}")) %>% 
-    separate(Date, sep = "\\.", into = c("day", "month", "year"))
+    select(article, date, piece) %>% 
+    filter(str_detect(date, "\\S{2}\\.\\S{2}\\.[:digit:]{4}")) %>% 
+    separate(date, sep = "\\.", into = c("day", "month", "year"))
 ```
 
 Make compatible with [Lubridate](https://lubridate.tidyverse.org/)
@@ -875,7 +875,7 @@ dates_tib_lubridate <- dates_tib_separate %>%
     relocate(day, .after = month) %>% 
     relocate(year, .before = month) %>% 
     mutate(date = make_date(year, month, day)) %>% 
-    select(Article, date, Piece) %>% 
+    select(article, date, piece) %>% 
   filter(!is.na(date)) %>% 
   arrange(date)
 ```
@@ -910,9 +910,9 @@ All
 
 ``` r
 dates_mt <- dates_tib %>% 
-  filter(Piece == "Massnahme") %>% 
+  filter(piece == "Massnahme") %>% 
   ungroup %>% 
-  select(-Piece)
+  select(-piece)
 ```
 
 Edited, for Lubridate
@@ -925,7 +925,7 @@ Edited, for Lubridate
 ``` r
 dates_mt_lubridate <- 
   dates_tib_lubridate %>% 
-  filter(Piece == "Massnahme") %>% 
+  filter(piece == "Massnahme") %>% 
   arrange(date)
 ```
 
@@ -935,7 +935,7 @@ dates_mt_lubridate <-
 
 ``` r
 dates_tib_lubridate %>% 
-  filter(Piece == "Massnahme") %>%
+  filter(piece == "Massnahme") %>%
   count(date) %>% 
   arrange(desc(n))
 ```
@@ -970,9 +970,9 @@ All
 
 ``` r
 dates_mother <- dates_tib %>% 
-  filter(Piece == "Mutter") %>% 
+  filter(piece == "Mutter") %>% 
   ungroup %>% 
-  select(-Piece)
+  select(-piece)
 ```
 
 Edited, for Lubridate
@@ -985,7 +985,7 @@ Edited, for Lubridate
 ``` r
 dates_mother_lubridate <- 
   dates_tib_lubridate %>% 
-  filter(Piece == "Mutter") %>% 
+  filter(piece == "Mutter") %>% 
   arrange(date)
 ```
 
@@ -995,7 +995,7 @@ dates_mother_lubridate <-
 
 ``` r
 dates_tib_lubridate %>% 
-  filter(Piece == "Mutter") %>%
+  filter(piece == "Mutter") %>%
   count(date) %>% 
   arrange(desc(n))
 ```
@@ -1157,27 +1157,27 @@ articles_mother_premiere_week_perc <-
 74% of articles on *The Mother* were published within one week of the
 premiere.
 
-## Articles on The Measures Taken published in 1932
+## Articles on The Measures Taken published in 1932 (with full dates)
 
 ``` r
 dates_tib_lubridate %>% 
-    filter(Piece == "Massnahme" &
+    filter(piece == "Massnahme" &
             year(date) == 1932) %>% 
-    left_join(data_main)
+    left_join(data_main, by = "article")
 ```
 
-    ## # A tibble: 5 x 17
-    ##   Article date       Piece Title Text  Newspaper Publisher Political_Affil~
-    ##     <dbl> <date>     <chr> <chr> <chr> <chr>     <chr>     <chr>           
-    ## 1      35 1932-02-19 Mass~ "Leh~ "Nic~ Literari~ Welt Ver~ Unknown         
-    ## 2      50 1932-06-01 Mass~ "„Di~ "1.\~ Der_Kämp~ KPD       KPD             
-    ## 3      34 1932-09-24 Mass~ "Die~ "Die~ Arbeiter~ Sozialde~ SPÖ             
-    ## 4      36 1932-11-22 Mass~ "Ers~ "In ~ General-~ Independ~ Unknown         
-    ## 5      37 1932-11-25 Mass~ "Kom~ "Am ~ Bayrisch~ Independ~ Unknown         
-    ## # ... with 9 more variables: Generalized_Political_Orientation <chr>,
-    ## #   Date <chr>, Author <chr>, Complete_or_Incomplete <chr>,
-    ## #   Other_Metadata <chr>, Other_Notes <chr>, AdK <chr>, AdK_Duplicate <chr>,
-    ## #   Comp_Doc <chr>
+    ## # A tibble: 5 x 18
+    ##   article date.x     piece.x title text  newspaper publisher political_affil~
+    ##     <dbl> <date>     <chr>   <chr> <chr> <chr>     <chr>     <chr>           
+    ## 1      35 1932-02-19 Massna~ "Leh~ "Nic~ Literari~ Welt Ver~ Unknown         
+    ## 2      50 1932-06-01 Massna~ "„Di~ "1.\~ Der_Kämp~ KPD       KPD             
+    ## 3      34 1932-09-24 Massna~ "Die~ "Die~ Arbeiter~ Sozialde~ SPÖ             
+    ## 4      36 1932-11-22 Massna~ "Ers~ "In ~ General-~ Independ~ Unknown         
+    ## 5      37 1932-11-25 Massna~ "Kom~ "Am ~ Bayrisch~ Independ~ Unknown         
+    ## # ... with 10 more variables: general_political_orientation <chr>,
+    ## #   date.y <chr>, author <chr>, complete_or_incomplete <chr>,
+    ## #   other_metadata <chr>, other_notes <chr>, AdK <chr>, AdK_Duplicate <chr>,
+    ## #   Comp_Doc <chr>, piece.y <chr>
 
 # Visualizations
 
@@ -1215,32 +1215,32 @@ toks_grouped <- gen_datafr_reduced %>%
 toks_grouped <- 
   left_join(toks_grouped, 
             corp_reduced_datafr[ , c("doc_id", 
-                                     "Generalized_Political_Orientation", 
-                                     "Piece")], 
+                                     "general_political_orientation", 
+                                     "piece")], 
             by = "doc_id", 
             copy = TRUE)
 
 # STEP 3
 # added for observation counts
 toks_grouped <- toks_grouped %>% 
-    add_count(Piece, Generalized_Political_Orientation)
+    add_count(piece, general_political_orientation)
 
 # STEP 4
 # must save GPO as factor and relevel, so that Left appears first
 toks_grouped <- toks_grouped %>% 
-    mutate(Generalized_Political_Orientation = 
-               as.factor(Generalized_Political_Orientation))
+    mutate(general_political_orientation = 
+               as.factor(general_political_orientation))
 
-toks_grouped$Generalized_Political_Orientation <- 
-    toks_grouped$Generalized_Political_Orientation %>% fct_relevel("Left")
+toks_grouped$general_political_orientation <- 
+    toks_grouped$general_political_orientation %>% fct_relevel("Left")
 ```
 
 Code for boxplot:
 
 ``` r
 toks_summary_boxplot <- toks_grouped %>% 
-    ggplot(aes(x = Piece, y = toks_sum, 
-               fill = Generalized_Political_Orientation)) +
+    ggplot(aes(x = piece, y = toks_sum, 
+               fill = general_political_orientation)) +
     geom_boxplot(alpha = 0.7,
                  varwidth = FALSE) +
     stat_summary(fun = median, geom = "point", 
@@ -1296,14 +1296,14 @@ category, because they stretch out the IQR.
 
 ``` r
 corp_reduced_summary %>% 
-    filter(Generalized_Political_Orientation == "Unknown" &
-               Piece == "Massnahme") %>% 
+    filter(general_political_orientation == "Unknown" &
+               piece == "Massnahme") %>% 
     arrange(desc(tokens)) %>% 
-  select(Article, tokens, Title:Piece)
+  select(article, tokens, title:piece)
 ```
 
     ## # A tibble: 10 x 11
-    ##    Article tokens Title Newspaper Publisher Political_Affil~ Generalized_Pol~
+    ##    article tokens title newspaper publisher political_affil~ general_politic~
     ##      <dbl>  <int> <chr> <chr>     <chr>     <chr>            <chr>           
     ##  1      35   2055 Lehr~ Literari~ Welt Ver~ Unknown          Unknown         
     ##  2      18   1894 Poli~ Der_Anbr~ Universa~ Unknown          Unknown         
@@ -1315,8 +1315,8 @@ corp_reduced_summary %>%
     ##  8       7    365 Brec~ Münchner~ Independ~ Unknown          Unknown         
     ##  9      37    314 Komm~ Bayrisch~ Independ~ Unknown          Unknown         
     ## 10      43    194 Brec~ Dresdner~ Independ~ Unknown          Unknown         
-    ## # ... with 4 more variables: Date <chr>, Author <chr>,
-    ## #   Complete_or_Incomplete <chr>, Piece <chr>
+    ## # ... with 4 more variables: date <chr>, author <chr>,
+    ## #   complete_or_incomplete <chr>, piece <chr>
 
 ## Wordclouds
 
@@ -1359,7 +1359,7 @@ By Piece:
 ``` r
 # grouped by piece (weighted)
 freq_piece <- dfm_weight(gen_dfm_reduced, scheme = "prop") %>% 
-    textstat_frequency(n = 15, groups = "Piece")
+    textstat_frequency(n = 15, groups = "piece")
 
 freq_piece_plot <- 
   ggplot(freq_piece, 
@@ -1393,7 +1393,7 @@ By Piece + GPO:
 # create weighted frequency table
 freq_grouped_wt <- dfm_weight(gen_dfm_reduced, scheme = "prop") %>% 
     textstat_frequency(n = 10, 
-                       groups = c("Piece", "Generalized_Political_Orientation")) 
+                       groups = c("piece", "general_political_orientation")) 
 
 # rename groups
 freq_grouped_wt <- freq_grouped_wt %>% 
