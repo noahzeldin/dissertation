@@ -26,9 +26,9 @@ Noah Zeldin
           - [Less Specific Groupings](#less-specific-groupings)
           - [By GPO](#by-gpo)
           - [By Piece](#by-piece)
-      - [Convert general (reduced) corpus and dfm to dataframe sfor
+      - [Convert general (reduced) corpus and dfm to dataframes for
         later
-        use](#convert-general-reduced-corpus-and-dfm-to-dataframe-sfor-later-use)
+        use](#convert-general-reduced-corpus-and-dfm-to-dataframes-for-later-use)
       - [Create corpus, dfm, ca, etc. of each piece w/o unknown
         GPO](#create-corpus-dfm-ca-etc.-of-each-piece-wo-unknown-gpo)
   - [FactoMineR Set-Up (for CA)](#factominer-set-up-for-ca)
@@ -136,7 +136,7 @@ data_reduced <- data_no_erfurt %>%
     filter(Author != "Ferdinand Junghans")
 ```
 
-10 articles removed from original data set (`data_main`).
+  - 10 articles removed from original data set (`data_main`).
 
 # Quanteda Set-Up
 
@@ -149,19 +149,19 @@ instance, finding and/or counting instances of a keyword in articles on
 
 ### General Corpora
 
-General Corpus
+General Corpus (`corp`)
 
 ``` r
 corp <- corpus(data_main, text_field = "Text")
 ```
 
-`corp` w/o *Measures Taken* Erfurt
+`corp` w/o *Measures Taken* Erfurt (`corp_no_erfurt`)
 
 ``` r
 corp_no_erfurt <- corpus(data_no_erfurt, text_field = "Text")
 ```
 
-`corp` Reduced
+`corp_reduced`
 
 ``` r
 corp_reduced <- corpus(data_reduced, text_field = "Text")
@@ -169,13 +169,13 @@ corp_reduced <- corpus(data_reduced, text_field = "Text")
 
 ### Corpora Grouped by Piece
 
-*Measures Taken* Corpus
+*Measures Taken* Corpus (`mt_corp`)
 
 ``` r
 mt_corp <- corpus_subset(corp, Piece == "Massnahme")
 ```
 
-*Measures Taken* Corpus No Erfurt
+*Measures Taken* Corpus No Erfurt (`mt_corp_no_erfurt`)
 
   - Again, the articles on the Erfurt performance were removed because
     of their distortionary effect.
@@ -186,7 +186,7 @@ mt_corp <- corpus_subset(corp, Piece == "Massnahme")
 mt_corp_no_erfurt <- corpus_subset(corp_no_erfurt, Piece == "Massnahme")
 ```
 
-*Mother* Corpus
+*Mother* Corpus (`mother_corp`)
 
 ``` r
 mother_corp <- corpus_subset(corp, Piece == "Mutter")
@@ -197,13 +197,13 @@ mother_corp <- corpus_subset(corp, Piece == "Mutter")
 This allows for later analysis of the texts of the titles, e.g. keyword
 frequencies.
 
-Title Corpus
+Title Corpus (`corp_title`)
 
 ``` r
 corp_title <- corpus(data_main, text_field = "Title")
 ```
 
-*Mother* Title Corpus
+*Mother* Title Corpus (`mother_corp_title`)
 
 ``` r
 mother_corp_title <- corpus_subset(corp_title, Piece == "Mutter")
@@ -266,10 +266,24 @@ dict_gen <- dictionary(list(revolution = "revolution*",
 
 Regular Expressions Dictionary
 
-  - In some cases, it was necessary to use regular expressions rather
-    than the simple wildcard option provided in **quanteda**.
+  - In the case of pedagogical terms, it was necessary to use regular
+    expressions. As I explain in ch. 2, **LEHRLERN** is the only keyword
+    defined in these dictionaries that can be considered an
+    interpretative combination of different words, rather than a mere
+    grouping of synonyms. **LEHRLERN** groups together words relating to
+    the following terms (the regular expressions should cover all forms
+    of the terms: nouns, verbs, adjectives and adverbs).
 
-<!-- end list -->
+\*\* “teaching” \[*lehren*\]
+
+\*\* “learning” \[*lernen* (and past particple, *gelernt*) and
+*erlernen*\]
+
+\*\* “instructing” \[*belehren*\]
+
+\*\* “pedagogical” \[*pädagogisch*\]
+
+\*\* “didactic” \[*didaktisch*\]
 
 ``` r
 dict_regex <- dictionary(list(lehrlern = c("lehr(?!s)[a-z]+", 
@@ -469,7 +483,7 @@ mother_sub <- dfm_subset(grouped_dfm,
                          Piece == "Mutter")
 ```
 
-## Convert general (reduced) corpus and dfm to dataframe sfor later use
+## Convert general (reduced) corpus and dfm to dataframes for later use
 
 ``` r
 # convert gen_dfm_reduced to dataframe
@@ -500,11 +514,7 @@ dfm_no_erfurt_or_unknown <-
   convert_to_dfm_and_apply_dictionaries(toks_no_erfurt_or_unknown)
 ```
 
-Just GPO, not piece
-
-  - not currently using
-
-<!-- end list -->
+Just GPO, not piece (not currently using)
 
 ``` r
 gpo_dfm_no_erfurt_or_unknown <- dfm_group(dfm_no_erfurt_or_unknown,
