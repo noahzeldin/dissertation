@@ -178,14 +178,14 @@ corp_reduced <- corpus(data_reduced, text_field = "text")
 *Measures Taken* Corpus (`mt_corp`):
 
 ``` r
-mt_corp <- corpus_subset(corp, piece == "Massnahme")
+mt_corp <- corpus_subset(corp, piece == "measures")
 ```
 
 *Measures Taken* Corpus without articles on Erfurt performance
 (`mt_corp_no_erfurt`):
 
 ``` r
-mt_corp_no_erfurt <- corpus_subset(corp_no_erfurt, piece == "Massnahme")
+mt_corp_no_erfurt <- corpus_subset(corp_no_erfurt, piece == "measures")
 ```
 
   - Again, the articles on the Erfurt performance were removed because
@@ -194,7 +194,7 @@ mt_corp_no_erfurt <- corpus_subset(corp_no_erfurt, piece == "Massnahme")
 *Mother* Corpus (`mother_corp`):
 
 ``` r
-mother_corp <- corpus_subset(corp, piece == "Mutter")
+mother_corp <- corpus_subset(corp, piece == "mother")
 ```
 
 ### Corpora of Title Texts
@@ -211,7 +211,7 @@ corp_title <- corpus(data_main, text_field = "title")
 *Mother* Title Corpus (`mother_corp_title`):
 
 ``` r
-mother_corp_title <- corpus_subset(corp_title, piece == "Mutter")
+mother_corp_title <- corpus_subset(corp_title, piece == "mother")
 ```
 
 ## Corpus Summary - Article Lengths, etc.
@@ -486,11 +486,11 @@ Not currently used in the analysis but leaving for the moment.
 ``` r
 # Measures Taken
 mt_sub <- dfm_subset(grouped_dfm,
-                            piece == "Massnahme")
+                            piece == "measures")
 
 # Mother
 mother_sub <- dfm_subset(grouped_dfm,
-                         piece == "Mutter")
+                         piece == "mother")
 ```
 
 ## Convert general (reduced) corpus and dfm to dataframes for later use
@@ -545,7 +545,7 @@ Only articles on *The Measures Taken*:
 ``` r
 mt_corp_no_erfurt_or_unknown <- 
   corpus_subset(corp_no_erfurt,
-                piece == "Massnahme" &! 
+                piece == "measures" &! 
                   general_political_orientation == "Unknown" )
 
 
@@ -565,7 +565,7 @@ Only articles on *The Mother*:
 ``` r
 mother_corp_no_unknown <- 
   corpus_subset(corp, 
-                piece == "Mutter" &! 
+                piece == "mother" &! 
                   general_political_orientation == "Unknown" )
 
 mother_toks_no_unknown <- tokenize_and_remove_stopwords(mother_corp_no_unknown)
@@ -724,7 +724,7 @@ wissen_kwic <-
 ``` r
 lehrstueck_mother_kwic <- 
   combine_kwic_with_data(corp, "lehrstück*", 10) %>% 
-  filter(piece == "Mutter")
+  filter(piece == "mother")
 ```
 
   - oratorium \[oratorio\] - *The Measures Taken*
@@ -734,7 +734,7 @@ lehrstueck_mother_kwic <-
 ``` r
 oratorium_mt_kwic <- 
   combine_kwic_with_data(corp, "oratori*", 30) %>% 
-  filter(piece == "Massnahme")
+  filter(piece == "measures")
 ```
 
   - arbeitersänger \[worker-singer(s)\] - *The Measures Taken*
@@ -744,7 +744,7 @@ oratorium_mt_kwic <-
 ``` r
 arbeitersaenger_mt_kwic <- 
   combine_kwic_with_data(corp, "arbeitersänger*", 30) %>% 
-  filter(piece == "Massnahme")
+  filter(piece == "measures")
 ```
 
   - stalin and stalinismus \[Stalinism\]
@@ -814,7 +814,7 @@ Filter for *The Mother* and right GPO:
 
 ``` r
 lehrlern_kwic_mother_right <- lehrlern_kwic %>% 
-  filter(piece == "Mutter" & general_political_orientation == "Right")
+  filter(piece == "mother" & general_political_orientation == "Right")
 ```
 
 ## Additional Terms Post-Processing (DFMs)
@@ -910,7 +910,7 @@ All
 
 ``` r
 dates_mt <- dates_tib %>% 
-  filter(piece == "Massnahme") %>% 
+  filter(piece == "measures") %>% 
   ungroup %>% 
   select(-piece)
 ```
@@ -925,7 +925,7 @@ Edited, for Lubridate
 ``` r
 dates_mt_lubridate <- 
   dates_tib_lubridate %>% 
-  filter(piece == "Massnahme") %>% 
+  filter(piece == "measures") %>% 
   arrange(date)
 ```
 
@@ -935,7 +935,7 @@ dates_mt_lubridate <-
 
 ``` r
 dates_tib_lubridate %>% 
-  filter(piece == "Massnahme") %>%
+  filter(piece == "measures") %>%
   count(date) %>% 
   arrange(desc(n))
 ```
@@ -970,7 +970,7 @@ All
 
 ``` r
 dates_mother <- dates_tib %>% 
-  filter(piece == "Mutter") %>% 
+  filter(piece == "mother") %>% 
   ungroup %>% 
   select(-piece)
 ```
@@ -985,7 +985,7 @@ Edited, for Lubridate
 ``` r
 dates_mother_lubridate <- 
   dates_tib_lubridate %>% 
-  filter(piece == "Mutter") %>% 
+  filter(piece == "mother") %>% 
   arrange(date)
 ```
 
@@ -995,7 +995,7 @@ dates_mother_lubridate <-
 
 ``` r
 dates_tib_lubridate %>% 
-  filter(piece == "Mutter") %>%
+  filter(piece == "mother") %>%
   count(date) %>% 
   arrange(desc(n))
 ```
@@ -1161,7 +1161,7 @@ premiere.
 
 ``` r
 dates_tib_lubridate %>% 
-    filter(piece == "Massnahme" &
+    filter(piece == "measures" &
             year(date) == 1932) %>% 
     left_join(data_main, by = "article")
 ```
@@ -1169,11 +1169,11 @@ dates_tib_lubridate %>%
     ## # A tibble: 5 x 18
     ##   article date.x     piece.x title text  newspaper publisher political_affil~
     ##     <dbl> <date>     <chr>   <chr> <chr> <chr>     <chr>     <chr>           
-    ## 1      35 1932-02-19 Massna~ "Leh~ "Nic~ Literari~ Welt Ver~ Unknown         
-    ## 2      50 1932-06-01 Massna~ "„Di~ "1.\~ Der_Kämp~ KPD       KPD             
-    ## 3      34 1932-09-24 Massna~ "Die~ "Die~ Arbeiter~ Sozialde~ SPÖ             
-    ## 4      36 1932-11-22 Massna~ "Ers~ "In ~ General-~ Independ~ Unknown         
-    ## 5      37 1932-11-25 Massna~ "Kom~ "Am ~ Bayrisch~ Independ~ Unknown         
+    ## 1      35 1932-02-19 measur~ "Leh~ "Nic~ Literari~ Welt Ver~ Unknown         
+    ## 2      50 1932-06-01 measur~ "„Di~ "1.\~ Der_Kämp~ KPD       KPD             
+    ## 3      34 1932-09-24 measur~ "Die~ "Die~ Arbeiter~ Sozialde~ SPÖ             
+    ## 4      36 1932-11-22 measur~ "Ers~ "In ~ General-~ Independ~ Unknown         
+    ## 5      37 1932-11-25 measur~ "Kom~ "Am ~ Bayrisch~ Independ~ Unknown         
     ## # ... with 10 more variables: general_political_orientation <chr>,
     ## #   date.y <chr>, author <chr>, complete_or_incomplete <chr>,
     ## #   other_metadata <chr>, other_notes <chr>, AdK <chr>, AdK_Duplicate <chr>,
@@ -1190,7 +1190,7 @@ colors_four <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")
 Create English labels for both works:
 
 ``` r
-labels_english <- c(Massnahme = "Measures Taken", Mutter = "Mother")
+labels_english <- c(measures = "Measures Taken", mother = "Mother")
 ```
 
 ## Visual Summary of Reduced Corpus
@@ -1297,7 +1297,7 @@ category, because they stretch out the IQR.
 ``` r
 corp_reduced_summary %>% 
     filter(general_political_orientation == "Unknown" &
-               piece == "Massnahme") %>% 
+               piece == "measures") %>% 
     arrange(desc(tokens)) %>% 
   select(article, tokens, title:piece)
 ```
@@ -1398,17 +1398,17 @@ freq_grouped_wt <- dfm_weight(gen_dfm_reduced, scheme = "prop") %>%
 # rename groups
 freq_grouped_wt <- freq_grouped_wt %>% 
     mutate(group = str_replace_all(group, 
-                                   c("Massnahme.Left" = "Measures Taken | Left", 
-                                     "Massnahme.Center" = 
+                                   c("measures.Left" = "Measures Taken | Left", 
+                                     "measures.Center" = 
                                        "Measures Taken | Center", 
-                                     "Massnahme.Right" = 
+                                     "measures.Right" = 
                                        "Measures Taken | Right",
-                                     "Massnahme.Unknown" = 
+                                     "measures.Unknown" = 
                                        "Measures Taken | Unknown",
-                                     "Mutter.Left" = "Mother | Left",
-                                     "Mutter.Center" = "Mother | Center",
-                                     "Mutter.Right" = "Mother | Right",
-                                     "Mutter.Unknown" = "Mother | Unknown")))
+                                     "mother.Left" = "Mother | Left",
+                                     "mother.Center" = "Mother | Center",
+                                     "mother.Right" = "Mother | Right",
+                                     "mother.Unknown" = "Mother | Unknown")))
 
 # save group column as factor and reorder
 freq_grouped_wt$group <- freq_grouped_wt$group %>% as.factor() 
