@@ -273,17 +273,19 @@ Regular Expressions Dictionary
     grouping of synonyms. **LEHRLERN** groups together words relating to
     the following terms (the regular expressions should cover all forms
     of the terms: nouns, verbs, adjectives and adverbs).
+    
+      - “teaching” \[*lehren*\]
+    
+      - “learning” \[*lernen* (and past particple, *gelernt*) and
+        *erlernen*\]
+    
+      - “instructing” \[*belehren*\]
+    
+      - “pedagogical” \[*pädagogisch*\]
+    
+      - “didactic” \[*didaktisch*\]
 
-\*\* “teaching” \[*lehren*\]
-
-\*\* “learning” \[*lernen* (and past particple, *gelernt*) and
-*erlernen*\]
-
-\*\* “instructing” \[*belehren*\]
-
-\*\* “pedagogical” \[*pädagogisch*\]
-
-\*\* “didactic” \[*didaktisch*\]
+<!-- end list -->
 
 ``` r
 dict_regex <- dictionary(list(lehrlern = c("lehr(?!s)[a-z]+", 

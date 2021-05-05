@@ -221,15 +221,15 @@ words, rather than a mere grouping of synonyms. **LEHRLERN** groups together
 words relating to the following terms (the regular expressions should cover all 
 forms of the terms: nouns, verbs, adjectives and adverbs).
 
-** "teaching" [*lehren*] 
+  * "teaching" [*lehren*] 
 
-** "learning" [*lernen* (and past particple, *gelernt*) and *erlernen*]
+  * "learning" [*lernen* (and past particple, *gelernt*) and *erlernen*]
 
-** "instructing" [*belehren*]
+  * "instructing" [*belehren*]
 
-** "pedagogical" [*pädagogisch*]
+  * "pedagogical" [*pädagogisch*]
 
-** "didactic" [*didaktisch*]
+  * "didactic" [*didaktisch*]
 
 ```{r}
 dict_regex <- dictionary(list(lehrlern = c("lehr(?!s)[a-z]+", 
