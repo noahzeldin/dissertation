@@ -1008,7 +1008,7 @@ dates_tib_lubridate %>%
 Create color scheme:
 
 ```{r}
-colors_four <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")
+colors_main <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")
 ```
 
 
@@ -1138,7 +1138,7 @@ piece_dfm_no_erfurt_english <- dfm_group(piece_dfm_no_erfurt,
 
 textplot_wordcloud(piece_dfm_no_erfurt_english,
                    max_words = 100,
-                   color = colors_four,
+                   color = colors_main,
                    rotation = FALSE,
                    comparison = TRUE,
                    labelcolor = "black")
@@ -1178,7 +1178,7 @@ freq_piece_plot <-
     scale_x_continuous(breaks = nrow(freq_piece):1, 
                        labels = freq_piece$feature) +
     labs(x = NULL, y = "Relative Frequency") +
-    scale_fill_manual(values = colors_four) + # prob could just use brewer, b/c only 2
+    scale_fill_manual(values = colors_main) + # prob could just use brewer, b/c only 2
     theme_bw() +
     theme(legend.position = "none",
           panel.grid.major.y = element_line(color = "grey", linetype = 3),
@@ -1230,7 +1230,7 @@ freq_piece_gpo_plot <- ggplot(freq_grouped_wt,
     scale_x_continuous(breaks = nrow(freq_grouped_wt):1, 
                        labels = freq_grouped_wt$feature) +
     labs(x = NULL, y = "Relative Frequency") +
-    scale_fill_manual(values = c(colors_four, colors_four)) + # repeat b/c need 8
+    scale_fill_manual(values = c(colors_main, colors_main)) + # repeat b/c need 8
     theme_bw() +
     theme(legend.position = "none",
           panel.grid.major.y = element_line(color = "grey", linetype = 3),
