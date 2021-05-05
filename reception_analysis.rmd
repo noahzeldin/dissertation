@@ -1103,14 +1103,18 @@ publications.
 ### Very Long Articles
 
 The goal is to identify the very long articles in *Measures - Unknown* category, 
-because they stretch out the IQR.
+because they stretch out the IQR. Here, a list of articles in this category in 
+order of descending total tokens (post-processing).
 
 ```{r}
-corp_reduced_summary %>% 
+toks_grouped %>% 
     filter(general_political_orientation == "unknown" &
                piece == "measures") %>% 
-    arrange(desc(tokens)) %>% 
-  select(article, tokens, title:piece)
+    arrange(desc(toks_sum)) %>%
+    mutate(article = doc_id %>% str_replace_all("[a-z]","")) %>% 
+    mutate(article = as.double(article)) %>% 
+    left_join(corp_reduced_summary, by = "article") %>% 
+    select(article, title, author, newspaper, date, toks_sum)
 ```
 
 ## Wordclouds

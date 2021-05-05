@@ -1292,31 +1292,34 @@ detail:
 ### Very Long Articles
 
 The goal is to identify the very long articles in *Measures - Unknown*
-category, because they stretch out the IQR.
+category, because they stretch out the IQR. Here, a list of articles in
+this category in order of descending total tokens (post-processing).
 
 ``` r
-corp_reduced_summary %>% 
+toks_grouped %>% 
     filter(general_political_orientation == "unknown" &
                piece == "measures") %>% 
-    arrange(desc(tokens)) %>% 
-  select(article, tokens, title:piece)
+    arrange(desc(toks_sum)) %>%
+    mutate(article = doc_id %>% str_replace_all("[a-z]","")) %>% 
+    mutate(article = as.double(article)) %>% 
+    left_join(corp_reduced_summary, by = "article") %>% 
+    select(article, title, author, newspaper, date, toks_sum)
 ```
 
-    ## # A tibble: 10 x 11
-    ##    article tokens title newspaper publisher political_affil~ general_politic~
-    ##      <dbl>  <int> <chr> <chr>     <chr>     <chr>            <chr>           
-    ##  1      35   2055 Lehr~ Literari~ Welt Ver~ Unknown          unknown         
-    ##  2      18   1894 Poli~ Der_Anbr~ Universa~ Unknown          unknown         
-    ##  3      42    822 Thea~ Heidelbe~ Independ~ Unknown          unknown         
-    ##  4      45    750 Brec~ Bergisch~ Vossen    Unknown          unknown         
-    ##  5      41    553 Welt~ Thüringi~ Unknown   Unknown          unknown         
-    ##  6      25    535 Anme~ Die_Lite~ Deutsche~ Unknown          unknown         
-    ##  7      19    439 Prob~ Der_Anbr~ Universa~ Unknown          unknown         
-    ##  8       7    365 Brec~ Münchner~ Independ~ Unknown          unknown         
-    ##  9      37    314 Komm~ Bayrisch~ Independ~ Unknown          unknown         
-    ## 10      43    194 Brec~ Dresdner~ Independ~ Unknown          unknown         
-    ## # ... with 4 more variables: date <chr>, author <chr>,
-    ## #   complete_or_incomplete <chr>, piece <chr>
+    ##   article                                         title
+    ## 1      35      Lehrstück in Gegenwart und Vergangenheit
+    ## 2      18 Politische Musik zu Brecht-Eislers »Maßnahme«
+    ## 3      25              Anmerkung zu Brechts »Versuchen«
+    ## 4      19            Probenerfahrung bei der »Maßnahme«
+    ## 5       7     Brecht-Eisler / Die Maßnahme/Philharmonie
+    ## 6      37                       Kommunistische »Musik«.
+    ##                      author               newspaper       date toks_sum
+    ## 1                Julius Bab       Literarische_Welt 19.02.1932      879
+    ## 2 Hans Heinz Stuckenschmidt             Der_Anbruch xx.xx.1931      852
+    ## 3             Lutz Weltmann           Die_Literatur 03.01.1931      215
+    ## 4         Friedrich Deutsch             Der_Anbruch xx.xx.1931      211
+    ## 5          Klaus Pringsheim         Münchner_Merkur 15.12.1930      152
+    ## 6                        k. Bayrische-Staatszeitung 25.11.1932      128
 
 ## Wordclouds
 
