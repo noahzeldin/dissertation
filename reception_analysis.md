@@ -1340,12 +1340,9 @@ By Piece:
 
 ``` r
 # grouped by piece (weighted)
-freq_piece <- dfm_weight(gen_dfm_reduced, scheme = "prop") %>% # 12.21.20 applying dfm_weight seems to make no difference
+freq_piece <- dfm_weight(gen_dfm_reduced, scheme = "prop") %>% 
     textstat_frequency(n = 15, groups = "Piece")
 
-# good, except overlap of a couple of words, can't figure out how to fix
-# yeah, but may not be necessary: keyness w/ target + reference is better,
-# shows typicality rather than freq
 freq_piece_plot <- 
   ggplot(freq_piece, 
        aes(x = nrow(freq_piece):1, y = frequency, fill = group)) +
