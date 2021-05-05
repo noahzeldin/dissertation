@@ -29,16 +29,17 @@ Noah Zeldin
       - [Convert general (reduced) corpus and dfm to dataframes for
         later
         use](#convert-general-reduced-corpus-and-dfm-to-dataframes-for-later-use)
-      - [Create corpus, dfm, ca, etc. of each piece w/o unknown GPO (for
-        CA)](#create-corpus-dfm-ca-etc.-of-each-piece-wo-unknown-gpo-for-ca)
+      - [Create corpus, dfm, ca, etc. of each piece without unknown GPO
+        (for
+        CA)](#create-corpus-dfm-ca-etc.-of-each-piece-without-unknown-gpo-for-ca)
   - [FactoMineR Set-Up (for CA)](#factominer-set-up-for-ca)
   - [Keywords In Context (KWIC) and Keyword
     Exploration](#keywords-in-context-kwic-and-keyword-exploration)
       - [Create function to link KWIC with
         data](#create-function-to-link-kwic-with-data)
       - [Explore various KWIC](#explore-various-kwic)
-          - [Special Case: LEHRLERN in rightwing articles on The
-            Mother](#special-case-lehrlern-in-rightwing-articles-on-the-mother)
+          - [Special Case: LEHRLERN in rightwing articles on *The
+            Mother*](#special-case-lehrlern-in-rightwing-articles-on-the-mother)
       - [Additional Terms Post-Processing
         (DFMs)](#additional-terms-post-processing-dfms)
   - [Dates of Publication with
@@ -52,7 +53,7 @@ Noah Zeldin
           - [Range / Interval](#range-interval)
           - [Proportion of Articles Published near
             Premieres](#proportion-of-articles-published-near-premieres)
-      - [Articles on The Measures Taken published in 1932 (with full
+      - [Articles on *The Measures Taken* published in 1932 (with full
         dates)](#articles-on-the-measures-taken-published-in-1932-with-full-dates)
   - [Visualizations](#visualizations)
       - [Visual Summary of Reduced
@@ -215,6 +216,8 @@ mother_corp_title <- corpus_subset(corp_title, piece == "mother")
 ```
 
 ## Corpus Summary - Article Lengths, etc.
+
+For later reference; used sparingly in analysis.
 
 ``` r
 corp_reduced_summary <- textstat_summary(corp_reduced) %>% 
@@ -398,7 +401,17 @@ original data set and is used extensively in the later analyses. It must
 be added back int dfm’s, using the `groups` function in **quanteda**.
 
 Here, we group the data by both piece and GPO, which results in 8 groups
-total.
+total:
+
+  - *The Measures Taken*
+    
+      - left, center, right, unknown
+
+  - *The Mother*
+    
+      - left, center, right, unknown
+
+<!-- end list -->
 
 ``` r
 grouped_dfm <- dfm_group(gen_dfm,
@@ -503,7 +516,7 @@ gen_datafr_reduced <- convert(gen_dfm_reduced, to = "data.frame")
 corp_reduced_datafr <- convert(corp_reduced, to = "data.frame")
 ```
 
-## Create corpus, dfm, ca, etc. of each piece w/o unknown GPO (for CA)
+## Create corpus, dfm, ca, etc. of each piece without unknown GPO (for CA)
 
 This is necessary for the CA, where I exclude those articles for which
 the GPO is unknown.
@@ -786,7 +799,7 @@ combine_kwic_with_data(corp, "Kantate*", 25) %>%
 
 No results.
 
-### Special Case: LEHRLERN in rightwing articles on The Mother
+### Special Case: LEHRLERN in rightwing articles on *The Mother*
 
 As I explain in ch. 2, **LEHRLERN** is the only term in the keyword
 diction (see above) that can be considered an interpretative combination
@@ -819,7 +832,7 @@ lehrlern_kwic_mother_right <- lehrlern_kwic %>%
 
 ## Additional Terms Post-Processing (DFMs)
 
-LEHRLERN in Mother
+LEHRLERN in *The Mother*
 
 ``` r
 lehrlern_mother_gpo_count <-  
@@ -902,7 +915,7 @@ articles_perc_with_full_dates <- 100 - articles_perc_without_full_dates
 
 ### By Piece
 
-#### Measures Taken
+#### *The Measures Taken*
 
 <!-- may not need this first one (non-Lubridate) -->
 
@@ -964,7 +977,7 @@ dates_tib_lubridate %>%
     ## 19 1932-11-22     1
     ## 20 1932-11-25     1
 
-#### Mother
+#### *The Mother*
 
 All
 
@@ -1079,7 +1092,7 @@ interval(start = articles_first_date,
 
     ## [1] 1930-06-04 UTC--1932-12-09 UTC
 
-#### The Measures Taken
+#### *The Measures Taken*
 
 ``` r
 interval(start = head(dates_mt_lubridate$date, 1),
@@ -1088,7 +1101,7 @@ interval(start = head(dates_mt_lubridate$date, 1),
 
     ## [1] 1930-06-04 UTC--1932-11-25 UTC
 
-#### The Mother
+#### *The Mother*
 
 ``` r
 interval(start = head(dates_mother_lubridate$date, 1),
@@ -1099,7 +1112,7 @@ interval(start = head(dates_mother_lubridate$date, 1),
 
 ### Proportion of Articles Published near Premieres
 
-#### The Measures Taken
+#### *The Measures Taken*
 
 Save date of premiere as variable (cf.
 [GBA](https://www.suhrkamp.de/werkausgabe/werke_grosse_kommentierte_berliner_und_frankfurter_ausgabe_30_baende_in_32_teilbaenden_und_ein_registerband_leinen_24.html)
@@ -1128,7 +1141,7 @@ articles_mt_premiere_week_perc <-
 45% of articles on *The Measures Taken* were published within one week
 of the premiere.
 
-#### The Mother
+#### *The Mother*
 
 Save date of premiere (cf.
 [GBA](https://www.suhrkamp.de/werkausgabe/werke_grosse_kommentierte_berliner_und_frankfurter_ausgabe_30_baende_in_32_teilbaenden_und_ein_registerband_leinen_24.html)
@@ -1157,7 +1170,7 @@ articles_mother_premiere_week_perc <-
 74% of articles on *The Mother* were published within one week of the
 premiere.
 
-## Articles on The Measures Taken published in 1932 (with full dates)
+## Articles on *The Measures Taken* published in 1932 (with full dates)
 
 ``` r
 dates_tib_lubridate %>% 
