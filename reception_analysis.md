@@ -1304,9 +1304,10 @@ detail:
 
 ### Very Long Articles
 
-The goal is to identify the very long articles in *Measures - Unknown*
-category, because they stretch out the IQR. Here, a list of articles in
-this category in order of descending total tokens (post-processing).
+The goal is to identify the very long articles in ***The Measures Taken*
+Unknown** category, because they stretch out the IQR. Here, a list of
+articles in this category in order of descending total tokens
+(post-processing).
 
 ``` r
 toks_grouped %>% 
@@ -1316,23 +1317,18 @@ toks_grouped %>%
     mutate(article = doc_id %>% str_replace_all("[a-z]","")) %>% 
     mutate(article = as.double(article)) %>% 
     left_join(corp_reduced_summary, by = "article") %>% 
-    select(article, title, author, newspaper, date, toks_sum)
+    select(article, toks_sum, title, author, newspaper, date) %>% 
+    knitr::kable()
 ```
 
-    ##   article                                         title
-    ## 1      35      Lehrstück in Gegenwart und Vergangenheit
-    ## 2      18 Politische Musik zu Brecht-Eislers »Maßnahme«
-    ## 3      25              Anmerkung zu Brechts »Versuchen«
-    ## 4      19            Probenerfahrung bei der »Maßnahme«
-    ## 5       7     Brecht-Eisler / Die Maßnahme/Philharmonie
-    ## 6      37                       Kommunistische »Musik«.
-    ##                      author               newspaper       date toks_sum
-    ## 1                Julius Bab       Literarische_Welt 19.02.1932      879
-    ## 2 Hans Heinz Stuckenschmidt             Der_Anbruch xx.xx.1931      852
-    ## 3             Lutz Weltmann           Die_Literatur 03.01.1931      215
-    ## 4         Friedrich Deutsch             Der_Anbruch xx.xx.1931      211
-    ## 5          Klaus Pringsheim         Münchner_Merkur 15.12.1930      152
-    ## 6                        k. Bayrische-Staatszeitung 25.11.1932      128
+| article | toks\_sum | title                                         | author                    | newspaper               | date       |
+| ------: | --------: | :-------------------------------------------- | :------------------------ | :---------------------- | :--------- |
+|      35 |       879 | Lehrstück in Gegenwart und Vergangenheit      | Julius Bab                | Literarische\_Welt      | 19.02.1932 |
+|      18 |       852 | Politische Musik zu Brecht-Eislers »Maßnahme« | Hans Heinz Stuckenschmidt | Der\_Anbruch            | xx.xx.1931 |
+|      25 |       215 | Anmerkung zu Brechts »Versuchen«              | Lutz Weltmann             | Die\_Literatur          | 03.01.1931 |
+|      19 |       211 | Probenerfahrung bei der »Maßnahme«            | Friedrich Deutsch         | Der\_Anbruch            | xx.xx.1931 |
+|       7 |       152 | Brecht-Eisler / Die Maßnahme/Philharmonie     | Klaus Pringsheim          | Münchner\_Merkur        | 15.12.1930 |
+|      37 |       128 | Kommunistische »Musik«.                       | k.                        | Bayrische-Staatszeitung | 25.11.1932 |
 
 ## Wordclouds
 
