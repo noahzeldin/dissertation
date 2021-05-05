@@ -1,4 +1,4 @@
-The Reception of The Measures Taken and The Mother in the
+The Reception of *The Measures Taken* and *The Mother* in the
 Political-Aesthetic Space of the Weimar Republic
 ================
 Noah Zeldin
@@ -8,7 +8,7 @@ Noah Zeldin
   - [Load Packages](#load-packages)
   - [Importation](#importation)
   - [Quanteda Set-Up](#quanteda-set-up)
-      - [Create Corpora](#create-corpora)
+      - [Create Corpora from Data Sets](#create-corpora-from-data-sets)
           - [General Corpora](#general-corpora)
           - [Corpora Grouped by Piece](#corpora-grouped-by-piece)
           - [Corpora of Title Texts](#corpora-of-title-texts)
@@ -29,8 +29,8 @@ Noah Zeldin
       - [Convert general (reduced) corpus and dfm to dataframes for
         later
         use](#convert-general-reduced-corpus-and-dfm-to-dataframes-for-later-use)
-      - [Create corpus, dfm, ca, etc. of each piece w/o unknown
-        GPO](#create-corpus-dfm-ca-etc.-of-each-piece-wo-unknown-gpo)
+      - [Create corpus, dfm, ca, etc. of each piece w/o unknown GPO (for
+        CA)](#create-corpus-dfm-ca-etc.-of-each-piece-wo-unknown-gpo-for-ca)
   - [FactoMineR Set-Up (for CA)](#factominer-set-up-for-ca)
   - [Keywords In Context (KWIC) and Keyword
     Exploration](#keywords-in-context-kwic-and-keyword-exploration)
@@ -72,11 +72,13 @@ dissertation. This analysis was conducted in R and relies heavily on the
 counts, etc.) and [FactoMineR](http://factominer.free.fr/index.html)
 package (for correspondence analysis). (Also, I have tried to use
 [tidyverse](https://www.tidyverse.org/) syntax as consistently as
-possible.) Data sets will be made available to researchers upon request.
+possible.) The data set will be made available to researchers upon
+request.
 
 The **main goals** of this analysis are:
 
-1.  to determine the most-discussed aspects of each work
+1.  to determine the most-discussed aspects of each work (e.g. musical
+    vs.  theatrical components, politics)
     
       - In the dissertation, I compare these results to the works’
         postwar reception.
@@ -116,7 +118,7 @@ data_main <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs")
 ```
 
 `data_main` w/o articles on the Erfurt performance *The Measures Taken*
-(`data_no_erfurt`)
+(`data_no_erfurt`):
 
 ``` r
 data_no_erfurt <- data_main %>% 
@@ -127,9 +129,13 @@ data_no_erfurt <- data_main %>%
     filter(Newspaper != "Internationaler_Revolutionärer_Theater-Bund_(Bulletin)")
 ```
 
+  - 9 articles removed from original data set
+
+(`data_main`).
+
 `data_main` without *Measures Taken* articles on Erfurt performance or
 Ferdinand Junghans, “Das Kartenhaus stürzt\!,” *Neue Preussische
-Kreuz-Zeitung*, n.d. (`data_reduced`)
+Kreuz-Zeitung*, n.d. (`data_reduced`):
 
 ``` r
 data_reduced <- data_no_erfurt %>% 
@@ -140,28 +146,28 @@ data_reduced <- data_no_erfurt %>%
 
 # Quanteda Set-Up
 
-## Create Corpora
+## Create Corpora from Data Sets
 
-In addition to the main corpora, I create additional corpora, based
-e.g. on piece, to provide greater flexibility for later analysis, for
+In addition to the main corpora, I create additional corpora, e.g. based
+on piece, to provide greater flexibility for later analysis, for
 instance, finding and/or counting instances of a keyword in articles on
 *The Mother*.
 
 ### General Corpora
 
-General Corpus (`corp`)
+General Corpus from `data_main` (`corp`):
 
 ``` r
 corp <- corpus(data_main, text_field = "Text")
 ```
 
-`corp` w/o *Measures Taken* Erfurt (`corp_no_erfurt`)
+Corpus from `data_no_erfurt` (`corp_no_erfurt`):
 
 ``` r
 corp_no_erfurt <- corpus(data_no_erfurt, text_field = "Text")
 ```
 
-`corp_reduced`
+Corpus from `data_reduced` (`corp_reduced` ):
 
 ``` r
 corp_reduced <- corpus(data_reduced, text_field = "Text")
@@ -169,24 +175,23 @@ corp_reduced <- corpus(data_reduced, text_field = "Text")
 
 ### Corpora Grouped by Piece
 
-*Measures Taken* Corpus (`mt_corp`)
+*Measures Taken* Corpus (`mt_corp`):
 
 ``` r
 mt_corp <- corpus_subset(corp, Piece == "Massnahme")
 ```
 
-*Measures Taken* Corpus No Erfurt (`mt_corp_no_erfurt`)
-
-  - Again, the articles on the Erfurt performance were removed because
-    of their distortionary effect.
-
-<!-- end list -->
+*Measures Taken* Corpus without articles on Erfurt performance
+(`mt_corp_no_erfurt`):
 
 ``` r
 mt_corp_no_erfurt <- corpus_subset(corp_no_erfurt, Piece == "Massnahme")
 ```
 
-*Mother* Corpus (`mother_corp`)
+  - Again, the articles on the Erfurt performance were removed because
+    of their distortionary effect.
+
+*Mother* Corpus (`mother_corp`):
 
 ``` r
 mother_corp <- corpus_subset(corp, Piece == "Mutter")
@@ -194,16 +199,16 @@ mother_corp <- corpus_subset(corp, Piece == "Mutter")
 
 ### Corpora of Title Texts
 
-This allows for later analysis of the texts of the titles, e.g. keyword
-frequencies.
+This allows for later analysis of the texts of the article titles,
+e.g. keyword frequencies.
 
-Title Corpus (`corp_title`)
+Title Corpus (all articles) (`corp_title`):
 
 ``` r
 corp_title <- corpus(data_main, text_field = "Title")
 ```
 
-*Mother* Title Corpus (`mother_corp_title`)
+*Mother* Title Corpus (`mother_corp_title`):
 
 ``` r
 mother_corp_title <- corpus_subset(corp_title, Piece == "Mutter")
@@ -231,7 +236,9 @@ General Dictionary
 
   - This dictionary contains what I perceived to be the most important
     keywords in the corpus and those on which I wished to focus in my
-    analysis.
+    analysis. As I explain in ch. 2, I read through all of the articles
+    in the corpus prior to conducting this analysis. As a result, I had
+    a clear idea of those terms on which I would focus.
 
 <!-- end list -->
 
@@ -311,7 +318,8 @@ sw_add <- c("dass", "wurde", "schon", "mehr", "ganz*", "immer", "gibt", "ja",
 
 ## Tokenize and Filter Corpora
 
-Create function for tokenizing and removing stopwords:
+Create function for tokenizing and removing stopwords, punctuation and
+other symbols:
 
 ``` r
 tokenize_and_remove_stopwords <- function(i) {
@@ -325,7 +333,7 @@ tokenize_and_remove_stopwords <- function(i) {
 }
 ```
 
-Tokenize and filter corpora:
+Tokenize and filter corpora (results in tokens object, labeled `_toks`):
 
 ``` r
 # general / ungrouped
@@ -363,7 +371,8 @@ convert_to_dfm_and_apply_dictionaries <- function(i) {
 }
 ```
 
-Convert and apply dictionaries to corpora, using above-defined function:
+Convert and apply dictionaries to tokens objects, using above-defined
+function:
 
 ``` r
 # general / ungrouped
@@ -385,9 +394,8 @@ mother_title_dfm <- convert_to_dfm_and_apply_dictionaries(mother_title_toks)
 ### Group dfm’s by General Political Orientation (GPO)
 
 **GPO** or “general political orientation” is a variable included in the
-original data set and is used extensively in the later analyses. Since
-it is lost in the creation of **dfm**’s, it must be added back in, using
-the `groups` function in **quanteda**.
+original data set and is used extensively in the later analyses. It must
+be added back int dfm’s, using the `groups` function in **quanteda**.
 
 Here, we group the data by both piece and GPO, which results in 8 groups
 total.
@@ -495,12 +503,13 @@ gen_datafr_reduced <- convert(gen_dfm_reduced, to = "data.frame")
 corp_reduced_datafr <- convert(corp_reduced, to = "data.frame")
 ```
 
-## Create corpus, dfm, ca, etc. of each piece w/o unknown GPO
+## Create corpus, dfm, ca, etc. of each piece w/o unknown GPO (for CA)
 
 This is necessary for the CA, where I exclude those articles for which
 the GPO is unknown.
 
-Create dfm w/o distortionary Erfurt articles or articles w/ unknown GPO:
+Create dfm without distortionary Erfurt articles or articles with
+unknown GPO:
 
 ``` r
 # broken up into 3 separate steps for legibility
@@ -516,7 +525,7 @@ dfm_no_erfurt_or_unknown <-
   convert_to_dfm_and_apply_dictionaries(toks_no_erfurt_or_unknown)
 ```
 
-Just GPO, not piece (not currently using)
+Just GPO, not piece (not currently using):
 
 ``` r
 gpo_dfm_no_erfurt_or_unknown <- dfm_group(dfm_no_erfurt_or_unknown,
