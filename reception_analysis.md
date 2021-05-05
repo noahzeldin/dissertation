@@ -462,21 +462,21 @@ gpo_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
 Not currently used in the analysis but leaving for the moment.
 
 ``` r
-# Left
+# left
 left_sub <- dfm_subset(grouped_dfm, 
-                       general_political_orientation == "Left")
+                       general_political_orientation == "left")
 
-# Right
+# right
 right_sub <- dfm_subset(grouped_dfm, 
-                        general_political_orientation == "Right")
+                        general_political_orientation == "right")
 
-# Center
+# center
 center_sub <- dfm_subset(grouped_dfm, 
-                         general_political_orientation == "Center")
+                         general_political_orientation == "center")
 
-# Unknown
+# unknown
 unknown_sub <- dfm_subset(grouped_dfm,
-                          general_political_orientation == "Unknown")
+                          general_political_orientation == "unknown")
 ```
 
 ### By Piece
@@ -516,7 +516,7 @@ unknown GPO:
 
 corp_no_erfurt_or_unknown <- 
   corpus_subset(corp_no_erfurt, 
-                ! general_political_orientation == "Unknown" )
+                ! general_political_orientation == "unknown" )
 
 toks_no_erfurt_or_unknown <- 
   tokenize_and_remove_stopwords(corp_no_erfurt_or_unknown)
@@ -546,7 +546,7 @@ Only articles on *The Measures Taken*:
 mt_corp_no_erfurt_or_unknown <- 
   corpus_subset(corp_no_erfurt,
                 piece == "measures" &! 
-                  general_political_orientation == "Unknown" )
+                  general_political_orientation == "unknown" )
 
 
 mt_toks_no_erfurt_or_unknown <- 
@@ -566,7 +566,7 @@ Only articles on *The Mother*:
 mother_corp_no_unknown <- 
   corpus_subset(corp, 
                 piece == "mother" &! 
-                  general_political_orientation == "Unknown" )
+                  general_political_orientation == "unknown" )
 
 mother_toks_no_unknown <- tokenize_and_remove_stopwords(mother_corp_no_unknown)
 
@@ -814,7 +814,7 @@ Filter for *The Mother* and right GPO:
 
 ``` r
 lehrlern_kwic_mother_right <- lehrlern_kwic %>% 
-  filter(piece == "mother" & general_political_orientation == "Right")
+  filter(piece == "mother" & general_political_orientation == "right")
 ```
 
 ## Additional Terms Post-Processing (DFMs)
@@ -832,10 +832,10 @@ lehrlern_mother_gpo_count
     ## # A tibble: 4 x 2
     ##   doc_id  LEHRLERN
     ##   <chr>      <dbl>
-    ## 1 Center        29
-    ## 2 Left          18
-    ## 3 Right         15
-    ## 4 Unknown       15
+    ## 1 center        29
+    ## 2 left          18
+    ## 3 right         15
+    ## 4 unknown       15
 
 # Dates of Publication with Counts
 
@@ -1226,13 +1226,13 @@ toks_grouped <- toks_grouped %>%
     add_count(piece, general_political_orientation)
 
 # STEP 4
-# must save GPO as factor and relevel, so that Left appears first
+# must save GPO as factor and relevel, so that left appears first
 toks_grouped <- toks_grouped %>% 
     mutate(general_political_orientation = 
                as.factor(general_political_orientation))
 
 toks_grouped$general_political_orientation <- 
-    toks_grouped$general_political_orientation %>% fct_relevel("Left")
+    toks_grouped$general_political_orientation %>% fct_relevel("left")
 ```
 
 Code for boxplot:
@@ -1296,7 +1296,7 @@ category, because they stretch out the IQR.
 
 ``` r
 corp_reduced_summary %>% 
-    filter(general_political_orientation == "Unknown" &
+    filter(general_political_orientation == "unknown" &
                piece == "measures") %>% 
     arrange(desc(tokens)) %>% 
   select(article, tokens, title:piece)
@@ -1305,16 +1305,16 @@ corp_reduced_summary %>%
     ## # A tibble: 10 x 11
     ##    article tokens title newspaper publisher political_affil~ general_politic~
     ##      <dbl>  <int> <chr> <chr>     <chr>     <chr>            <chr>           
-    ##  1      35   2055 Lehr~ Literari~ Welt Ver~ Unknown          Unknown         
-    ##  2      18   1894 Poli~ Der_Anbr~ Universa~ Unknown          Unknown         
-    ##  3      42    822 Thea~ Heidelbe~ Independ~ Unknown          Unknown         
-    ##  4      45    750 Brec~ Bergisch~ Vossen    Unknown          Unknown         
-    ##  5      41    553 Welt~ Thüringi~ Unknown   Unknown          Unknown         
-    ##  6      25    535 Anme~ Die_Lite~ Deutsche~ Unknown          Unknown         
-    ##  7      19    439 Prob~ Der_Anbr~ Universa~ Unknown          Unknown         
-    ##  8       7    365 Brec~ Münchner~ Independ~ Unknown          Unknown         
-    ##  9      37    314 Komm~ Bayrisch~ Independ~ Unknown          Unknown         
-    ## 10      43    194 Brec~ Dresdner~ Independ~ Unknown          Unknown         
+    ##  1      35   2055 Lehr~ Literari~ Welt Ver~ Unknown          unknown         
+    ##  2      18   1894 Poli~ Der_Anbr~ Universa~ Unknown          unknown         
+    ##  3      42    822 Thea~ Heidelbe~ Independ~ Unknown          unknown         
+    ##  4      45    750 Brec~ Bergisch~ Vossen    Unknown          unknown         
+    ##  5      41    553 Welt~ Thüringi~ Unknown   Unknown          unknown         
+    ##  6      25    535 Anme~ Die_Lite~ Deutsche~ Unknown          unknown         
+    ##  7      19    439 Prob~ Der_Anbr~ Universa~ Unknown          unknown         
+    ##  8       7    365 Brec~ Münchner~ Independ~ Unknown          unknown         
+    ##  9      37    314 Komm~ Bayrisch~ Independ~ Unknown          unknown         
+    ## 10      43    194 Brec~ Dresdner~ Independ~ Unknown          unknown         
     ## # ... with 4 more variables: date <chr>, author <chr>,
     ## #   complete_or_incomplete <chr>, piece <chr>
 
@@ -1344,7 +1344,7 @@ wordcloud_mother_gpo <-
   textplot_wordcloud(mother_dfm_gpo_no_unknown,
                    max_words = 100,
                    rotation = FALSE,
-                   # must do manual order for colors, so that Left is red
+                   # must do manual order for colors, so that left is red
                    color = c("#377EB8", "#E41A1C", "#4DAF4A", "#984EA3"),
                    comparison = TRUE,
                    labelcolor = "black")
@@ -1398,17 +1398,17 @@ freq_grouped_wt <- dfm_weight(gen_dfm_reduced, scheme = "prop") %>%
 # rename groups
 freq_grouped_wt <- freq_grouped_wt %>% 
     mutate(group = str_replace_all(group, 
-                                   c("measures.Left" = "Measures Taken | Left", 
-                                     "measures.Center" = 
+                                   c("measures.left" = "Measures Taken | Left", 
+                                     "measures.center" = 
                                        "Measures Taken | Center", 
-                                     "measures.Right" = 
+                                     "measures.right" = 
                                        "Measures Taken | Right",
-                                     "measures.Unknown" = 
+                                     "measures.unknown" = 
                                        "Measures Taken | Unknown",
-                                     "mother.Left" = "Mother | Left",
-                                     "mother.Center" = "Mother | Center",
-                                     "mother.Right" = "Mother | Right",
-                                     "mother.Unknown" = "Mother | Unknown")))
+                                     "mother.left" = "Mother | Left",
+                                     "mother.center" = "Mother | Center",
+                                     "mother.right" = "Mother | Right",
+                                     "mother.unknown" = "Mother | Unknown")))
 
 # save group column as factor and reorder
 freq_grouped_wt$group <- freq_grouped_wt$group %>% as.factor() 
