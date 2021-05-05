@@ -11,7 +11,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
-knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Documents/R stuff/R projects/dissertation")
+knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Desktop/Proposal/R materials for dissertation/data/data_github")
 ```
 
 # Introductory Remarks
