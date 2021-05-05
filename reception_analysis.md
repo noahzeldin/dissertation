@@ -86,10 +86,9 @@ The **main goals** of this analysis are:
     
       - Hence the notion of the “political-aesthetic space.”
 
-**NB: Further refinements to the code are forthcoming.** This was my
-first serious attempt at coding in R, so certain portions are still a
-bit clunky. The final version will be included in the supplementary
-materials of the dissertation.
+**NB: Further refinements to the code are forthcoming.** The final
+version will be included in the supplementary materials of the
+dissertation.
 
 In the near future, I will upload the corresponding write-up included in
 ch. 2 of my dissertation to this repository.
@@ -108,18 +107,16 @@ library(lubridate)
 # Importation
 
 NB: Several articles had to be removed because of their distortionary
-effects. This resulted in multiple versions of the data, as shown below.
-Although I ultimately only use the third of these (`data_reduced`), I
-have left the excluded articles in the data set for the sake of
-transparency and because other researchers may find them useful.
+effects. This resulted in three versions of the data, as shown below.
 
-Main Data Set (all articles)
+Main data set containing all articles (`data_main`):
 
 ``` r
 data_main <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs")
 ```
 
-`data_main` w/o *Measures Taken* articles on Erfurt performance
+`data_main` w/o articles on the Erfurt performance *The Measures Taken*
+(`data_no_erfurt`)
 
 ``` r
 data_no_erfurt <- data_main %>% 
@@ -130,9 +127,9 @@ data_no_erfurt <- data_main %>%
     filter(Newspaper != "Internationaler_Revolutionärer_Theater-Bund_(Bulletin)")
 ```
 
-`data_main` w/o *Measures Taken* articles on Erfurt performance or
+`data_main` without *Measures Taken* articles on Erfurt performance or
 Ferdinand Junghans, “Das Kartenhaus stürzt\!,” *Neue Preussische
-Kreuz-Zeitung*, n.d.
+Kreuz-Zeitung*, n.d. (`data_reduced`)
 
 ``` r
 data_reduced <- data_no_erfurt %>% 
