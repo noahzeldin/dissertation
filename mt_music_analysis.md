@@ -86,7 +86,7 @@ work but focuses on the choral material. However, some of the
 calculations involved with the latter require the former.
 
 NB: Several column types in both spreadsheets must be converted to
-*factors* in a separate step because this is not an option with
+**factors** in a separate step because this is not an option with
 `readxl()` (explained again below).
 
 ## Duration
