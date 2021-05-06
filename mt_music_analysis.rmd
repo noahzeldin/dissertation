@@ -38,7 +38,7 @@ There are **two** separate spreadsheets:
 
 1. **durations** of each piece (`mt_data_durations_meters.xlsx`)
 
-  * also used to compute e.g. rates of meter change
+  + also used to compute e.g. rates of meter change
 
 2. much more detailed data relating specifically to the **choral material** 
 (`mt_data_choir.xlsx`)
@@ -94,6 +94,9 @@ excel_sheets("mt_data_choir.xlsx")
 ```
 
 Import all sheets into a single list and specify column types:
+
+* NB: Several columns must be converted to factor later because this is not an 
+option with `readxl()` (explained again below).
 
 ```{r}
 voice_analysis_sheets <- excel_sheets("mt_data_choir.xlsx")
@@ -186,7 +189,8 @@ gen_tib <- as_tibble(bind_rows(voice_analysis_list))
 
 # Cleaning and Manipulation: 1. Durations
 
-Convert **piece_no**, **category** and **subcategory** to factors:
+Convert **piece_no**, **category** and **subcategory** to factors (not possible 
+with `readxl()`):
 
 ```{r}
 dur_tib <- dur_tib %>% 

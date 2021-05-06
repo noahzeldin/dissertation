@@ -143,6 +143,11 @@ excel_sheets("mt_data_choir.xlsx")
 
 Import all sheets into a single list and specify column types:
 
+  - NB: Several columns must be converted to factor later because this
+    is not an option with `readxl()` (explained again below).
+
+<!-- end list -->
+
 ``` r
 voice_analysis_sheets <- excel_sheets("mt_data_choir.xlsx")
 
@@ -231,7 +236,8 @@ gen_tib <- as_tibble(bind_rows(voice_analysis_list))
 
 # Cleaning and Manipulation: 1. Durations
 
-Convert **piece\_no**, **category** and **subcategory** to factors:
+Convert **piece\_no**, **category** and **subcategory** to factors (not
+possible with `readxl()`):
 
 ``` r
 dur_tib <- dur_tib %>% 
