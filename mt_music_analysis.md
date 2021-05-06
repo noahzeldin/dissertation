@@ -62,11 +62,8 @@ available to researchers upon request.
 
 ``` r
 library(tidyverse)
-library(readxl)
-library(ggforce)
-library(scales)
 library(lubridate)
-library(mosaic) # may be unnecessary
+library(readxl)
 ```
 
 # Importation
