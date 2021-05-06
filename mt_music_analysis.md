@@ -86,11 +86,11 @@ the latter require the former.
 Import all sheets into a single list and specify column types:
 
 ``` r
-durations_sheets <- excel_sheets("Massnahme_durations_meter_changes.xlsx")
+durations_sheets <- excel_sheets("mt_data_durations_meters.xlsx")
 
 durations_list <- lapply(durations_sheets, 
                          function(x) 
-                             read_excel("Massnahme_durations_meter_changes.xlsx", 
+                             read_excel("mt_data_durations_meters.xlsx", 
                                                   sheet = x, 
                                                           col_types = c(
                                                               "text", # piece_no
@@ -123,7 +123,7 @@ Check worksheets and ensure that there is a sheet for each piece
 containing choral material:
 
 ``` r
-excel_sheets("Massnahme_choir_voice_analysis.xlsx")
+excel_sheets("mt_data_choir.xlsx")
 ```
 
     ##  [1] "1 Vorspiel"                     "2b Lob der U.S.S.R."           
@@ -139,10 +139,10 @@ excel_sheets("Massnahme_choir_voice_analysis.xlsx")
 Import all sheets into a single list and specify column types:
 
 ``` r
-voice_analysis_sheets <- excel_sheets("Massnahme_choir_voice_analysis.xlsx")
+voice_analysis_sheets <- excel_sheets("mt_data_choir.xlsx")
 
 voice_analysis_list <- lapply(voice_analysis_sheets, 
-                           function(x) read_excel("Massnahme_choir_voice_analysis.xlsx", 
+                           function(x) read_excel("mt_data_choir.xlsx", 
                                                   sheet = x, 
                                                           col_types = c(
                                                               "text", # piece_no
