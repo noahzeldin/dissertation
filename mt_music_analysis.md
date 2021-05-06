@@ -245,29 +245,7 @@ dur_tib <- dur_tib %>%
     mutate(subcategory = as_factor(subcategory))
 ```
 
-<!-- Check to see if each piece is now a factor. -->
-
-<!-- * NB: n col. refers to # of segments -->
-
-<!-- ```{r} -->
-
-<!-- dur_tib$piece_no %>%  -->
-
-<!--     fct_count() -->
-
-<!-- ``` -->
-
-<!-- same for category -->
-
-<!-- ```{r} -->
-
-<!-- dur_tib$category %>%  -->
-
-<!--     fct_count() -->
-
-<!-- ``` -->
-
-Re-level subcategories:
+Re-level subcategories and ensure proper order:
 
 ``` r
 dur_tib$subcategory <- dur_tib$subcategory %>% 
@@ -305,19 +283,7 @@ gen_tib <- gen_tib %>%
     mutate(piece_no = as_factor(piece_no))
 ```
 
-<!-- Check to see if each piece is now a factor. -->
-
-<!-- * **Add something about n = # of mm. - and check.** -->
-
-<!-- ```{r} -->
-
-<!-- gen_tib$piece_no %>%  -->
-
-<!--     fct_count() -->
-
-<!-- ``` -->
-
-Since 6c now follows 7a, must re-level (and check):
+Since 6c now follows 7a, must re-level (and then double check):
 
 ``` r
 gen_tib$piece_no <- gen_tib$piece_no %>% 
@@ -440,36 +406,6 @@ gen_tib_sung <- gen_tib %>%
                spoken == 0) 
 ```
 
-<!-- Check to see if any NAs remain. The following should return an **empty**  -->
-
-<!-- table. -->
-
-<!-- ```{r} -->
-
-<!-- gen_tib_sung %>%  -->
-
-<!--     filter(is.na(dm_s1), -->
-
-<!--            is.na(dm_s2),  -->
-
-<!--            is.na(dm_a1), -->
-
-<!--            is.na(dm_a2), -->
-
-<!--            is.na(dm_t1), -->
-
-<!--            is.na(dm_t2), -->
-
-<!--            is.na(dm_b1), -->
-
-<!--            is.na(dm_b2)) %>%  -->
-
-<!--     select(id, piece_no, measure, starts_with("notes_"), starts_with("tones_"), -->
-
-<!--            quarters_per_bar, starts_with("dm_"))  -->
-
-<!-- ``` -->
-
 ## Tibble for Pitch: pitch\_tib
 
 Create tibble containing data on choir’s pitch material in each measure:
@@ -504,6 +440,10 @@ basis of my formal analysis and some of the values were used in the
 write-up included in the chapter.
 
 ## Durations: General
+
+The following calculations derive from the data set:
+`mt_data_durations_meters.xlsx` (post-importation and -processing:
+`dur_tib`).
 
 ### Total Duration in Minutes
 
@@ -1056,6 +996,9 @@ choral material. The calculations here determine the proportions of
 choral material that are sung (with and without instrumental
 accompaniment) or spoken.
 
+The following calculations derive from the data set:
+`mt_data_choir.xlsx` (post-importation and -processing: `dur_choir`).
+
 ### Choir Total Durations
 
 Create tibble containing only measures with choir:
@@ -1068,7 +1011,10 @@ choir_tib <- gen_tib %>%
 Total duration of choir:
 
 ``` r
+# in seconds
 dur_choir_total_sec <- sum(choir_tib$dur_choir)
+
+# in minutes
 dur_choir_total_min <- sum(choir_tib$dur_choir) / 60
 ```
 
@@ -1087,6 +1033,9 @@ The choir is active for 51.94 % of total duration of music.
 
 ### Choir Sung Durations
 
+Create table listing the pieces with the greatest durations of **sung**
+choral material:
+
 ``` r
 gen_tib %>% 
     filter(dur_choir != 0 & spoken == 0) %>% 
@@ -1096,36 +1045,31 @@ gen_tib %>%
     mutate(dur_choir_prop = dur_choir / sum(dur_choir)) %>% 
     mutate(dur_choir = round(dur_choir, digits = 2), 
            dur_choir_prop = round(dur_choir_prop, digits = 3)) %>% 
-    arrange(desc(dur_choir_prop))
+    arrange(desc(dur_choir_prop)) %>% 
+    knitr::kable()
 ```
 
-    ## # A tibble: 14 x 3
-    ##    piece_no dur_choir dur_choir_prop
-    ##    <fct>        <dbl>          <dbl>
-    ##  1 9           210             0.192
-    ##  2 1           170.            0.155
-    ##  3 4           134.            0.123
-    ##  4 5           124.            0.114
-    ##  5 2b          111.            0.102
-    ##  6 10           88.1           0.081
-    ##  7 14           80.3           0.073
-    ##  8 7a           51.5           0.047
-    ##  9 12b          48.1           0.044
-    ## 10 13b          26.4           0.024
-    ## 11 11           19             0.017
-    ## 12 6c           14.1           0.013
-    ## 13 8b           10.6           0.01 
-    ## 14 13a           4.76          0.004
-
-<!-- Pretty interesting: -->
-
-<!-- * 9. Aendere die Welt has by far most choir singing -> include in analysis -->
-
-<!-- * other pieces with complex polyphony in top 5: -->
-
-<!-- ** 4. Lob der illegalen Arbeit and 2b. Lob der USSR -->
+| piece\_no | dur\_choir | dur\_choir\_prop |
+| :-------- | ---------: | ---------------: |
+| 9         |     210.00 |            0.192 |
+| 1         |     169.71 |            0.155 |
+| 4         |     134.44 |            0.123 |
+| 5         |     124.31 |            0.114 |
+| 2b        |     111.30 |            0.102 |
+| 10        |      88.12 |            0.081 |
+| 14        |      80.29 |            0.073 |
+| 7a        |      51.50 |            0.047 |
+| 12b       |      48.10 |            0.044 |
+| 13b       |      26.45 |            0.024 |
+| 11        |      19.00 |            0.017 |
+| 6c        |      14.09 |            0.013 |
+| 8b        |      10.57 |            0.010 |
+| 13a       |       4.76 |            0.004 |
 
 ### Choir Acapella Durations
+
+Create list of pieces with **acapella** choral material (saved as
+`dur_acapella`):
 
 ``` r
 dur_acapella <- gen_tib %>% 
@@ -1150,7 +1094,7 @@ knitr::kable(dur_acapella)
 | 13a       |       4.76 |            0.032 |
 | 13b       |      26.45 |            0.178 |
 
-Arrange descending to see top pieces:
+Arrange `dur_acapella` by duration (descending) to see top pieces:
 
 ``` r
 dur_acapella %>% 
@@ -1176,11 +1120,10 @@ sum(dur_acapella$dur_choir) / dur_choir_total_sec
 
     ## [1] 0.1236756
 
-<!-- Good results: -->
-
-<!-- * top 2 are 2b. Lob der USSR and 9. Aendere die Welt -->
-
 ### Choir Spoken Durations
+
+Create list of works with greatest durations of **spoken** choral
+material:
 
 ``` r
 gen_tib %>% 
@@ -1207,21 +1150,12 @@ gen_tib %>%
     ## 8 10            3             0.027
     ## 9 7b            1.8           0.016
 
-<!-- Interesting that 14. Schlusschor is top. -->
-
-<!-- Other remarks: -->
-
-<!-- * close second is 3b. Sprechchor = Wer fuer den Kommunismus kaempft -->
-
-<!-- * interesting that 3b. is only category 4 piece in top 5 -->
-
 ### Choir Voice Durations
 
 #### Check for measures where duration of 1st and 2nd parts don’t align.
 
 NB: As is typical for choral music, Eisler sometimes splits the part of
-one or more of the four voices. The calculations below take account of
-this.
+one or more of the four voices. The calculations below account for this.
 
 1.  Sopranos
 
@@ -1319,8 +1253,11 @@ gen_tib_sung %>%
     ## #   dm_s1 <dbl>, dm_s2 <dbl>, dm_a1 <dbl>, dm_a2 <dbl>, dm_t1 <dbl>,
     ## #   dm_t2 <dbl>, dm_b1 <dbl>, dm_b2 <dbl>, dm_sum <dbl>, dmc <dbl>
 
-Only antiphonic passage at beginning of “Lob der Partei.” Doesn’t
-matter, because t1 and t2 overlap.
+  - Only the antiphonic passage at beginning of “Lob der Partei.” This
+    doesn’t impact any of the calculations, because even though t1 and
+    t2 are split, they overlap.
+
+<!-- end list -->
 
 4.  Basses
 
@@ -1354,8 +1291,8 @@ gen_tib_sung %>%
     ## #   dm_s1 <dbl>, dm_s2 <dbl>, dm_a1 <dbl>, dm_a2 <dbl>, dm_t1 <dbl>,
     ## #   dm_t2 <dbl>, dm_b1 <dbl>, dm_b2 <dbl>, dm_sum <dbl>, dmc <dbl>
 
-Final measure of “Streiklied.” Doesn’t matter, because b1 and b2
-overlap.
+  - Only the final measure of “Streiklied.” As is the case with the
+    tenors, this doesn’t matter, because b1 and b2 overlap.
 
 #### Check for measures where 2nd sings but 1st doesn’t
 
@@ -1459,9 +1396,10 @@ gen_tib_sung %>%
     ## #   dm_s1 <dbl>, dm_s2 <dbl>, dm_a1 <dbl>, dm_a2 <dbl>, dm_t1 <dbl>,
     ## #   dm_t2 <dbl>, dm_b1 <dbl>, dm_b2 <dbl>, dm_sum <dbl>, dmc <dbl>
 
-Only beginning of “Lob der Partei,” as expected.
+  - Only the beginning of “Lob der Partei,” as expected. Save as extra
+    duration to add to male proportion (`dur_t2_extra`).
 
-Save as extra duration to add to male proportion.
+<!-- end list -->
 
 ``` r
 dur_t2_extra <- gen_tib_sung %>% 
@@ -1582,7 +1520,9 @@ gen_tib_sung %>%
     ## 2 10            10  0.375   2.25
     ## 3 10            14  0.375   2.25
 
-Again, doesn’t matter because of overlap.
+  - This doesn’t matter because there is overlap.
+
+<!-- end list -->
 
 4.  Basses
 
@@ -1599,84 +1539,62 @@ gen_tib_sung %>%
     ##   <fct>      <dbl>  <dbl>  <dbl>
     ## 1 7a            64   0.75   0.25
 
-Again, doesn’t matter because of overlap.
+  - Again, this doesn’t matter because of the overlap.
 
 #### Computations for male vs. female
 
 The introduction of mixed choirs into the German worker-singers’
 movement was a widely discussed and highly politicized topic in the
-Weimar Republic. These calculations determine the extent to which Eisler
-used women’s voices in comparison to men’s voices.
+Weimar Republic. I address this point briefly in ch. 2.
 
-<!-- Four voices - FIX - need to account for doublings, can't just add 1 and 2 -->
-
-<!-- **CURRENTLY SKIPPING THIS CHUNK - PROB DELETE** -->
-
-<!-- ```{r, eval=FALSE} -->
-
-<!-- dur_soprano <- sum(gen_tib_sung$dur_s1 + gen_tib_sung$dur_s2) -->
-
-<!-- dur_alto <- sum(gen_tib_sung$dur_a1 + gen_tib_sung$dur_a2) -->
-
-<!-- dur_tenor <- sum(gen_tib_sung$dur_t1 + gen_tib_sung$dur_t2) -->
-
-<!-- dur_bass <- sum(gen_tib_sung$dur_b1 + gen_tib_sung$dur_b2) # FIX/CHECK -->
-
-<!-- dur_soprano <- sum(gen_tib_sung$soprano * gen_tib_sung) -->
-
-<!-- dur_voice <-  -->
-
-<!--     tibble(voice = c("soprano", "alto", "tenor", "bass"), -->
-
-<!--     dur_min =  -->
-
-<!--     c(dur_soprano /60,  -->
-
-<!--     dur_alto / 60,  -->
-
-<!--     dur_tenor / 60,  -->
-
-<!--     dur_bass / 60)) -->
-
-<!-- dur_voice %>%  -->
-
-<!--     mutate(dur_prop = dur_min / sum(dur_min)) -->
-
-<!-- ``` -->
+These following calculations determine the extent to which Eisler used
+women’s voices in comparison to men’s voices.
 
 Generate sums of sung material for each voice:
 
 ``` r
+# soprano
 dur_s1_sung <- gen_tib_sung %>% 
     select(dur_s1) %>% 
     sum()
 
+# alto
 dur_a1_sung <- gen_tib_sung %>% 
     select(dur_a1) %>% 
     sum()
 
+# tenor
 dur_t1_sung <- gen_tib_sung %>% 
     select(dur_t1) %>% 
     sum()
 
+# bass
 dur_b1_sung <- gen_tib_sung %>% 
     select(dur_b1) %>% 
     sum()
 
-dur_sung_total <- dur_s1_sung + dur_a1_sung + dur_t1_sung + dur_b1_sung + dur_t2_extra
+# total (plus extra from tenor 2 - see above)
+dur_sung_total <- dur_s1_sung + dur_a1_sung + dur_t1_sung + dur_b1_sung + 
+  dur_t2_extra
 
+# total of women's voices (soprano + alto)
 dur_female_sung <- dur_s1_sung + dur_a1_sung
+
+# total of men's voices (tenor + bass)
 dur_male_sung <- dur_t1_sung + dur_b1_sung + dur_t2_extra
 ```
 
-Calculate proportions of male and female durations:
+Calculate proportions of male and female durations and save for further
+calculations:
 
 ``` r
 dur_female_sung_perc <- round((dur_female_sung/dur_sung_total)*100)
+
 dur_male_sung_perc <- round((dur_male_sung/dur_sung_total)*100)
 ```
 
-Compute proportion of discrepancy resulting from pieces 5 and 7a:
+Compute proportion of discrepancy resulting from pieces 5 and 7a (the
+two pieces that feature men’s choir):
 
 1.  Get extra durations for tenors and basses:
 
@@ -1694,7 +1612,7 @@ dur_b1_sung_5_and_7a <-gen_tib_sung %>%
     sum()
 ```
 
-2.  Amount by which dur\_male is longer than dur\_female:
+2.  Amount by which `dur_male` is longer than `dur_female`:
 
 <!-- end list -->
 
