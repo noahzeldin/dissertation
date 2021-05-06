@@ -85,6 +85,10 @@ Both are necessary. The chapter begins with a structural overview of the
 work but focuses on the choral material. However, some of the
 calculations involved with the latter require the former.
 
+NB: Several column types in both spreadsheets must be converted to
+*factors* in a separate step because this is not an option with
+`readxl()` (explained again below).
+
 ## Duration
 
 Import all sheets into a single list and specify column types:
@@ -142,11 +146,6 @@ excel_sheets("mt_data_choir.xlsx")
     ## [17] "13b (untitled)"                 "14 Schlusschor"
 
 Import all sheets into a single list and specify column types:
-
-  - NB: Several columns must be converted to factor later because this
-    is not an option with `readxl()` (explained again below).
-
-<!-- end list -->
 
 ``` r
 voice_analysis_sheets <- excel_sheets("mt_data_choir.xlsx")
@@ -299,7 +298,7 @@ dur_tib$subcategory %>%
 
 ## General Tibble: gen\_tib
 
-Convert **piece\_no** to factor:
+Convert **piece\_no** to factor (not possible with `readxl()`):
 
 ``` r
 gen_tib <- gen_tib %>% 
