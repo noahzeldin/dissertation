@@ -1578,19 +1578,19 @@ dur_sung_total <- dur_s1_sung + dur_a1_sung + dur_t1_sung + dur_b1_sung +
   dur_t2_extra
 
 # total of women's voices (soprano + alto)
-dur_female_sung <- dur_s1_sung + dur_a1_sung
+dur_women_sung <- dur_s1_sung + dur_a1_sung
 
 # total of men's voices (tenor + bass)
-dur_male_sung <- dur_t1_sung + dur_b1_sung + dur_t2_extra
+dur_men_sung <- dur_t1_sung + dur_b1_sung + dur_t2_extra
 ```
 
 Calculate proportions of male and female durations and save for further
 calculations:
 
 ``` r
-dur_female_sung_perc <- round((dur_female_sung/dur_sung_total)*100)
+dur_women_sung_perc <- round((dur_women_sung/dur_sung_total)*100)
 
-dur_male_sung_perc <- round((dur_male_sung/dur_sung_total)*100)
+dur_men_sung_perc <- round((dur_men_sung/dur_sung_total)*100)
 ```
 
 Compute proportion of discrepancy resulting from pieces 5 and 7a (the
@@ -1612,12 +1612,12 @@ dur_b1_sung_5_and_7a <-gen_tib_sung %>%
     sum()
 ```
 
-2.  Amount by which `dur_male` is longer than `dur_female`:
+2.  Amount by which `dur_men` is longer than `dur_women`:
 
 <!-- end list -->
 
 ``` r
-dur_male_sung - dur_female_sung
+dur_men_sung - dur_women_sung
 ```
 
     ## [1] 629.0887
@@ -1637,11 +1637,11 @@ dur_t1_sung_5_and_7a + dur_b1_sung_5_and_7a
 <!-- end list -->
 
 ``` r
-dur_male_extra_from_5_and_7a_perc <- 
+dur_men_extra_from_5_and_7a_perc <- 
   round(((dur_t1_sung_5_and_7a + dur_b1_sung_5_and_7a) /
-         (dur_male_sung - dur_female_sung)) * 100)
+         (dur_men_sung - dur_women_sung)) * 100)
 
-dur_male_extra_from_5_and_7a_perc
+dur_men_extra_from_5_and_7a_perc
 ```
 
     ## [1] 53
@@ -1661,12 +1661,16 @@ homophony). This claim is fully developed in ch. 2.
 
 ### Whole Work
 
+As a precaution, I compute the proportions of each texture in relation
+to both **measure count** and **duration**. The results differ very
+little from each other.
+
 #### By Measure Count
 
-Generate tibble for whole work:
+Generate tibble for whole work (`texture_tib_mm`):
 
 ``` r
-texture_tib <- gen_tib %>% 
+texture_tib_mm <- gen_tib %>% 
     count(texture) %>% 
     as_tibble %>% 
     rename(n_measures = n) %>% 
@@ -1674,34 +1678,25 @@ texture_tib <- gen_tib %>%
     mutate(prop_of_sung = (n_measures/sum(n_measures)*100))
 ```
 
-<!-- Check to see if proportions add up to 100, in order to ensure that order of  -->
-
-<!-- previous step is correct. -->
-
-<!-- ```{r} -->
-
-<!-- sum(texture_tib$prop_of_sung) == 100  -->
-
-<!-- ``` -->
-
-Create a basic barplot of textures for whole work:
+Create a basic barplot of textures for whole work (for basic exploratory
+purposes):
 
 ``` r
-texture_tib %>% 
+texture_tib_mm %>% 
     ggplot() +
     geom_col(aes(x = texture, y = prop_of_sung, fill = texture))
 ```
 
 ![](mt_music_analysis_files/figure-gfm/unnamed-chunk-64-1.png)<!-- -->
 
-Homophony clearly dominates, followed by monophony.
+  - Homophony clearly dominates, followed by monophony.
 
 #### By Duration
 
 Create tibble:
 
 ``` r
-dur_texture_work <- gen_tib %>% 
+texture_tib_dur <- gen_tib %>% 
     filter(texture != "na") %>% 
     group_by(texture) %>% 
     summarize(duration = dur_choir) %>% 
@@ -1714,111 +1709,21 @@ dur_texture_work <- gen_tib %>%
 Create barplot:
 
 ``` r
-dur_texture_work %>% 
+texture_tib_dur %>% 
     ggplot() +
     geom_col(aes(x = texture, y = prop_of_sung, fill = texture))
 ```
 
 ![](mt_music_analysis_files/figure-gfm/unnamed-chunk-66-1.png)<!-- -->
 
-Again, homophony clearly dominates, followed by monophony.
-
-<!-- #### Table of Polyphonic Passages by Piece/Measure -->
-
-<!-- ```{r} -->
-
-<!-- gen_tib_sung %>%  -->
-
-<!--     filter(texture == "p") %>%  -->
-
-<!--     select(id:texture)  -->
-
-<!-- ``` -->
+  - Again, homophony clearly dominates, followed by monophony.
 
 ### Individual Pieces (By Duration)
 
-<!-- #### By Measure Count -->
-
-<!-- Generate basic tibble, grouped by piece: -->
-
-<!-- ```{r} -->
-
-<!-- texture_piece <- by_piece %>%  -->
-
-<!--     count(texture) %>%  -->
-
-<!--     as_tibble %>%  -->
-
-<!--     rename(n_measures = n) %>%  -->
-
-<!--     filter(texture != "na") %>% -->
-
-<!--     group_by(piece_no) %>%  -->
-
-<!--     mutate(mm_sung = sum(n_measures)) %>%  -->
-
-<!--     mutate(prop_of_sung = (n_measures/sum(n_measures)*100))  -->
-
-<!-- ``` -->
-
-<!-- Relevel factors for piece_no, so that bars in barcharts below appear in correct order: -->
-
-<!-- ```{r} -->
-
-<!-- texture_piece <- texture_piece %>%  -->
-
-<!--     mutate(piece_no = fct_relevel(piece_no,  -->
-
-<!--                                   c("1", "2b", "4", "5", "6c", "7a", "8b",  -->
-
-<!--                                     "9","10", "11", "12b","13a", "13b", "14"))) -->
-
-<!-- ``` -->
-
-<!-- Create a stacked bar chart displaying the proportions of each texture in each -->
-
-<!-- piece. **MAY NEED TO CHANGE** `width = 0.3`. -->
-
-<!-- ```{r} -->
-
-<!-- bar_texture_piece <- texture_piece %>%  -->
-
-<!--     ggplot(aes(fill = texture, y = prop_of_sung, x = piece_no)) + -->
-
-<!--     geom_bar(position = "stack", stat = "identity",  -->
-
-<!--              width = 0.45 # play with this -->
-
-<!--              ) + -->
-
-<!--     xlab("Piece Number") + -->
-
-<!--     scale_fill_discrete(name = "Texture", -->
-
-<!--                         labels = c("Antiphony", "Homophony",  -->
-
-<!--                                    "Monophony", "Polyphony")) + -->
-
-<!--     theme(axis.title.y = element_blank(), -->
-
-<!--           axis.ticks.y = element_blank(), -->
-
-<!--           axis.text.y = element_blank(), -->
-
-<!--           axis.ticks.x = element_blank() -->
-
-<!--          ) + -->
-
-<!--     ggtitle("Proportion of Texture by Piece") -->
-
-<!-- bar_texture_piece -->
-
-<!-- ``` -->
-
-Create tibble:
+Create tibble (`texture_piece_dur`):
 
 ``` r
-dur_texture_piece <- gen_tib %>% 
+texture_piece_dur <- gen_tib %>% 
     filter(texture != "na") %>% 
     group_by(piece_no, texture) %>% 
     summarize(duration = dur_choir) %>% 
@@ -1882,13 +1787,15 @@ dur_texture_piece_mosaic_plot
 
 ![](mt_music_analysis_files/figure-gfm/unnamed-chunk-68-1.png)<!-- -->
 
+  - included in ch. 2
+
 <!-- #### Presence of Each Texture by Piece -->
 
 <!-- Create table: -->
 
 <!-- ```{r} -->
 
-<!-- texture_piece_presence <- dur_texture_piece %>%  -->
+<!-- texture_piece_presence <- texture_piece_dur %>%  -->
 
 <!--     group_by(piece_no, texture) %>%  -->
 
@@ -1991,25 +1898,23 @@ Create new, elongated table with pitches:
 
 ``` r
 pitch_long <- pitch_tib %>% 
-    # this first step may be unnecessary if factors work
-    mutate(c = c*1, # unnecessary but included for clarity
-           c_sharp_d_flat = c_sharp_d_flat*2,
-           d = d*3,
-           d_sharp_e_flat = d_sharp_e_flat*4,
-           e = e*5,
-           f = f*6,
-           f_sharp_g_flat = f_sharp_g_flat*7,
-           g = g*8,
-           g_sharp_a_flat = g_sharp_a_flat*9,
-           a = a*10,
-           a_sharp_b_flat = a_sharp_b_flat*11,
-           b = b*12) %>% 
-    pivot_longer(c:b, names_to = "pitch", values_to = "value") %>% 
-    filter(value != 0) %>% 
-    mutate(pitch = as.factor(pitch),
-           value = as.factor(value)
-           ) %>% 
-    mutate(pitch = fct_relevel(pitch,
+  mutate(c = c*1, # unnecessary but included for clarity
+         c_sharp_d_flat = c_sharp_d_flat*2,
+         d = d*3,
+         d_sharp_e_flat = d_sharp_e_flat*4,
+         e = e*5,
+         f = f*6,
+         f_sharp_g_flat = f_sharp_g_flat*7,
+         g = g*8,
+         g_sharp_a_flat = g_sharp_a_flat*9,
+         a = a*10,
+         a_sharp_b_flat = a_sharp_b_flat*11,
+         b = b*12) %>% 
+  pivot_longer(c:b, names_to = "pitch", values_to = "value") %>% 
+  filter(value != 0) %>% 
+  mutate(pitch = as.factor(pitch),
+         value = as.factor(value)) %>% 
+  mutate(pitch = fct_relevel(pitch,
                              levels = c("c",
                                         "c_sharp_d_flat",
                                         "d",
@@ -2067,54 +1972,6 @@ pitch_distribution_plot
 ```
 
 ![](mt_music_analysis_files/figure-gfm/unnamed-chunk-70-1.png)<!-- -->
-
-<!-- **OLD** -->
-
-<!-- ```{r, eval=FALSE} -->
-
-<!-- # pitch_long %>%  -->
-
-<!-- #     ggplot() + -->
-
-<!-- #     geom_bar(aes(x = pitch, -->
-
-<!-- #                  fill = pitch, -->
-
-<!-- #                  y = ..count../sum(..count..))) + -->
-
-<!-- #     scale_y_continuous(labels = percent_format()) + -->
-
-<!-- #     scale_x_discrete(labels = c("C", "C#", "D", "D#", "E", "F", "F-sh", -->
-
-<!-- #                                 "G", "G-sh", "A", "A-sh", "B")) + -->
-
-<!-- #     facet_wrap(~piece_no, ncol = 5) + -->
-
-<!-- #     coord_flip() + -->
-
-<!-- #     theme(legend.position = "none",  -->
-
-<!-- #           axis.title.x = element_blank(), -->
-
-<!-- #           axis.title = element_blank(), -->
-
-<!-- #           axis.text.x = element_blank(), -->
-
-<!-- #           axis.ticks.x = element_blank(), -->
-
-<!-- #           panel.background = element_rect(fill = "white", colour = 'black'), -->
-
-<!-- #           panel.grid.major.y = element_line(color = "grey", linetype = 3), -->
-
-<!-- #           strip.background = element_rect(fill = "gray89",  -->
-
-<!-- #                                           color = "black")) + -->
-
-<!-- #     labs(title = "Distribution of Choir's Pitches", -->
-
-<!-- #          subtitle = "Based on number of measures, in which each pitch appears. \nBar length corresponds to proportion of whole.") -->
-
-<!-- ``` -->
 
 ### Chromaticism of Each Piece
 

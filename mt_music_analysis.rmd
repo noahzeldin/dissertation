@@ -1044,6 +1044,10 @@ developed in ch. 2.
 
 ### Whole Work
 
+As a precaution, I compute the proportions of each texture in relation to both 
+**measure count** and **duration**. The results differ very little from each 
+other.
+
 #### By Measure Count
 
 Generate tibble for whole work (`texture_tib_mm`):
@@ -1093,70 +1097,15 @@ texture_tib_dur %>%
     geom_col(aes(x = texture, y = prop_of_sung, fill = texture))
 ```
 
-Again, homophony clearly dominates, followed by monophony.
-
-<!-- #### Table of Polyphonic Passages by Piece/Measure -->
-
-<!-- ```{r} -->
-<!-- gen_tib_sung %>%  -->
-<!--     filter(texture == "p") %>%  -->
-<!--     select(id:texture)  -->
-<!-- ``` -->
+* Again, homophony clearly dominates, followed by monophony.
 
 
 ### Individual Pieces (By Duration)
 
-<!-- #### By Measure Count -->
-
-<!-- Generate basic tibble, grouped by piece: -->
-
-<!-- ```{r} -->
-<!-- texture_piece <- by_piece %>%  -->
-<!--     count(texture) %>%  -->
-<!--     as_tibble %>%  -->
-<!--     rename(n_measures = n) %>%  -->
-<!--     filter(texture != "na") %>% -->
-<!--     group_by(piece_no) %>%  -->
-<!--     mutate(mm_sung = sum(n_measures)) %>%  -->
-<!--     mutate(prop_of_sung = (n_measures/sum(n_measures)*100))  -->
-<!-- ``` -->
-
-<!-- Relevel factors for piece_no, so that bars in barcharts below appear in correct order: -->
-
-<!-- ```{r} -->
-<!-- texture_piece <- texture_piece %>%  -->
-<!--     mutate(piece_no = fct_relevel(piece_no,  -->
-<!--                                   c("1", "2b", "4", "5", "6c", "7a", "8b",  -->
-<!--                                     "9","10", "11", "12b","13a", "13b", "14"))) -->
-<!-- ``` -->
-
-<!-- Create a stacked bar chart displaying the proportions of each texture in each -->
-<!-- piece. **MAY NEED TO CHANGE** `width = 0.3`. -->
-
-<!-- ```{r} -->
-<!-- bar_texture_piece <- texture_piece %>%  -->
-<!--     ggplot(aes(fill = texture, y = prop_of_sung, x = piece_no)) + -->
-<!--     geom_bar(position = "stack", stat = "identity",  -->
-<!--              width = 0.45 # play with this -->
-<!--              ) + -->
-<!--     xlab("Piece Number") + -->
-<!--     scale_fill_discrete(name = "Texture", -->
-<!--                         labels = c("Antiphony", "Homophony",  -->
-<!--                                    "Monophony", "Polyphony")) + -->
-<!--     theme(axis.title.y = element_blank(), -->
-<!--           axis.ticks.y = element_blank(), -->
-<!--           axis.text.y = element_blank(), -->
-<!--           axis.ticks.x = element_blank() -->
-<!--          ) + -->
-<!--     ggtitle("Proportion of Texture by Piece") -->
-
-<!-- bar_texture_piece -->
-<!-- ``` -->
-
-Create tibble:
+Create tibble (`texture_piece_dur`):
 
 ```{r}
-dur_texture_piece <- gen_tib %>% 
+texture_piece_dur <- gen_tib %>% 
     filter(texture != "na") %>% 
     group_by(piece_no, texture) %>% 
     summarize(duration = dur_choir) %>% 
@@ -1218,13 +1167,14 @@ dur_texture_piece_mosaic_plot <- ggplot(dur_texture_piece_mosaic_table,
 dur_texture_piece_mosaic_plot
 ```
 
+* included in ch. 2
 
 <!-- #### Presence of Each Texture by Piece -->
 
 <!-- Create table: -->
 
 <!-- ```{r} -->
-<!-- texture_piece_presence <- dur_texture_piece %>%  -->
+<!-- texture_piece_presence <- texture_piece_dur %>%  -->
 <!--     group_by(piece_no, texture) %>%  -->
 <!--     count(texture) %>%  -->
 <!--     spread(texture, n, fill = 0) %>%  -->
@@ -1303,25 +1253,23 @@ Create new, elongated table with pitches:
 
 ```{r}
 pitch_long <- pitch_tib %>% 
-    # this first step may be unnecessary if factors work
-    mutate(c = c*1, # unnecessary but included for clarity
-           c_sharp_d_flat = c_sharp_d_flat*2,
-           d = d*3,
-           d_sharp_e_flat = d_sharp_e_flat*4,
-           e = e*5,
-           f = f*6,
-           f_sharp_g_flat = f_sharp_g_flat*7,
-           g = g*8,
-           g_sharp_a_flat = g_sharp_a_flat*9,
-           a = a*10,
-           a_sharp_b_flat = a_sharp_b_flat*11,
-           b = b*12) %>% 
-    pivot_longer(c:b, names_to = "pitch", values_to = "value") %>% 
-    filter(value != 0) %>% 
-    mutate(pitch = as.factor(pitch),
-           value = as.factor(value)
-           ) %>% 
-    mutate(pitch = fct_relevel(pitch,
+  mutate(c = c*1, # unnecessary but included for clarity
+         c_sharp_d_flat = c_sharp_d_flat*2,
+         d = d*3,
+         d_sharp_e_flat = d_sharp_e_flat*4,
+         e = e*5,
+         f = f*6,
+         f_sharp_g_flat = f_sharp_g_flat*7,
+         g = g*8,
+         g_sharp_a_flat = g_sharp_a_flat*9,
+         a = a*10,
+         a_sharp_b_flat = a_sharp_b_flat*11,
+         b = b*12) %>% 
+  pivot_longer(c:b, names_to = "pitch", values_to = "value") %>% 
+  filter(value != 0) %>% 
+  mutate(pitch = as.factor(pitch),
+         value = as.factor(value)) %>% 
+  mutate(pitch = fct_relevel(pitch,
                              levels = c("c",
                                         "c_sharp_d_flat",
                                         "d",
@@ -1338,6 +1286,7 @@ pitch_long <- pitch_tib %>%
 # check if pitches are correctly factored
 levels(pitch_long$pitch)
 ```
+
 
 ### Pitch Distribution
 
@@ -1373,32 +1322,6 @@ pitch_distribution_plot <- pitch_long %>%
 
 pitch_distribution_plot
 ```
-
-<!-- **OLD** -->
-
-<!-- ```{r, eval=FALSE} -->
-<!-- # pitch_long %>%  -->
-<!-- #     ggplot() + -->
-<!-- #     geom_bar(aes(x = pitch, -->
-<!-- #                  fill = pitch, -->
-<!-- #                  y = ..count../sum(..count..))) + -->
-<!-- #     scale_y_continuous(labels = percent_format()) + -->
-<!-- #     scale_x_discrete(labels = c("C", "C#", "D", "D#", "E", "F", "F-sh", -->
-<!-- #                                 "G", "G-sh", "A", "A-sh", "B")) + -->
-<!-- #     facet_wrap(~piece_no, ncol = 5) + -->
-<!-- #     coord_flip() + -->
-<!-- #     theme(legend.position = "none",  -->
-<!-- #           axis.title.x = element_blank(), -->
-<!-- #           axis.title = element_blank(), -->
-<!-- #           axis.text.x = element_blank(), -->
-<!-- #           axis.ticks.x = element_blank(), -->
-<!-- #           panel.background = element_rect(fill = "white", colour = 'black'), -->
-<!-- #           panel.grid.major.y = element_line(color = "grey", linetype = 3), -->
-<!-- #           strip.background = element_rect(fill = "gray89",  -->
-<!-- #                                           color = "black")) + -->
-<!-- #     labs(title = "Distribution of Choir's Pitches", -->
-<!-- #          subtitle = "Based on number of measures, in which each pitch appears. \nBar length corresponds to proportion of whole.") -->
-<!-- ``` -->
 
 
 ### Chromaticism of Each Piece
