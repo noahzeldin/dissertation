@@ -552,6 +552,7 @@ Create dfm with proper group names (will appear in CA graph) and apply
 above-defined function:
 
 ```{r}
+# simply renaming groups with capitalized names (data is unchanged)
 grouped_dfm_no_erfurt_or_unknown <- 
   dfm_group(grouped_dfm_no_erfurt_or_unknown,
             groups = c("Measures.Center", "Mother.Center", "Measures.Left",
