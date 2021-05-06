@@ -70,13 +70,20 @@ library(readxl)
 
 There are **two** separate spreadsheets:
 
-1.  **durations** of each piece
+1.  **durations** of each piece (`mt_data_durations_meters.xlsx`)
 
-2.  data relating to the **choral** material
+<!-- end list -->
+
+  - also used to compute e.g. rates of meter change
+
+<!-- end list -->
+
+2.  much more detailed data relating specifically to the **choral
+    material** (`mt_data_choir.xlsx`)
 
 Both are necessary. The chapter begins with a structural overview of the
-work but focuses on the choral material. The calculations involved with
-the latter require the former.
+work but focuses on the choral material. However, some of the
+calculations involved with the latter require the former.
 
 ## Duration
 
@@ -85,27 +92,28 @@ Import all sheets into a single list and specify column types:
 ``` r
 durations_sheets <- excel_sheets("mt_data_durations_meters.xlsx")
 
-durations_list <- lapply(durations_sheets, 
-                         function(x) 
-                             read_excel("mt_data_durations_meters.xlsx", 
-                                                  sheet = x, 
-                                                          col_types = c(
-                                                              "text", # piece_no
-                                                              "numeric", # category
-                                                              "text", # subcategory
-                                                              "numeric", # segment
-                                                              "numeric", # m_start
-                                                              "numeric", # m_end
-                                                              "numeric", # no_of_mm
-                                                              "numeric", # meter_1
-                                                              "numeric", # meter_2
-                                                              "numeric", # meter_ch_count
-                                                              "numeric", # quarters_per_bar
-                                                              "numeric", # beats
-                                                              "numeric", # tempo
-                                                              "numeric", # tempo_ch_count
-                                                              "numeric") # duration
-                                                          ))
+# comments next to "col_types" are the col. names
+durations_list <- 
+  lapply(durations_sheets, 
+         function(x) 
+           read_excel("mt_data_durations_meters.xlsx",
+                      sheet = x, 
+                      col_types = c("text", # piece_no
+                                    "numeric", # category 
+                                    "text", # subcategory
+                                    "numeric", # segment
+                                    "numeric", # m_start
+                                    "numeric", # m_end
+                                    "numeric", # no_of_mm
+                                    "numeric", # meter_1
+                                    "numeric", # meter_2
+                                    "numeric", # meter_ch_count
+                                    "numeric", # quarters_per_bar
+                                    "numeric", # beats
+                                    "numeric", # tempo
+                                    "numeric", # tempo_ch_count
+                                    "numeric") # duration 
+                      ))
 ```
 
 From `durations_list` create single data frame and save as tibble:
@@ -138,35 +146,81 @@ Import all sheets into a single list and specify column types:
 ``` r
 voice_analysis_sheets <- excel_sheets("mt_data_choir.xlsx")
 
-voice_analysis_list <- lapply(voice_analysis_sheets, 
-                           function(x) read_excel("mt_data_choir.xlsx", 
-                                                  sheet = x, 
-                                                          col_types = c(
-                                                              "text", # piece_no
-                                                              "numeric", # measure
-                                                              "text", # texture
-                                                              "numeric", # voices
-                                                              "text", # groupings
-                                                              
-                                                              "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", # soprano:ratio
-                                                              
-                                                              "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", # rests
-                                                              
-                                                              "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", # quarters
-                                                              
-                                                              "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", # notes
-                                                              
-                                                              "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "text", "numeric", # tones
-                                                              
-                                                              "numeric", "numeric", # spoken, acapella
-                                                              
-                                                              "numeric", "numeric", "numeric", "numeric", # meter etc.
-                                                              
-                                                              "numeric", "numeric", "numeric", "numeric", # general dur's
-                                                              
-                                                              "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric" # dur's of voices
-                                                              ) 
-                                                              ))
+voice_analysis_list <- 
+  lapply(voice_analysis_sheets, 
+         function(x) 
+           read_excel("mt_data_choir.xlsx", 
+                      sheet = x, 
+                      col_types = c("text", # piece_no
+                                    "numeric", # measure
+                                    "text", # texture
+                                    "numeric", # voices
+                                    "text", # groupings
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", # soprano:ratio
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", # rests
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", # quarters
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", # notes
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "text", 
+                                    "numeric", # tones
+                                    "numeric", 
+                                    "numeric", # spoken, acapella
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", # meter etc.
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", # general dur's
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric",
+                                    "numeric" # dur's of voices
+                                    )
+                      ))
 ```
 
 From `voice_analysis_list` create single data frame and save as tibble:
