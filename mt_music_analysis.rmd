@@ -1046,10 +1046,10 @@ developed in ch. 2.
 
 #### By Measure Count
 
-Generate tibble for whole work:
+Generate tibble for whole work (`texture_tib_mm`):
 
 ```{r}
-texture_tib <- gen_tib %>% 
+texture_tib_mm <- gen_tib %>% 
     count(texture) %>% 
     as_tibble %>% 
     rename(n_measures = n) %>% 
@@ -1057,22 +1057,17 @@ texture_tib <- gen_tib %>%
     mutate(prop_of_sung = (n_measures/sum(n_measures)*100))
 ```
 
-<!-- Check to see if proportions add up to 100, in order to ensure that order of  -->
-<!-- previous step is correct. -->
 
-<!-- ```{r} -->
-<!-- sum(texture_tib$prop_of_sung) == 100  -->
-<!-- ``` -->
-
-Create a basic barplot of textures for whole work:
+Create a basic barplot of textures for whole work (for basic exploratory 
+purposes):
 
 ```{r}
-texture_tib %>% 
+texture_tib_mm %>% 
     ggplot() +
     geom_col(aes(x = texture, y = prop_of_sung, fill = texture))
 ```
 
-Homophony clearly dominates, followed by monophony.
+* Homophony clearly dominates, followed by monophony.
 
 
 #### By Duration
@@ -1080,7 +1075,7 @@ Homophony clearly dominates, followed by monophony.
 Create tibble:
 
 ```{r}
-dur_texture_work <- gen_tib %>% 
+texture_tib_dur <- gen_tib %>% 
     filter(texture != "na") %>% 
     group_by(texture) %>% 
     summarize(duration = dur_choir) %>% 
@@ -1093,7 +1088,7 @@ dur_texture_work <- gen_tib %>%
 Create barplot:
 
 ```{r}
-dur_texture_work %>% 
+texture_tib_dur %>% 
     ggplot() +
     geom_col(aes(x = texture, y = prop_of_sung, fill = texture))
 ```
