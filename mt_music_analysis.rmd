@@ -972,19 +972,19 @@ dur_sung_total <- dur_s1_sung + dur_a1_sung + dur_t1_sung + dur_b1_sung +
   dur_t2_extra
 
 # total of women's voices (soprano + alto)
-dur_female_sung <- dur_s1_sung + dur_a1_sung
+dur_women_sung <- dur_s1_sung + dur_a1_sung
 
 # total of men's voices (tenor + bass)
-dur_male_sung <- dur_t1_sung + dur_b1_sung + dur_t2_extra
+dur_men_sung <- dur_t1_sung + dur_b1_sung + dur_t2_extra
 ```
 
 Calculate proportions of male and female durations and save for further 
 calculations:
 
 ```{r}
-dur_female_sung_perc <- round((dur_female_sung/dur_sung_total)*100)
+dur_women_sung_perc <- round((dur_women_sung/dur_sung_total)*100)
 
-dur_male_sung_perc <- round((dur_male_sung/dur_sung_total)*100)
+dur_men_sung_perc <- round((dur_men_sung/dur_sung_total)*100)
 ```
 
 
@@ -1005,10 +1005,10 @@ dur_b1_sung_5_and_7a <-gen_tib_sung %>%
     sum()
 ```
 
-2. Amount by which `dur_male` is longer than `dur_female`:
+2. Amount by which `dur_men` is longer than `dur_women`:
 
 ```{r}
-dur_male_sung - dur_female_sung
+dur_men_sung - dur_women_sung
 ```
 
 3. Extra duration from 5 and 7a:
@@ -1020,11 +1020,11 @@ dur_t1_sung_5_and_7a + dur_b1_sung_5_and_7a
 4. Compute percentage:
 
 ```{r}
-dur_male_extra_from_5_and_7a_perc <- 
+dur_men_extra_from_5_and_7a_perc <- 
   round(((dur_t1_sung_5_and_7a + dur_b1_sung_5_and_7a) /
-         (dur_male_sung - dur_female_sung)) * 100)
+         (dur_men_sung - dur_women_sung)) * 100)
 
-dur_male_extra_from_5_and_7a_perc
+dur_men_extra_from_5_and_7a_perc
 ```
 
 
