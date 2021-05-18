@@ -394,7 +394,10 @@ Resort to find longest pieces:
 
 ```{r}
 dur_piece %>% 
-    arrange(desc(duration_min))
+  arrange(desc(duration_min)) %>% 
+  mutate(perc_of_dur = prop_of_dur*100) %>% 
+  select(-prop_of_dur) %>% 
+  knitr::kable()
 ```
 
 <!-- ##### NEW with Lubridate - FIX! -->
@@ -428,13 +431,11 @@ I assigned one of four categories to each of the pieces. These are:
 
 ```{r}
 dur_tib %>% 
-    group_by(category) %>%
-    summarize(duration = sum(duration)) %>% 
-    mutate(prop_of_dur = (duration/sum(duration)))
+  group_by(category) %>%
+  summarize(duration = sum(duration)) %>% 
+  mutate(perc_of_dur = round((duration/sum(duration))*100, digits = 2)) %>% 
+  knitr::kable()
 ```
-
-<!-- No contest: two biggest categories are 1. choir with orchestra and 3. tenor solo -->
-<!-- close to 95 % -->
 
 
 ### Duration by Subcategory
@@ -576,7 +577,7 @@ knitr::kable(tempo_ch_count_and_rate_piece)
 
 ### Most Common Meters
 
-Create tibble with meter, number of meters and duration:
+Create tibble with meter, number of meters and duration (`dur_meter`):
 
 ```{r}
 dur_meter <- dur_tib %>% 
@@ -590,21 +591,24 @@ Most common meters by number of measures:
 
 ```{r}
 dur_meter %>% 
-    group_by(meter) %>% 
-    count(no_of_mm) %>% 
-    mutate(no_of_mm = no_of_mm * n) %>% 
-    select(-n) %>% 
-    summarize(no_of_mm = sum(no_of_mm)) %>% 
-    arrange(desc(no_of_mm))
+  group_by(meter) %>% 
+  count(no_of_mm) %>% 
+  mutate(no_of_mm = no_of_mm * n) %>% 
+  select(-n) %>% 
+  summarize(no_of_mm = sum(no_of_mm)) %>% 
+  arrange(desc(no_of_mm)) %>% 
+  knitr::kable()
 ```
 
 Most common meters by duration:
 
 ```{r}
 dur_meter %>% 
-    group_by(meter) %>% 
-    summarize(duration = sum(duration)) %>% 
-    arrange(desc(duration))
+  group_by(meter) %>% 
+  summarize(duration = sum(duration)) %>% 
+  mutate(duration = round(duration, digits = 2)) %>% 
+  arrange(desc(duration)) %>% 
+  knitr::kable()
 ```
 
 #### Grouped by Duple vs. Triple
@@ -637,7 +641,6 @@ dur_meter_groups <- dur_meter_groups %>%
 knitr::kable(dur_meter_groups)
 ```
 
-<!-- Interesting: pretty evenly split. -->
 
 #### Special Case: 6/4
 
@@ -648,7 +651,9 @@ Check which measures are in 6/4:
 
 ```{r}
 gen_tib %>% 
-  filter(meter_1 == 6, meter_2 == 4) 
+  filter(meter_1 == 6, meter_2 == 4) %>% 
+  select(id:measure) %>% 
+  knitr::kable()
 ```
 
 Compute percent of duration that is 6/4:
@@ -734,7 +739,6 @@ Duration of choir as proportion of total duration:
 
 ```{r}
 dur_choir_prop <- round((dur_choir_total_min / dur_total_min), digits = 4)*100
-print(dur_choir_prop)
 ```
 
 The choir is active for `r dur_choir_prop` % of total duration of music.
@@ -781,7 +785,9 @@ Arrange `dur_acapella` by duration (descending) to see top pieces:
 
 ```{r}
 dur_acapella %>% 
-    arrange(desc(dur_choir_prop))
+  arrange(desc(dur_choir_prop)) %>% 
+  mutate(dur_choir_perc = dur_choir_prop*100, .keep = "unused") %>% 
+  knitr::kable()
 ```
 
 Proportion of `dur_chor` that is acapella:
@@ -821,14 +827,16 @@ more of the four voices. The calculations below account for this.
 
 ```{r}
 gen_tib_sung %>% 
-    filter(quarters_s1 != 0 & quarters_s2 != 0 & quarters_s1 != quarters_s2)
+  filter(quarters_s1 != 0 & quarters_s2 != 0 & quarters_s1 != quarters_s2) %>% 
+  nrow()
 ```
 
 2. Altos
 
 ```{r}
 gen_tib_sung %>% 
-    filter(quarters_a1 != 0 & quarters_a2 != 0 & quarters_a1 != quarters_a2)
+  filter(quarters_a1 != 0 & quarters_a2 != 0 & quarters_a1 != quarters_a2) %>% 
+  nrow()
 ```
 
 3. Tenors
@@ -861,14 +869,16 @@ NB: Similar goal as in previous section.
 
 ```{r}
 gen_tib_sung %>% 
-    filter(quarters_s1 == 0 & quarters_s2 != 0)
+  filter(quarters_s1 == 0 & quarters_s2 != 0) %>% 
+  nrow()
 ```
 
 2. Altos
 
 ```{r}
 gen_tib_sung %>% 
-    filter(quarters_a1 == 0 & quarters_a2 != 0)
+  filter(quarters_a1 == 0 & quarters_a2 != 0) %>% 
+  nrow()
 ```
 
 3. Tenors
@@ -893,7 +903,8 @@ dur_t2_extra <- gen_tib_sung %>%
 
 ```{r}
 gen_tib_sung %>% 
-    filter(quarters_b1 == 0 & quarters_b2 != 0)
+  filter(quarters_b1 == 0 & quarters_b2 != 0) %>% 
+  nrow()
 ```
 
 
@@ -910,7 +921,8 @@ gen_tib_sung %>%
 
 ```{r}
 gen_tib_sung %>% 
-    filter(dur_a1 != 0 & dur_a2 != 0 & dur_a1 != dur_a2)
+  filter(dur_a1 != 0 & dur_a2 != 0 & dur_a1 != dur_a2) %>% 
+  nrow()
 ```
 
 3. Tenors
@@ -1282,11 +1294,7 @@ pitch_long <- pitch_tib %>%
                                         "a",
                                         "a_sharp_b_flat",
                                         "b")))
-
-# check if pitches are correctly factored
-levels(pitch_long$pitch)
 ```
-
 
 ### Pitch Distribution
 
