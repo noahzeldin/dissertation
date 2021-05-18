@@ -1983,38 +1983,32 @@ pitch_no_piece <- pitch_long %>%
     rename(no_of_pitches = n) %>% 
     arrange(desc(no_of_pitches))
 
-pitch_no_piece
+knitr::kable(pitch_no_piece)
 ```
 
-    ## # A tibble: 14 x 2
-    ## # Groups:   piece_no [14]
-    ##    piece_no no_of_pitches
-    ##    <fct>            <int>
-    ##  1 2b                  11
-    ##  2 9                   11
-    ##  3 12b                 11
-    ##  4 4                   10
-    ##  5 5                    9
-    ##  6 1                    8
-    ##  7 7a                   8
-    ##  8 10                   8
-    ##  9 14                   8
-    ## 10 6c                   7
-    ## 11 13b                  7
-    ## 12 8b                   6
-    ## 13 13a                  5
-    ## 14 11                   4
+| piece\_no | no\_of\_pitches |
+| :-------- | --------------: |
+| 2b        |              11 |
+| 9         |              11 |
+| 12b       |              11 |
+| 4         |              10 |
+| 5         |               9 |
+| 1         |               8 |
+| 7a        |               8 |
+| 10        |               8 |
+| 14        |               8 |
+| 6c        |               7 |
+| 13b       |               7 |
+| 8b        |               6 |
+| 13a       |               5 |
+| 11        |               4 |
 
 ## Groupings
 
-<!-- UPDATE 12.08: changed source data from `gen_tib` to `gen_tib_sung`. -->
-
-<!-- * This should avoid pieces with no singing. -->
-
-Directly related to Eisler’s heavy use of reduced choral textures
-(monophony and homophony), the composer also frequently groups voices
-together. The calculations in this section explore this compositional
-tactical and e.g.  determine which groupings of voices are most common.
+Eisler frequently grouped voices together, which relates directly to his
+heavy use of reduced choral textures (monophony and homophony). The
+calculations in this section explore this compositional tactic and
+determine for instance which groupings of voices are most common.
 
 NB: It is necessary to perform two separate calculations:
 
@@ -2022,17 +2016,10 @@ NB: It is necessary to perform two separate calculations:
 
 2.  combinations of groupings
 
-To give an example, the first reveals the duration of the grouping
-sopranos- tenors, while the second will reveals the duration of this
-grouping *plus* the grouping altos-basses.
-
-<!-- **2. combinations of groupings** will be much easier, because this is the  -->
-
-<!-- existing observation in the spreadsheet. Can calculate now.   -->
-
-<!-- Will need to put in some work for **1. separate groupings.**   -->
-
-<!-- * must separate groupings, probably into different columns and then count   -->
+To give an example of why both calculations are necessary: The first
+reveals the duration of the grouping sopranos-tenors, while the second
+will reveals the duration of this grouping *plus* the grouping
+altos-basses.
 
 ### Combinations of Groupings
 
@@ -2056,18 +2043,20 @@ groupings_5 <- groupings_tib %>%
     arrange(desc(prop_of_groupings)) %>%
     select(groupings, prop_of_groupings) %>%
     slice(1:5) %>% 
-    mutate(perc_of_groupings = round((prop_of_groupings*100), digits = 0)) %>% 
-    print()
+    mutate(perc_of_groupings = round((prop_of_groupings*100), digits = 0)) 
+
+groupings_5 %>% 
+  select(groupings, perc_of_groupings) %>% 
+  knitr::kable()
 ```
 
-    ## # A tibble: 5 x 3
-    ##   groupings prop_of_groupings perc_of_groupings
-    ##   <chr>                 <dbl>             <dbl>
-    ## 1 st_ab                0.343                 34
-    ## 2 tb                   0.212                 21
-    ## 3 none                 0.173                 17
-    ## 4 st                   0.0517                 5
-    ## 5 b1b2                 0.04                   4
+| groupings | perc\_of\_groupings |
+| :-------- | ------------------: |
+| st\_ab    |                  34 |
+| tb        |                  21 |
+| none      |                  17 |
+| st        |                   5 |
+| b1b2      |                   4 |
 
 #### By Duration (of Measures)
 
@@ -2091,21 +2080,22 @@ groupings_5_dur <- groupings_dur_tib %>%
     slice(1:5) %>%  
     mutate(perc_of_dur = round(prop_of_dur*100))
 
-groupings_5_dur 
+groupings_5_dur %>% 
+  select(groupings, perc_of_dur) %>% 
+  knitr::kable()
 ```
 
-    ## # A tibble: 5 x 3
-    ##   groupings prop_of_dur perc_of_dur
-    ##   <chr>           <dbl>       <dbl>
-    ## 1 st_ab          0.367           37
-    ## 2 tb             0.157           16
-    ## 3 none           0.111           11
-    ## 4 satb           0.0967          10
-    ## 5 sa_tb          0.0519           5
+| groupings | perc\_of\_dur |
+| :-------- | ------------: |
+| st\_ab    |            37 |
+| tb        |            16 |
+| none      |            11 |
+| satb      |            10 |
+| sa\_tb    |             5 |
 
 This differs only slightly from previous computation (by number of
 measures). Top 3 and no. 5 are same as `groupings_5` but 4th place is
-now **satb** (rather than st).
+now **satb** (rather than **st**).
 
 ##### Separated by Texture
 
@@ -2120,64 +2110,82 @@ groupings_texture_dur <- gen_tib_sung %>%
            perc_of_dur_text = round(prop_of_dur_text*100)) %>%
     arrange(groupings, desc(duration))
 
-groupings_texture_dur
+groupings_texture_dur %>% 
+  select(-prop_of_dur_text) %>% 
+  knitr::kable()
 ```
 
-    ## # A tibble: 28 x 5
-    ## # Groups:   groupings [21]
-    ##    groupings    texture duration prop_of_dur_text perc_of_dur_text
-    ##    <chr>        <chr>      <dbl>            <dbl>            <dbl>
-    ##  1 ab           p           5.45           1                   100
-    ##  2 b1b2         m          17.8            0.5                  50
-    ##  3 b1b2         p          17.8            0.5                  50
-    ##  4 none         h         105.             0.826                83
-    ##  5 none         m          15.5            0.122                12
-    ##  6 none         p           6.67           0.0525                5
-    ##  7 s1t_s2b2_ab2 h          29.1            1                   100
-    ##  8 s1t1_s2t2_ab h           4.5            1                   100
-    ##  9 sa           h          20.6            1                   100
-    ## 10 sa_tb        p          45.8            0.774                77
-    ## # ... with 18 more rows
+| groupings      | texture |    duration | perc\_of\_dur\_text |
+| :------------- | :------ | ----------: | ------------------: |
+| ab             | p       |   5.4545455 |                 100 |
+| b1b2           | m       |  17.8032787 |                  50 |
+| b1b2           | p       |  17.8032787 |                  50 |
+| none           | h       | 104.7582418 |                  83 |
+| none           | m       |  15.4545455 |                  12 |
+| none           | p       |   6.6666667 |                   5 |
+| s1t\_s2b2\_ab2 | h       |  29.0909091 |                 100 |
+| s1t1\_s2t2\_ab | h       |   4.5000000 |                 100 |
+| sa             | h       |  20.5714286 |                 100 |
+| sa\_tb         | p       |  45.7575758 |                  77 |
+| sa\_tb         | h       |  13.3679654 |                  23 |
+| sab            | h       |   1.9047619 |                 100 |
+| sat            | h       |  20.5714286 |                 100 |
+| sat1b          | a       |  38.2500000 |                 100 |
+| satb           | m       | 110.2314036 |                 100 |
+| sb\_at         | h       |   0.9836066 |                 100 |
+| st             | h       |  48.1697723 |                  90 |
+| st             | m       |   5.3359684 |                  10 |
+| st\_a1a2       | h       |   1.7142857 |                 100 |
+| st\_a1b        | h       |   3.8095238 |                 100 |
+| st\_ab         | h       | 297.2279242 |                  71 |
+| st\_ab         | p       | 121.1067194 |                  29 |
+| st\_ab1        | h       |   1.9047619 |                 100 |
+| st1b\_at2      | h       |  10.2857143 |                 100 |
+| stb            | h       |  17.1085090 |                 100 |
+| stb2\_ab1      | h       |   0.9523810 |                 100 |
+| tb             | m       | 111.1847042 |                  62 |
+| tb             | h       |  68.0000000 |                  38 |
 
 With top 5 groupings:
 
 ``` r
 groupings_texture_dur_5 <- semi_join(groupings_texture_dur, groupings_5_dur)
 
-groupings_texture_dur_5
+groupings_texture_dur_5 %>% 
+  select(-prop_of_dur_text) %>% 
+  knitr::kable()
 ```
 
-    ## # A tibble: 10 x 5
-    ## # Groups:   groupings [5]
-    ##    groupings texture duration prop_of_dur_text perc_of_dur_text
-    ##    <chr>     <chr>      <dbl>            <dbl>            <dbl>
-    ##  1 none      h         105.             0.826                83
-    ##  2 none      m          15.5            0.122                12
-    ##  3 none      p           6.67           0.0525                5
-    ##  4 sa_tb     p          45.8            0.774                77
-    ##  5 sa_tb     h          13.4            0.226                23
-    ##  6 satb      m         110.             1                   100
-    ##  7 st_ab     h         297.             0.711                71
-    ##  8 st_ab     p         121.             0.289                29
-    ##  9 tb        m         111.             0.621                62
-    ## 10 tb        h          68              0.379                38
+| groupings | texture |   duration | perc\_of\_dur\_text |
+| :-------- | :------ | ---------: | ------------------: |
+| none      | h       | 104.758242 |                  83 |
+| none      | m       |  15.454546 |                  12 |
+| none      | p       |   6.666667 |                   5 |
+| sa\_tb    | p       |  45.757576 |                  77 |
+| sa\_tb    | h       |  13.367965 |                  23 |
+| satb      | m       | 110.231404 |                 100 |
+| st\_ab    | h       | 297.227924 |                  71 |
+| st\_ab    | p       | 121.106719 |                  29 |
+| tb        | m       | 111.184704 |                  62 |
+| tb        | h       |  68.000000 |                  38 |
 
 Compute percentages of each texture:
 
 ``` r
 groupings_texture_dur_5 %>% 
-    group_by(texture) %>% 
-    summarize(duration = sum(duration)) %>% 
-    mutate(prop_dur = duration / sum(duration),
-           perc_dur = round(prop_dur * 100))
+  group_by(texture) %>% 
+  summarize(duration = sum(duration)) %>% 
+  mutate(prop_dur = duration / sum(duration),
+         perc_dur = round(prop_dur * 100)) %>% 
+  select(-prop_dur) %>% 
+  knitr::kable()
 ```
 
-    ## # A tibble: 3 x 4
-    ##   texture duration prop_dur perc_dur
-    ##   <chr>      <dbl>    <dbl>    <dbl>
-    ## 1 h           483.    0.541       54
-    ## 2 m           237.    0.265       27
-    ## 3 p           174.    0.194       19
+| texture | duration | perc\_dur |
+| :------ | -------: | --------: |
+| h       | 483.3541 |        54 |
+| m       | 236.8707 |        27 |
+| p       | 173.5310 |        19 |
 
 Just homophony:
 
@@ -2194,47 +2202,47 @@ groupings_homophony_dur <- gen_tib_sung %>%
                                )) %>% 
     arrange(desc(duration))
 
-groupings_homophony_dur
+groupings_homophony_dur %>% 
+  select(-prop_of_dur) %>% 
+  knitr::kable()
 ```
 
-    ## # A tibble: 17 x 4
-    ##    groupings    duration prop_of_dur perc_of_dur
-    ##    <chr>           <dbl>       <dbl>       <dbl>
-    ##  1 st_ab         297.        0.461            46
-    ##  2 none          105.        0.162            16
-    ##  3 tb             68         0.105            11
-    ##  4 st             48.2       0.0747            7
-    ##  5 s1t_s2b2_ab2   29.1       0.0451            5
-    ##  6 sa             20.6       0.0319            3
-    ##  7 sat            20.6       0.0319            3
-    ##  8 stb            17.1       0.0265            3
-    ##  9 sa_tb          13.4       0.0207            2
-    ## 10 st1b_at2       10.3       0.0159            2
-    ## 11 s1t1_s2t2_ab    4.5       0.00698           1
-    ## 12 st_a1b          3.81      0.00591           1
-    ## 13 sab             1.90      0.00295           0
-    ## 14 st_ab1          1.90      0.00295           0
-    ## 15 st_a1a2         1.71      0.00266           0
-    ## 16 sb_at           0.984     0.00153           0
-    ## 17 stb2_ab1        0.952     0.00148           0
+| groupings      |    duration | perc\_of\_dur |
+| :------------- | ----------: | ------------: |
+| st\_ab         | 297.2279242 |            46 |
+| none           | 104.7582418 |            16 |
+| tb             |  68.0000000 |            11 |
+| st             |  48.1697723 |             7 |
+| s1t\_s2b2\_ab2 |  29.0909091 |             5 |
+| sa             |  20.5714286 |             3 |
+| sat            |  20.5714286 |             3 |
+| stb            |  17.1085090 |             3 |
+| sa\_tb         |  13.3679654 |             2 |
+| st1b\_at2      |  10.2857143 |             2 |
+| s1t1\_s2t2\_ab |   4.5000000 |             1 |
+| st\_a1b        |   3.8095238 |             1 |
+| sab            |   1.9047619 |             0 |
+| st\_ab1        |   1.9047619 |             0 |
+| st\_a1a2       |   1.7142857 |             0 |
+| sb\_at         |   0.9836066 |             0 |
+| stb2\_ab1      |   0.9523810 |             0 |
 
 Show that all instances of homophony with no groupings are just two
 voices (necessary for write-up in ch. 2):
 
 ``` r
 gen_tib_sung %>% 
-    filter(texture == "h" & groupings == "none") %>% 
-    select(voices, duration) %>% 
-    group_by(voices) %>% 
-    summarize(duration = sum(duration)) %>% 
-    mutate(prop_of_dur = (duration/sum(duration)),
-           perc_of_dur = round(prop_of_dur*100)) 
+  filter(texture == "h" & groupings == "none") %>% 
+  select(voices, duration) %>% 
+  group_by(voices) %>% 
+  summarize(duration = sum(duration)) %>% 
+  mutate(prop_of_dur = (duration/sum(duration))) %>% 
+  knitr::kable()
 ```
 
-    ## # A tibble: 1 x 4
-    ##   voices duration prop_of_dur perc_of_dur
-    ##    <dbl>    <dbl>       <dbl>       <dbl>
-    ## 1      2     105.           1         100
+| voices | duration | prop\_of\_dur |
+| -----: | -------: | ------------: |
+|      2 | 104.7582 |             1 |
 
 ### Separate Groupings
 
@@ -2258,36 +2266,27 @@ Create list of 10 most common separate groupings:
 
 ``` r
 groupings_separate_10 <- groupings_separate_tib %>% 
-    arrange(desc(perc_of_groupings)) %>%
-    select(groupings, perc_of_groupings) %>%
-    slice(1:10) 
+  arrange(desc(perc_of_groupings)) %>%
+  select(groupings, perc_of_groupings) %>%
+  slice(1:10) 
 
-groupings_separate_10
+groupings_separate_10 %>% 
+  mutate(perc_of_groupings = round(perc_of_groupings, digits = 2)) %>% 
+  knitr::kable()
 ```
 
-    ## # A tibble: 10 x 2
-    ##    groupings perc_of_groupings
-    ##    <chr>                 <dbl>
-    ##  1 st                   28.7  
-    ##  2 ab                   24.7  
-    ##  3 tb                   16.6  
-    ##  4 none                 12.2  
-    ##  5 b1b2                  2.83 
-    ##  6 sa                    2.83 
-    ##  7 satb                  2.71 
-    ##  8 sat1b                 2.00 
-    ##  9 stb                   1.30 
-    ## 10 sat                   0.942
-
-<!-- Also quite interesting!    -->
-
-<!-- * Like `groupings_tib`, shows that **st** and **ab** are most common, though -->
-
-<!-- interesting that **st** appears a little more frequently.   -->
-
-<!-- * **tb** is almost as common as **none** and far more common than **sa**.   -->
-
-<!-- ** This makes sense, since male voices sing much more than female voices.   -->
+| groupings | perc\_of\_groupings |
+| :-------- | ------------------: |
+| st        |               28.74 |
+| ab        |               24.73 |
+| tb        |               16.61 |
+| none      |               12.25 |
+| b1b2      |                2.83 |
+| sa        |                2.83 |
+| satb      |                2.71 |
+| sat1b     |                2.00 |
+| stb       |                1.30 |
+| sat       |                0.94 |
 
 #### By Duration (of Measures)
 
@@ -2295,41 +2294,42 @@ Create tibble with each separate grouping and its total duration:
 
 ``` r
 groupings_separate_dur_tib <- gen_tib %>% 
-    separate(groupings, sep = "_", 
-             into = c("grouping_1", "grouping_2", "grouping_3")) %>% 
-    gather("grouping_1", "grouping_2", "grouping_3", key = "old_column", 
-           value = "groupings") %>% 
-    select(groupings, duration) %>% 
-    filter(groupings != "na") %>% 
-    group_by(groupings) %>% 
-    summarize(duration = sum(duration)) %>% 
-    mutate(prop_of_dur = duration/sum(duration)) 
+  separate(groupings, sep = "_", 
+           into = c("grouping_1", "grouping_2", "grouping_3")) %>% 
+  gather("grouping_1", "grouping_2", "grouping_3", key = "old_column", 
+         value = "groupings") %>% 
+  select(groupings, duration) %>% 
+  filter(groupings != "na") %>% 
+  group_by(groupings) %>% 
+  summarize(duration = sum(duration)) %>% 
+  mutate(prop_of_dur = duration/sum(duration)) 
 ```
 
 Create list of 10 most common separate groupings by duration:
 
 ``` r
 groupings_separate_10_dur <- groupings_separate_dur_tib %>% 
-    arrange(desc(prop_of_dur)) %>%
-    select(groupings, prop_of_dur) %>%
-    slice(1:10) %>%  
-    mutate(perc_of_dur = round(prop_of_dur*100))
+  arrange(desc(prop_of_dur)) %>%
+  select(groupings, prop_of_dur) %>%
+  slice(1:10) %>%  
+  mutate(perc_of_dur = round((prop_of_dur*100), digits = 2))
 
-groupings_separate_10_dur
+groupings_separate_10_dur %>% 
+  select(-prop_of_dur) %>% 
+  knitr::kable()
 ```
 
-    ## # A tibble: 10 x 3
-    ##    groupings prop_of_dur perc_of_dur
-    ##    <chr>           <dbl>       <dbl>
-    ##  1 st             0.266           27
-    ##  2 ab             0.238           24
-    ##  3 tb             0.132           13
-    ##  4 none           0.124           12
-    ##  5 satb           0.0612           6
-    ##  6 sa             0.0442           4
-    ##  7 sat1b          0.0212           2
-    ##  8 b1b2           0.0198           2
-    ##  9 ab2            0.0162           2
-    ## 10 s1t            0.0162           2
+| groupings | perc\_of\_dur |
+| :-------- | ------------: |
+| st        |         26.61 |
+| ab        |         23.78 |
+| tb        |         13.23 |
+| none      |         12.42 |
+| satb      |          6.12 |
+| sa        |          4.42 |
+| sat1b     |          2.12 |
+| b1b2      |          1.98 |
+| ab2       |          1.62 |
+| s1t       |          1.62 |
 
 Results show that factoring in duration makes *very* little difference.

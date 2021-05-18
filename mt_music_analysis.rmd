@@ -1334,19 +1334,16 @@ pitch_no_piece <- pitch_long %>%
     rename(no_of_pitches = n) %>% 
     arrange(desc(no_of_pitches))
 
-pitch_no_piece
+knitr::kable(pitch_no_piece)
 ```
 
 
 ## Groupings 
 
-<!-- UPDATE 12.08: changed source data from `gen_tib` to `gen_tib_sung`. -->
-<!-- * This should avoid pieces with no singing. -->
-
-Directly related to Eisler's heavy use of reduced choral textures (monophony
-and homophony), the composer also frequently groups voices together. The 
-calculations in this section explore this compositional tactical and e.g. 
-determine which groupings of voices are most common.  
+Eisler frequently grouped voices together, which relates directly to his heavy 
+use of reduced choral textures (monophony and homophony). The calculations in 
+this section explore this compositional tactic and determine for instance which 
+groupings of voices are most common.  
 
 NB: It is necessary to perform two separate calculations:  
 
@@ -1354,16 +1351,9 @@ NB: It is necessary to perform two separate calculations:
 
 2. combinations of groupings  
 
-To give an example, the first reveals the duration of the grouping sopranos-
-tenors, while the second will reveals the duration of this grouping *plus* the
-grouping altos-basses. 
-
-<!-- **2. combinations of groupings** will be much easier, because this is the  -->
-<!-- existing observation in the spreadsheet. Can calculate now.   -->
-
-<!-- Will need to put in some work for **1. separate groupings.**   -->
-
-<!-- * must separate groupings, probably into different columns and then count   -->
+To give an example of why both calculations are necessary: The first reveals the 
+duration of the grouping sopranos-tenors, while the second will reveals the 
+duration of this grouping *plus* the grouping altos-basses. 
 
 ### Combinations of Groupings   
 
@@ -1389,8 +1379,11 @@ groupings_5 <- groupings_tib %>%
     arrange(desc(prop_of_groupings)) %>%
     select(groupings, prop_of_groupings) %>%
     slice(1:5) %>% 
-    mutate(perc_of_groupings = round((prop_of_groupings*100), digits = 0)) %>% 
-    print()
+    mutate(perc_of_groupings = round((prop_of_groupings*100), digits = 0)) 
+
+groupings_5 %>% 
+  select(groupings, perc_of_groupings) %>% 
+  knitr::kable()
 ```
 
 
@@ -1416,12 +1409,14 @@ groupings_5_dur <- groupings_dur_tib %>%
     slice(1:5) %>%  
     mutate(perc_of_dur = round(prop_of_dur*100))
 
-groupings_5_dur 
+groupings_5_dur %>% 
+  select(groupings, perc_of_dur) %>% 
+  knitr::kable()
 ```
 
 This differs only slightly from previous computation (by number of measures). 
 Top 3 and no. 5 are same as `groupings_5` but 4th place is now **satb** (rather 
-than st). 
+than **st**). 
 
 ##### Separated by Texture
 
@@ -1436,7 +1431,9 @@ groupings_texture_dur <- gen_tib_sung %>%
            perc_of_dur_text = round(prop_of_dur_text*100)) %>%
     arrange(groupings, desc(duration))
 
-groupings_texture_dur
+groupings_texture_dur %>% 
+  select(-prop_of_dur_text) %>% 
+  knitr::kable()
 ```
 
 With top 5 groupings:
@@ -1444,17 +1441,21 @@ With top 5 groupings:
 ```{r}
 groupings_texture_dur_5 <- semi_join(groupings_texture_dur, groupings_5_dur)
 
-groupings_texture_dur_5
+groupings_texture_dur_5 %>% 
+  select(-prop_of_dur_text) %>% 
+  knitr::kable()
 ```
 
 Compute percentages of each texture:
 
 ```{r}
 groupings_texture_dur_5 %>% 
-    group_by(texture) %>% 
-    summarize(duration = sum(duration)) %>% 
-    mutate(prop_dur = duration / sum(duration),
-           perc_dur = round(prop_dur * 100))
+  group_by(texture) %>% 
+  summarize(duration = sum(duration)) %>% 
+  mutate(prop_dur = duration / sum(duration),
+         perc_dur = round(prop_dur * 100)) %>% 
+  select(-prop_dur) %>% 
+  knitr::kable()
 ```
 
 Just homophony:
@@ -1472,7 +1473,9 @@ groupings_homophony_dur <- gen_tib_sung %>%
                                )) %>% 
     arrange(desc(duration))
 
-groupings_homophony_dur
+groupings_homophony_dur %>% 
+  select(-prop_of_dur) %>% 
+  knitr::kable()
 ```
 
 Show that all instances of homophony with no groupings are just two voices 
@@ -1480,12 +1483,12 @@ Show that all instances of homophony with no groupings are just two voices
 
 ```{r}
 gen_tib_sung %>% 
-    filter(texture == "h" & groupings == "none") %>% 
-    select(voices, duration) %>% 
-    group_by(voices) %>% 
-    summarize(duration = sum(duration)) %>% 
-    mutate(prop_of_dur = (duration/sum(duration)),
-           perc_of_dur = round(prop_of_dur*100)) 
+  filter(texture == "h" & groupings == "none") %>% 
+  select(voices, duration) %>% 
+  group_by(voices) %>% 
+  summarize(duration = sum(duration)) %>% 
+  mutate(prop_of_dur = (duration/sum(duration))) %>% 
+  knitr::kable()
 ```
 
 
@@ -1511,22 +1514,14 @@ Create list of 10 most common separate groupings:
 
 ```{r}
 groupings_separate_10 <- groupings_separate_tib %>% 
-    arrange(desc(perc_of_groupings)) %>%
-    select(groupings, perc_of_groupings) %>%
-    slice(1:10) 
+  arrange(desc(perc_of_groupings)) %>%
+  select(groupings, perc_of_groupings) %>%
+  slice(1:10) 
 
-groupings_separate_10
+groupings_separate_10 %>% 
+  mutate(perc_of_groupings = round(perc_of_groupings, digits = 2)) %>% 
+  knitr::kable()
 ```
-
-
-<!-- Also quite interesting!    -->
-
-<!-- * Like `groupings_tib`, shows that **st** and **ab** are most common, though -->
-<!-- interesting that **st** appears a little more frequently.   -->
-
-<!-- * **tb** is almost as common as **none** and far more common than **sa**.   -->
-
-<!-- ** This makes sense, since male voices sing much more than female voices.   -->
 
 
 #### By Duration (of Measures)  
@@ -1535,27 +1530,29 @@ Create tibble with each separate grouping and its total duration:
 
 ```{r}
 groupings_separate_dur_tib <- gen_tib %>% 
-    separate(groupings, sep = "_", 
-             into = c("grouping_1", "grouping_2", "grouping_3")) %>% 
-    gather("grouping_1", "grouping_2", "grouping_3", key = "old_column", 
-           value = "groupings") %>% 
-    select(groupings, duration) %>% 
-    filter(groupings != "na") %>% 
-    group_by(groupings) %>% 
-    summarize(duration = sum(duration)) %>% 
-    mutate(prop_of_dur = duration/sum(duration)) 
+  separate(groupings, sep = "_", 
+           into = c("grouping_1", "grouping_2", "grouping_3")) %>% 
+  gather("grouping_1", "grouping_2", "grouping_3", key = "old_column", 
+         value = "groupings") %>% 
+  select(groupings, duration) %>% 
+  filter(groupings != "na") %>% 
+  group_by(groupings) %>% 
+  summarize(duration = sum(duration)) %>% 
+  mutate(prop_of_dur = duration/sum(duration)) 
 ```
 
 Create list of 10 most common separate groupings by duration:
 
 ```{r}
 groupings_separate_10_dur <- groupings_separate_dur_tib %>% 
-    arrange(desc(prop_of_dur)) %>%
-    select(groupings, prop_of_dur) %>%
-    slice(1:10) %>%  
-    mutate(perc_of_dur = round(prop_of_dur*100))
+  arrange(desc(prop_of_dur)) %>%
+  select(groupings, prop_of_dur) %>%
+  slice(1:10) %>%  
+  mutate(perc_of_dur = round((prop_of_dur*100), digits = 2))
 
-groupings_separate_10_dur
+groupings_separate_10_dur %>% 
+  select(-prop_of_dur) %>% 
+  knitr::kable()
 ```
 
 Results show that factoring in duration makes *very* little difference.  
