@@ -1292,21 +1292,19 @@ levels(pitch_long$pitch)
 
 ```{r}
 pitch_distribution_plot <- pitch_long %>% 
-    group_by(piece_no) %>% 
-    mutate(prop_piece = dur_choir / sum(dur_choir)) %>% 
-    select(piece_no, pitch, prop_piece) %>% 
+    group_by(piece_no) %>%
+    count(pitch) %>% 
+    mutate(mm = sum(n)) %>% 
+    mutate(prop_piece = n / mm) %>% 
     ggplot(aes(x = pitch,
                  fill = pitch, y = prop_piece)) +
-    geom_col(
-        # color = "black" # want to add outline to entire bar but this splits for each obs.
-        ) +
+    geom_col() +
     scale_x_discrete(labels = c("C ", "C#", "D ", "D#", "E ", "F ", "F#",
                                 "G ", "G#", "A ", "A#", "B " )) +
     scale_y_continuous(
-        breaks = c(0.25, 0.5), labels = c("25%", "50%") # gives same as automated in next line
-        # labels = percent_format()
+        breaks = c(0.25, 0.5), labels = c("25%", "50%") 
         ) +
-    ylab("Proportion of Appearances of all Pitches per Number of Measures") + # FIX
+    ylab("Proportion of Appearances (per Measure Count)") + 
     facet_wrap(~piece_no, ncol = 7) +
     coord_flip() +
     theme(legend.position = "none", 
@@ -1317,7 +1315,7 @@ pitch_distribution_plot <- pitch_long %>%
           strip.background = element_rect(fill = "gray89", 
                                           color = "black")) +
     labs(title = "Distribution of Choir's Pitches"
-         # , subtitle = "Based on number of measures, in which each pitch appears."
+         , subtitle = "Based on number of measures, in which each pitch appears."
          )
 
 pitch_distribution_plot
