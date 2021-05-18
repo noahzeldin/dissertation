@@ -1150,28 +1150,28 @@ material:
 
 ``` r
 gen_tib %>% 
-    filter(spoken == 1) %>% 
-    group_by(piece_no) %>% 
-    select(piece_no, dur_choir) %>% 
-    summarize(dur_choir = sum(dur_choir)) %>% 
-    mutate(dur_choir_prop = dur_choir / sum(dur_choir),
-           dur_choir = round(dur_choir, digits = 2),
-           dur_choir_prop = round(dur_choir_prop, digits = 3)) %>% 
-    arrange(desc(dur_choir_prop))
+  filter(spoken == 1) %>% 
+  group_by(piece_no) %>% 
+  select(piece_no, dur_choir) %>% 
+  summarize(dur_choir = sum(dur_choir)) %>% 
+  mutate(dur_choir_prop = dur_choir / sum(dur_choir),
+         dur_choir = round(dur_choir, digits = 2),
+         dur_choir_prop = round(dur_choir_prop, digits = 3)) %>% 
+  arrange(desc(dur_choir_prop)) %>% 
+  knitr::kable()
 ```
 
-    ## # A tibble: 9 x 3
-    ##   piece_no dur_choir dur_choir_prop
-    ##   <fct>        <dbl>          <dbl>
-    ## 1 14           28             0.256
-    ## 2 3b           24.9           0.227
-    ## 3 4            18.3           0.168
-    ## 4 9            12.7           0.116
-    ## 5 11            9.5           0.087
-    ## 6 6b            7.62          0.07 
-    ## 7 6a            3.6           0.033
-    ## 8 10            3             0.027
-    ## 9 7b            1.8           0.016
+| piece\_no | dur\_choir | dur\_choir\_prop |
+| :-------- | ---------: | ---------------: |
+| 14        |      28.00 |            0.256 |
+| 3b        |      24.87 |            0.227 |
+| 4         |      18.33 |            0.168 |
+| 9         |      12.73 |            0.116 |
+| 11        |       9.50 |            0.087 |
+| 6b        |       7.62 |            0.070 |
+| 6a        |       3.60 |            0.033 |
+| 10        |       3.00 |            0.027 |
+| 7b        |       1.80 |            0.016 |
 
 ### Choir Voice Durations
 
@@ -1210,33 +1210,16 @@ gen_tib_sung %>%
 
 ``` r
 gen_tib_sung %>% 
-    filter(quarters_t1 != 0 & quarters_t2 != 0 & quarters_t1 != quarters_t2) 
+  filter(quarters_t1 != 0 & quarters_t2 != 0 & quarters_t1 != quarters_t2) %>% 
+  select(piece_no, measure, dur_t1, dur_t2)
 ```
 
-    ## # A tibble: 3 x 83
-    ##      id piece_no measure texture texture_value voices groupings soprano  alto
-    ##   <int> <fct>      <dbl> <chr>           <dbl>  <dbl> <chr>       <dbl> <dbl>
-    ## 1   815 10             6 a                 1.5      2 sat1b           1     1
-    ## 2   819 10            10 a                 1.5      2 sat1b           1     1
-    ## 3   823 10            14 a                 1.5      2 sat1b           1     1
-    ## # ... with 74 more variables: tenor <dbl>, bass <dbl>, parts_active <dbl>,
-    ## #   ratio_voices_parts <dbl>, rests_s1 <dbl>, rests_s2 <dbl>, rests_a1 <dbl>,
-    ## #   rests_a2 <dbl>, rests_t1 <dbl>, rests_t2 <dbl>, rests_b1 <dbl>,
-    ## #   rests_b2 <dbl>, rests_all <dbl>, quarters_s1 <dbl>, quarters_s2 <dbl>,
-    ## #   quarters_a1 <dbl>, quarters_a2 <dbl>, quarters_t1 <dbl>, quarters_t2 <dbl>,
-    ## #   quarters_b1 <dbl>, quarters_b2 <dbl>, quarters_sum <dbl>, notes_s1 <dbl>,
-    ## #   notes_s2 <dbl>, notes_a1 <dbl>, notes_a2 <dbl>, notes_t1 <dbl>,
-    ## #   notes_t2 <dbl>, notes_b1 <dbl>, notes_b2 <dbl>, notes_sum <dbl>,
-    ## #   notes_sum_pairings <dbl>, tones_s1 <dbl>, tones_s2 <dbl>, tones_a1 <dbl>,
-    ## #   tones_a2 <dbl>, tones_t1 <dbl>, tones_t2 <dbl>, tones_b1 <dbl>,
-    ## #   tones_b2 <dbl>, tones_sum <dbl>, tones <chr>, tones_count <dbl>,
-    ## #   spoken <dbl>, acapella <dbl>, meter_1 <dbl>, meter_2 <dbl>,
-    ## #   quarters_per_bar <dbl>, tempo <dbl>, duration <dbl>, dur_choir <dbl>,
-    ## #   dur_spoken <dbl>, dur_acapella <dbl>, dur_s1 <dbl>, dur_s2 <dbl>,
-    ## #   dur_a1 <dbl>, dur_a2 <dbl>, dur_t1 <dbl>, dur_t2 <dbl>, dur_b1 <dbl>,
-    ## #   dur_b2 <dbl>, `meter 1` <dbl>, `meter 2` <dbl>, `quarters per bar` <dbl>,
-    ## #   dm_s1 <dbl>, dm_s2 <dbl>, dm_a1 <dbl>, dm_a2 <dbl>, dm_t1 <dbl>,
-    ## #   dm_t2 <dbl>, dm_b1 <dbl>, dm_b2 <dbl>, dm_sum <dbl>, dmc <dbl>
+    ## # A tibble: 3 x 4
+    ##   piece_no measure dur_t1 dur_t2
+    ##   <fct>      <dbl>  <dbl>  <dbl>
+    ## 1 10             6  0.375   2.25
+    ## 2 10            10  0.375   2.25
+    ## 3 10            14  0.375   2.25
 
   - Only the antiphonic passage at beginning of “Lob der Partei.” This
     doesn’t impact any of the calculations, because even though t1 and
@@ -1250,31 +1233,14 @@ gen_tib_sung %>%
 
 ``` r
 gen_tib_sung %>% 
-    filter(quarters_b1 != 0 & quarters_b2 != 0 & quarters_b1 != quarters_b2)
+  filter(quarters_b1 != 0 & quarters_b2 != 0 & quarters_b1 != quarters_b2) %>% 
+  select(piece_no, measure, dur_b1, dur_b2)
 ```
 
-    ## # A tibble: 1 x 83
-    ##      id piece_no measure texture texture_value voices groupings soprano  alto
-    ##   <int> <fct>      <dbl> <chr>           <dbl>  <dbl> <chr>       <dbl> <dbl>
-    ## 1   570 7a            64 m                   1      1 tb              0     0
-    ## # ... with 74 more variables: tenor <dbl>, bass <dbl>, parts_active <dbl>,
-    ## #   ratio_voices_parts <dbl>, rests_s1 <dbl>, rests_s2 <dbl>, rests_a1 <dbl>,
-    ## #   rests_a2 <dbl>, rests_t1 <dbl>, rests_t2 <dbl>, rests_b1 <dbl>,
-    ## #   rests_b2 <dbl>, rests_all <dbl>, quarters_s1 <dbl>, quarters_s2 <dbl>,
-    ## #   quarters_a1 <dbl>, quarters_a2 <dbl>, quarters_t1 <dbl>, quarters_t2 <dbl>,
-    ## #   quarters_b1 <dbl>, quarters_b2 <dbl>, quarters_sum <dbl>, notes_s1 <dbl>,
-    ## #   notes_s2 <dbl>, notes_a1 <dbl>, notes_a2 <dbl>, notes_t1 <dbl>,
-    ## #   notes_t2 <dbl>, notes_b1 <dbl>, notes_b2 <dbl>, notes_sum <dbl>,
-    ## #   notes_sum_pairings <dbl>, tones_s1 <dbl>, tones_s2 <dbl>, tones_a1 <dbl>,
-    ## #   tones_a2 <dbl>, tones_t1 <dbl>, tones_t2 <dbl>, tones_b1 <dbl>,
-    ## #   tones_b2 <dbl>, tones_sum <dbl>, tones <chr>, tones_count <dbl>,
-    ## #   spoken <dbl>, acapella <dbl>, meter_1 <dbl>, meter_2 <dbl>,
-    ## #   quarters_per_bar <dbl>, tempo <dbl>, duration <dbl>, dur_choir <dbl>,
-    ## #   dur_spoken <dbl>, dur_acapella <dbl>, dur_s1 <dbl>, dur_s2 <dbl>,
-    ## #   dur_a1 <dbl>, dur_a2 <dbl>, dur_t1 <dbl>, dur_t2 <dbl>, dur_b1 <dbl>,
-    ## #   dur_b2 <dbl>, `meter 1` <dbl>, `meter 2` <dbl>, `quarters per bar` <dbl>,
-    ## #   dm_s1 <dbl>, dm_s2 <dbl>, dm_a1 <dbl>, dm_a2 <dbl>, dm_t1 <dbl>,
-    ## #   dm_t2 <dbl>, dm_b1 <dbl>, dm_b2 <dbl>, dm_sum <dbl>, dmc <dbl>
+    ## # A tibble: 1 x 4
+    ##   piece_no measure dur_b1 dur_b2
+    ##   <fct>      <dbl>  <dbl>  <dbl>
+    ## 1 7a            64   0.75   0.25
 
   - Only the final measure of “Streiklied.” As is the case with the
     tenors, this doesn’t matter, because b1 and b2 overlap.
@@ -1313,35 +1279,18 @@ gen_tib_sung %>%
 
 ``` r
 gen_tib_sung %>% 
-    filter(quarters_t1 == 0 & quarters_t2 != 0)
+  filter(quarters_t1 == 0 & quarters_t2 != 0) %>% 
+  select(piece_no, measure, dur_t1, dur_t2)
 ```
 
-    ## # A tibble: 5 x 83
-    ##      id piece_no measure texture texture_value voices groupings soprano  alto
-    ##   <int> <fct>      <dbl> <chr>           <dbl>  <dbl> <chr>       <dbl> <dbl>
-    ## 1   814 10             5 a                 1.5      2 sat1b           1     1
-    ## 2   818 10             9 a                 1.5      2 sat1b           1     1
-    ## 3   822 10            13 a                 1.5      2 sat1b           1     1
-    ## 4   826 10            17 a                 1.5      2 sat1b           1     1
-    ## 5   827 10            18 a                 1.5      2 sat1b           1     1
-    ## # ... with 74 more variables: tenor <dbl>, bass <dbl>, parts_active <dbl>,
-    ## #   ratio_voices_parts <dbl>, rests_s1 <dbl>, rests_s2 <dbl>, rests_a1 <dbl>,
-    ## #   rests_a2 <dbl>, rests_t1 <dbl>, rests_t2 <dbl>, rests_b1 <dbl>,
-    ## #   rests_b2 <dbl>, rests_all <dbl>, quarters_s1 <dbl>, quarters_s2 <dbl>,
-    ## #   quarters_a1 <dbl>, quarters_a2 <dbl>, quarters_t1 <dbl>, quarters_t2 <dbl>,
-    ## #   quarters_b1 <dbl>, quarters_b2 <dbl>, quarters_sum <dbl>, notes_s1 <dbl>,
-    ## #   notes_s2 <dbl>, notes_a1 <dbl>, notes_a2 <dbl>, notes_t1 <dbl>,
-    ## #   notes_t2 <dbl>, notes_b1 <dbl>, notes_b2 <dbl>, notes_sum <dbl>,
-    ## #   notes_sum_pairings <dbl>, tones_s1 <dbl>, tones_s2 <dbl>, tones_a1 <dbl>,
-    ## #   tones_a2 <dbl>, tones_t1 <dbl>, tones_t2 <dbl>, tones_b1 <dbl>,
-    ## #   tones_b2 <dbl>, tones_sum <dbl>, tones <chr>, tones_count <dbl>,
-    ## #   spoken <dbl>, acapella <dbl>, meter_1 <dbl>, meter_2 <dbl>,
-    ## #   quarters_per_bar <dbl>, tempo <dbl>, duration <dbl>, dur_choir <dbl>,
-    ## #   dur_spoken <dbl>, dur_acapella <dbl>, dur_s1 <dbl>, dur_s2 <dbl>,
-    ## #   dur_a1 <dbl>, dur_a2 <dbl>, dur_t1 <dbl>, dur_t2 <dbl>, dur_b1 <dbl>,
-    ## #   dur_b2 <dbl>, `meter 1` <dbl>, `meter 2` <dbl>, `quarters per bar` <dbl>,
-    ## #   dm_s1 <dbl>, dm_s2 <dbl>, dm_a1 <dbl>, dm_a2 <dbl>, dm_t1 <dbl>,
-    ## #   dm_t2 <dbl>, dm_b1 <dbl>, dm_b2 <dbl>, dm_sum <dbl>, dmc <dbl>
+    ## # A tibble: 5 x 4
+    ##   piece_no measure dur_t1 dur_t2
+    ##   <fct>      <dbl>  <dbl>  <dbl>
+    ## 1 10             5      0   2.25
+    ## 2 10             9      0   2.25
+    ## 3 10            13      0   2.25
+    ## 4 10            17      0   2.25
+    ## 5 10            18      0   2.25
 
   - Only the beginning of “Lob der Partei,” as expected. Save as extra
     duration to add to male proportion (`dur_t2_extra`).
@@ -1375,30 +1324,11 @@ gen_tib_sung %>%
 
 ``` r
 gen_tib_sung %>% 
-    filter(dur_s1 != 0 & dur_s2 != 0 & dur_s1 != dur_s2)
+  filter(dur_s1 != 0 & dur_s2 != 0 & dur_s1 != dur_s2) %>% 
+  nrow()
 ```
 
-    ## # A tibble: 0 x 83
-    ## # ... with 83 variables: id <int>, piece_no <fct>, measure <dbl>,
-    ## #   texture <chr>, texture_value <dbl>, voices <dbl>, groupings <chr>,
-    ## #   soprano <dbl>, alto <dbl>, tenor <dbl>, bass <dbl>, parts_active <dbl>,
-    ## #   ratio_voices_parts <dbl>, rests_s1 <dbl>, rests_s2 <dbl>, rests_a1 <dbl>,
-    ## #   rests_a2 <dbl>, rests_t1 <dbl>, rests_t2 <dbl>, rests_b1 <dbl>,
-    ## #   rests_b2 <dbl>, rests_all <dbl>, quarters_s1 <dbl>, quarters_s2 <dbl>,
-    ## #   quarters_a1 <dbl>, quarters_a2 <dbl>, quarters_t1 <dbl>, quarters_t2 <dbl>,
-    ## #   quarters_b1 <dbl>, quarters_b2 <dbl>, quarters_sum <dbl>, notes_s1 <dbl>,
-    ## #   notes_s2 <dbl>, notes_a1 <dbl>, notes_a2 <dbl>, notes_t1 <dbl>,
-    ## #   notes_t2 <dbl>, notes_b1 <dbl>, notes_b2 <dbl>, notes_sum <dbl>,
-    ## #   notes_sum_pairings <dbl>, tones_s1 <dbl>, tones_s2 <dbl>, tones_a1 <dbl>,
-    ## #   tones_a2 <dbl>, tones_t1 <dbl>, tones_t2 <dbl>, tones_b1 <dbl>,
-    ## #   tones_b2 <dbl>, tones_sum <dbl>, tones <chr>, tones_count <dbl>,
-    ## #   spoken <dbl>, acapella <dbl>, meter_1 <dbl>, meter_2 <dbl>,
-    ## #   quarters_per_bar <dbl>, tempo <dbl>, duration <dbl>, dur_choir <dbl>,
-    ## #   dur_spoken <dbl>, dur_acapella <dbl>, dur_s1 <dbl>, dur_s2 <dbl>,
-    ## #   dur_a1 <dbl>, dur_a2 <dbl>, dur_t1 <dbl>, dur_t2 <dbl>, dur_b1 <dbl>,
-    ## #   dur_b2 <dbl>, `meter 1` <dbl>, `meter 2` <dbl>, `quarters per bar` <dbl>,
-    ## #   dm_s1 <dbl>, dm_s2 <dbl>, dm_a1 <dbl>, dm_a2 <dbl>, dm_t1 <dbl>,
-    ## #   dm_t2 <dbl>, dm_b1 <dbl>, dm_b2 <dbl>, dm_sum <dbl>, dmc <dbl>
+    ## [1] 0
 
 2.  Altos
 
