@@ -526,7 +526,7 @@ dur_piece %>%
 | 6a        |          0.06 |           0.2 |
 | 7b        |          0.04 |           0.1 |
 
-##### In Lubridate Format (properly displaying seconds)
+#### In Lubridate Format (properly displaying seconds)
 
 Create new table with Lubridate that expresses min. and sec. properly
 (`dur_piece_lubridate`):
@@ -534,12 +534,12 @@ Create new table with Lubridate that expresses min. and sec. properly
 ``` r
 # The code here is not very elegant and must be split up into multiple steps.
 
-# create foundational dataframe
+# create foundational dataframe for further manipulation
 dur_piece_lubridate <- dur_piece %>%
     as.data.frame() %>% 
     select(-prop_of_dur)
 
-# create dummy vector for partial min. that retains trailing zeros
+# create dummy variable for partial min. that retains trailing zeros
 x <- sub("^[^.]*[.]", "", 
          format(dur_piece_lubridate$duration_min, 
                 width = max(nchar(dur_piece_lubridate$duration_min))))
@@ -558,10 +558,12 @@ dur_piece_lubridate <- dur_piece_lubridate %>%
     mutate(duration = (minutes(min) + seconds(sec)), .keep = "unused") %>%
     relocate(duration, .after = piece_no)
 
-# delete dummy vector
+# delete dummy variable
 rm(x)
 
-dur_piece_lubridate %>% knitr::kable()
+# view results
+dur_piece_lubridate %>% 
+  knitr::kable()
 ```
 
 | piece\_no | duration |
