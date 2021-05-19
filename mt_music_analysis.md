@@ -526,29 +526,67 @@ dur_piece %>%
 | 6a        |          0.06 |           0.2 |
 | 7b        |          0.04 |           0.1 |
 
-<!-- ##### NEW with Lubridate - FIX! -->
+##### In Lubridate Format (properly displaying seconds)
 
-<!-- ```{r} -->
+Create new table with Lubridate that expresses min. and sec. properly
+(`dur_piece_lubridate`):
 
-<!-- dur_piece_lubridate <- dur_piece %>%  -->
+``` r
+# The code here is not very elegant and must be split up into multiple steps.
 
-<!--     separate(duration_min, sep = "\\.", into = c("min", "sec")) %>%  -->
+# create foundational dataframe
+dur_piece_lubridate <- dur_piece %>%
+    as.data.frame() %>% 
+    select(-prop_of_dur)
 
-<!--     mutate(min = as.numeric(min), -->
+# create dummy vector for partial min. that retains trailing zeros
+x <- sub("^[^.]*[.]", "", 
+         format(dur_piece_lubridate$duration_min, 
+                width = max(nchar(dur_piece_lubridate$duration_min))))
 
-<!--            sec = as.numeric(sec) # PROBLEM - removes zeros -->
+# split min col and prep for conversion to Lubridate format
+dur_piece_lubridate <- dur_piece_lubridate %>% 
+    mutate(sec = x) %>% 
+    mutate(min = str_split(duration_min, "\\.", simplify = FALSE, n = 2), 
+           .keep = "unused", .before = "sec") %>% 
+    unnest_wider(min) %>% 
+    rename(min = "...1") %>% 
+    select(-"...2") %>% 
+    mutate(min = as.numeric(min), 
+             sec = as.numeric(sec)) %>%
+    mutate(sec = round(sec * .6)) %>%
+    mutate(duration = (minutes(min) + seconds(sec)), .keep = "unused") %>%
+    relocate(duration, .after = piece_no)
 
-<!--            ) %>%  -->
+# delete dummy vector
+rm(x)
 
-<!--     mutate(sec = round(sec * .6)) %>%  -->
+dur_piece_lubridate %>% knitr::kable()
+```
 
-<!--     mutate(duration = (minutes(min) + seconds(sec)), .keep = "unused") %>%  -->
-
-<!--     relocate(duration, .after = piece_no) -->
-
-<!-- dur_piece_lubridate -->
-
-<!-- ``` -->
+| piece\_no | duration |
+| :-------- | -------: |
+| 1         |   4M 55S |
+| 2b        |    2M 4S |
+| 3a        |   3M 50S |
+| 3b        |      29S |
+| 4         |    4M 7S |
+| 5         |   3M 55S |
+| 6a        |       4S |
+| 6b        |       8S |
+| 6c        |      14S |
+| 7a        |   1M 37S |
+| 7b        |       2S |
+| 8a        |   2M 19S |
+| 8b        |    3M 7S |
+| 9         |   4M 49S |
+| 10        |   1M 58S |
+| 11        |      36S |
+| 12a       |      28S |
+| 12b       |      54S |
+| 13a       |       6S |
+| 13b       |      28S |
+| 14        |   2M 22S |
 
 ### Duration by Category
 
@@ -1526,7 +1564,7 @@ texture_tib_mm %>%
     geom_col(aes(x = texture, y = prop_of_sung, fill = texture))
 ```
 
-![](mt_music_analysis_files/figure-gfm/unnamed-chunk-64-1.png)<!-- -->
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-65-1.png)<!-- -->
 
   - Homophony clearly dominates, followed by monophony.
 
@@ -1553,7 +1591,7 @@ texture_tib_dur %>%
     geom_col(aes(x = texture, y = prop_of_sung, fill = texture))
 ```
 
-![](mt_music_analysis_files/figure-gfm/unnamed-chunk-66-1.png)<!-- -->
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-67-1.png)<!-- -->
 
   - Again, homophony clearly dominates, followed by monophony.
 
@@ -1624,7 +1662,7 @@ dur_texture_piece_mosaic_plot <- ggplot(dur_texture_piece_mosaic_table,
 dur_texture_piece_mosaic_plot
 ```
 
-![](mt_music_analysis_files/figure-gfm/unnamed-chunk-68-1.png)<!-- -->
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-69-1.png)<!-- -->
 
   - included in ch. 2
 
@@ -1801,7 +1839,7 @@ pitch_distribution_plot <- pitch_long %>%
 pitch_distribution_plot
 ```
 
-![](mt_music_analysis_files/figure-gfm/unnamed-chunk-70-1.png)<!-- -->
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-71-1.png)<!-- -->
 
 ### Chromaticism of Each Piece
 
