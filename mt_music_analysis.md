@@ -532,31 +532,33 @@ Create new table with Lubridate that expresses min. and sec. properly
 (`dur_piece_lubridate`):
 
 ``` r
-# The code here is not very elegant and must be split up into multiple steps.
+# The code here is unfortunately not very elegant and must be split into 
+# multiple steps.
 
 # create foundational dataframe for further manipulation
 dur_piece_lubridate <- dur_piece %>%
     as.data.frame() %>% 
     select(-prop_of_dur)
 
-# create dummy variable for partial min. that retains trailing zeros
+# create dummy variable for decimal values that retains trailing zeros 
+# (later converted to seconds)
 x <- sub("^[^.]*[.]", "", 
          format(dur_piece_lubridate$duration_min, 
                 width = max(nchar(dur_piece_lubridate$duration_min))))
 
 # split min col and prep for conversion to Lubridate format
 dur_piece_lubridate <- dur_piece_lubridate %>% 
-    mutate(sec = x) %>% 
-    mutate(min = str_split(duration_min, "\\.", simplify = FALSE, n = 2), 
-           .keep = "unused", .before = "sec") %>% 
-    unnest_wider(min) %>% 
-    rename(min = "...1") %>% 
-    select(-"...2") %>% 
-    mutate(min = as.numeric(min), 
-             sec = as.numeric(sec)) %>%
-    mutate(sec = round(sec * .6)) %>%
-    mutate(duration = (minutes(min) + seconds(sec)), .keep = "unused") %>%
-    relocate(duration, .after = piece_no)
+  mutate(sec = x, min = str_split(duration_min, "\\.", simplify = FALSE, n = 2), 
+           .keep = "unused", .before = "sec") %>%   
+  unnest_wider(min) %>% 
+  rename(min = "...1") %>% 
+  select(-"...2") %>% 
+  mutate(min = as.numeric(min), 
+           sec = as.numeric(sec)) %>%
+  mutate(sec = round(sec * .6),
+         duration = (minutes(min) + seconds(sec)), .keep = "unused") %>%
+  relocate(duration, .after = piece_no) %>% 
+  select(-sec)
 
 # delete dummy variable
 rm(x)
