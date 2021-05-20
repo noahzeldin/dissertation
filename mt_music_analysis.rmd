@@ -414,20 +414,6 @@ knitr::kable(dur_subcategory)
 ```
 
 
-<!-- arranged descending -->
-
-<!-- ```{r} -->
-<!-- dur_subcategory %>%  -->
-<!--     arrange(desc(prop_of_dur)) -->
-<!-- ``` -->
-
-<!-- Exactly what I expected:    -->
-<!-- * largest proportion = 1a. mixed choir with orchestra -->
-<!-- * followed by 3. tenor solo with accompaniment -->
-<!-- * then 1b. = male choir with orchestra -->
-<!-- ** actually, only one piece = Streiklied -->
-
-
 ## Meter and Tempo
 
 An important feature of Eisler's music for *The Measures Taken* are the frequent
@@ -474,14 +460,6 @@ knitr::kable(dur_meter_tempo_piece)
 ```
 
 
-<!-- sorted by **meter_ch_count**   -->
-
-<!-- ```{r} -->
-<!-- dur_meter_tempo_piece %>%  -->
-<!--     arrange(desc(meter_ch_count)) %>%  -->
-<!--     select(-tempo_ch_count, -tempo_ch_rate_sec) -->
-<!-- ``` -->
-
 5 pieces with greatest number of meter changes:
 
 ```{r}
@@ -494,15 +472,6 @@ knitr::kable(meter_ch_count_piece_top_5)
 ```
 
 
-<!-- sorted by **meter_ch_rate_sec** ASCENDING   -->
-
-<!-- ```{r} -->
-<!-- dur_meter_tempo_piece %>%  -->
-<!--     filter(meter_ch_count != 1) %>%  -->
-<!--     select(-tempo_ch_count, -tempo_ch_rate_sec) %>%  -->
-<!--     arrange(meter_ch_rate_sec) -->
-<!-- ``` -->
-
 5 pieces with fastest rates of meter change:
 
 ```{r}
@@ -514,14 +483,6 @@ meter_ch_rate_piece_top_5 <- dur_meter_tempo_piece %>%
 
 knitr::kable(meter_ch_rate_piece_top_5)
 ```
-
-<!-- sorted by **tempo_ch_count**   -->
-
-<!-- ```{r} -->
-<!-- dur_meter_tempo_piece %>%   -->
-<!--     select(-meter_ch_count, -meter_ch_rate_sec) %>%  -->
-<!--     arrange(desc(tempo_ch_count)) -->
-<!-- ``` -->
 
 3 pieces with greatest number of tempo changes:  
 
@@ -643,25 +604,6 @@ dur_6_4_duple_perc <- round((dur_meter %>%
 ```
 
 `r dur_6_4_duple_perc` % of measures with duple meters are in 6/4.
-
-
-<!-- ```{r} -->
-<!-- # duration of duple meters -->
-<!-- dur_meter_groups %>%  -->
-<!--   filter(group == "duple") %>%  -->
-<!--   select(duration) - -->
-<!--   # subtract duration of 6/4 measures -->
-<!--   dur_meter %>%  -->
-<!--     filter(meter == "6_4") %>%  -->
-<!--     select(duration) %>%  -->
-<!--     sum() -  -->
-<!--   # subtract duration of triple meters -->
-<!--   dur_meter_groups %>%  -->
-<!--   filter(group == "triple") %>%  -->
-<!--   select(duration) -->
-<!-- ``` -->
-
-<!-- Almost even. -->
 
 
 ## Durations: Choir
@@ -1144,77 +1086,6 @@ dur_texture_piece_mosaic_plot
 ```
 
 * included in ch. 2
-
-<!-- #### Presence of Each Texture by Piece -->
-
-<!-- Create table: -->
-
-<!-- ```{r} -->
-<!-- texture_piece_presence <- texture_piece_dur %>%  -->
-<!--     group_by(piece_no, texture) %>%  -->
-<!--     count(texture) %>%  -->
-<!--     spread(texture, n, fill = 0) %>%  -->
-<!--     mutate(no_of_textures = sum(c_across(a:p))) -->
-
-<!-- texture_piece_presence -->
-<!-- ``` -->
-
-<!-- ##### Pieces grouped by number of textures -->
-
-<!-- Pieces with 3 textures. -->
-
-<!-- ```{r} -->
-<!-- texture_piece_presence %>%  -->
-<!--     filter(no_of_textures == 3) -->
-<!-- ``` -->
-
-<!-- Pieces with 1 texture. -->
-
-<!-- ```{r} -->
-<!-- texture_piece_presence %>%  -->
-<!--     filter(no_of_textures == 1) -->
-<!-- ``` -->
-
-<!-- Really interesting - all homophonic. -->
-
-
-<!-- ##### Grouped by type of texture -->
-
-<!-- 1. with antiphony -->
-
-<!-- ```{r} -->
-<!-- texture_piece_presence %>%  -->
-<!--     filter(a == 1) -->
-<!-- ``` -->
-
-<!-- Yep, only start of "Lob der Partei". -->
-
-<!-- 2. with homophony -->
-
-<!-- ```{r} -->
-<!-- texture_piece_presence %>%  -->
-<!--     filter(h == 1) -->
-<!-- ``` -->
-
-<!-- So, every single piece. -->
-
-<!-- 3. with monophony -->
-
-<!-- ```{r} -->
-<!-- texture_piece_presence %>%  -->
-<!--     filter(m == 1) -->
-<!-- ``` -->
-
-<!-- ###### CONSIDER CHANGING - MAY NOT NEED VALUE -->
-
-<!-- 4. with polyphony -->
-
-<!-- ```{r} -->
-<!-- no_pieces_with_polyphony <- texture_piece_presence %>%  -->
-<!--     filter(p == 1) %>%  -->
-<!--     print() %>%  -->
-<!--     nrow() -->
-<!-- ``` -->
 
 
 ## Pitch
