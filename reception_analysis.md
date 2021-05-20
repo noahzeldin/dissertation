@@ -70,7 +70,8 @@ Noah Zeldin
 Below is the annotated set-up for my quantitative analysis of the
 Weimar-era reception of Brecht and Eisler’s *The Measures Taken* and
 *The Mother*, which is included in the second chapter of my
-dissertation. This analysis was conducted in R and relies heavily on the
+dissertation. This analysis was conducted in
+[R](https://www.r-project.org/) and relies heavily on the
 [quanteda](https://quanteda.io/) package (for general manipulation, word
 counts, etc.) and [FactoMineR](http://factominer.free.fr/index.html)
 package (for correspondence analysis). (Also, I have tried to use
