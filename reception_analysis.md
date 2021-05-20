@@ -610,8 +610,9 @@ Conduct CA:
 
 ``` r
 grouped_ca_no_erfurt_or_unknown <- grouped_dfm_no_erfurt_or_unknown %>% 
-    as.data.frame() %>% 
-    CA(quali.sup = 1, graph = FALSE)
+  as.data.frame() %>% 
+  column_to_rownames(var = "doc_id") %>% 
+  CA(graph = FALSE)
 ```
 
 View results (mainly to get p-value):
@@ -625,21 +626,19 @@ grouped_ca_no_erfurt_or_unknown
     ## The chi square of independence between the two variables is equal to 48474.43 (p-value =  1.896141e-219 ).
     ## *The results are available in the following objects:
     ## 
-    ##    name               description                                
-    ## 1  "$eig"             "eigenvalues"                              
-    ## 2  "$col"             "results for the columns"                  
-    ## 3  "$col$coord"       "coord. for the columns"                   
-    ## 4  "$col$cos2"        "cos2 for the columns"                     
-    ## 5  "$col$contrib"     "contributions of the columns"             
-    ## 6  "$row"             "results for the rows"                     
-    ## 7  "$row$coord"       "coord. for the rows"                      
-    ## 8  "$row$cos2"        "cos2 for the rows"                        
-    ## 9  "$row$contrib"     "contributions of the rows"                
-    ## 10 "$quali.sup$coord" "coord. for supplementary categorical var."
-    ## 11 "$quali.sup$cos2"  "cos2 for supplementary categorical var."  
-    ## 12 "$call"            "summary called parameters"                
-    ## 13 "$call$marge.col"  "weights of the columns"                   
-    ## 14 "$call$marge.row"  "weights of the rows"
+    ##    name              description                   
+    ## 1  "$eig"            "eigenvalues"                 
+    ## 2  "$col"            "results for the columns"     
+    ## 3  "$col$coord"      "coord. for the columns"      
+    ## 4  "$col$cos2"       "cos2 for the columns"        
+    ## 5  "$col$contrib"    "contributions of the columns"
+    ## 6  "$row"            "results for the rows"        
+    ## 7  "$row$coord"      "coord. for the rows"         
+    ## 8  "$row$cos2"       "cos2 for the rows"           
+    ## 9  "$row$contrib"    "contributions of the rows"   
+    ## 10 "$call"           "summary called parameters"   
+    ## 11 "$call$marge.col" "weights of the columns"      
+    ## 12 "$call$marge.row" "weights of the rows"
 
   - Researchers can of course explore the results in further detail,
     following the instructions printed above.
@@ -1484,8 +1483,6 @@ Main
 
 ``` r
 ca_main <- plot(grouped_ca_no_erfurt_or_unknown,
-                invisible = "row",
-                col.quali.sup = "darkblue",
                 selectCol = "contrib 20",
                 autoLab = "y", 
                 ylim = c(-0.75, 1.75), 
@@ -1506,8 +1503,6 @@ ca_main
 
 ``` r
 ca_measures <- plot(grouped_ca_no_erfurt_or_unknown,
-     invisible = "row",
-     col.quali.sup = "darkblue",
      selectCol = "contrib 20",
      autoLab = "y",
      xlim = c(0, 1.5),
@@ -1529,8 +1524,6 @@ ca_measures
 
 ``` r
 ca_mother <- plot(grouped_ca_no_erfurt_or_unknown,
-     invisible = "row",
-     col.quali.sup = "darkblue",
      selectCol = "contrib 20",
      autoLab = "y",
      xlim = c(-1.25, 0),

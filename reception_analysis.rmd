@@ -551,8 +551,9 @@ Conduct CA:
 
 ```{r}
 grouped_ca_no_erfurt_or_unknown <- grouped_dfm_no_erfurt_or_unknown %>% 
-    as.data.frame() %>% 
-    CA(quali.sup = 1, graph = FALSE)
+  as.data.frame() %>% 
+  column_to_rownames(var = "doc_id") %>% 
+  CA(graph = FALSE)
 ```
 
 View results (mainly to get p-value):
@@ -1251,8 +1252,6 @@ Main
 
 ```{r, fig.width=11, fig.height=11}
 ca_main <- plot(grouped_ca_no_erfurt_or_unknown,
-                invisible = "row",
-                col.quali.sup = "darkblue",
                 selectCol = "contrib 20",
                 autoLab = "y", 
                 ylim = c(-0.75, 1.75), 
@@ -1271,8 +1270,6 @@ ca_main
 
 ```{r, fig.width=10, fig.height=10}
 ca_measures <- plot(grouped_ca_no_erfurt_or_unknown,
-     invisible = "row",
-     col.quali.sup = "darkblue",
      selectCol = "contrib 20",
      autoLab = "y",
      xlim = c(0, 1.5),
@@ -1292,8 +1289,6 @@ ca_measures
 
 ```{r, fig.width=10, fig.height=10}
 ca_mother <- plot(grouped_ca_no_erfurt_or_unknown,
-     invisible = "row",
-     col.quali.sup = "darkblue",
      selectCol = "contrib 20",
      autoLab = "y",
      xlim = c(-1.25, 0),
