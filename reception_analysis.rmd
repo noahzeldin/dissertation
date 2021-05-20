@@ -46,7 +46,7 @@ dissertation.
 In the near future, I will upload the corresponding write-up included in ch. 2 
 of my dissertation to this repository.
 
-# Load Packages
+# 1. Load Packages
 
 ```{r}
 library(tidyverse)
@@ -57,7 +57,7 @@ library(FactoMineR)
 library(lubridate)
 ```
 
-# Importation
+# 2. Importation
 
 NB: Several articles had to be removed because of their distortionary effects.
 This resulted in three versions of the data, as shown below. 
@@ -99,9 +99,9 @@ data_reduced <- data_no_erfurt %>%
 (`data_main`).
 
 
-# Quanteda Set-Up
+# 3. Quanteda Set-Up
 
-## Create Corpora from Data Sets
+## a. Create Corpora from Data Sets
 
 In addition to the main corpora, I create additional corpora, e.g. based on 
 piece, to provide greater flexibility for later analysis, for instance, finding 
@@ -168,7 +168,7 @@ corp_title <- corpus(data_main, text_field = "title")
 mother_corp_title <- corpus_subset(corp_title, piece == "mother")
 ```
 
-## Corpus Summary - Article Lengths, etc.
+## b. Corpus Summary - Article Lengths, etc.
 
 For later reference; used sparingly in analysis.
 
@@ -187,7 +187,7 @@ corp_reduced_summary <- corp_reduced_summary %>%
 ```
 
 
-## Dictionaries and Additional Stopwords
+## c. Dictionaries and Additional Stopwords
 
 General Dictionary
 
@@ -263,7 +263,7 @@ sw_add <- c("dass", "wurde", "schon", "mehr", "ganz*", "immer", "gibt", "ja",
             "müssen", "kommt", "sei", "tun")
 ```
 
-## Tokenize and Filter Corpora
+## d. Tokenize and Filter Corpora
 
 Create function for tokenizing and removing stopwords, punctuation and other 
 symbols:
@@ -305,7 +305,7 @@ mother_toks <- tokenize_and_remove_stopwords(mother_corp)
 mother_title_toks <- tokenize_and_remove_stopwords(mother_corp_title)
 ```
 
-## Document-Feature Matrices (dfm)
+## e. Document-Feature Matrices (dfm)
 
 Create function for converting tokenized items from previous section (ending in 
 `_toks`) to dfm and applying dictionaries:
@@ -447,7 +447,7 @@ mother_sub <- dfm_subset(grouped_dfm,
                          piece == "mother")
 ```
 
-## Convert general (reduced) corpus and dfm to dataframes for later use
+## f. Convert general (reduced) corpus and dfm to dataframes for later use
 
 ```{r}
 # convert gen_dfm_reduced to dataframe
@@ -458,7 +458,7 @@ corp_reduced_datafr <- convert(corp_reduced, to = "data.frame")
 ```
 
 
-## Create corpus, dfm, ca, etc. of each piece without unknown GPO (for CA)
+## g. Create corpus, dfm, ca, etc. of each piece without unknown GPO (for CA)
 
 This is necessary for the CA, where I exclude those articles for which the GPO 
 is unknown.
@@ -533,7 +533,7 @@ mother_dfm_gpo_no_unknown <-
 ```
 
 
-# FactoMineR Set-Up (for CA)
+# 4. FactoMineR Set-Up (for CA)
 
 Create function for converting dfm to dataframe and performing CA:
 
@@ -564,9 +564,9 @@ grouped_ca_no_erfurt_or_unknown <-
 
 
 
-# Keywords In Context (KWIC) and Keyword Exploration
+# 5. Keywords In Context (KWIC) and Keyword Exploration
 
-## Create function to link KWIC with data
+## a. Create function to link KWIC with data
 
 ```{r}
 combine_kwic_with_data <- function(corpus, words, window) {
@@ -587,7 +587,7 @@ combine_kwic_with_data <- function(corpus, words, window) {
     }
 ```
 
-## Explore various KWIC 
+## b. Explore various KWIC 
 
 All of these keywords relate to claims made in ch. 2 of the dissertation. (All 
 words are written lowercase to reflect how they appear post-processing.)
@@ -727,7 +727,7 @@ lehrlern_kwic_mother_right <- lehrlern_kwic %>%
   filter(piece == "mother" & general_political_orientation == "right")
 ```
 
-## Additional Terms Post-Processing (DFMs)
+## c. Additional Terms Post-Processing (DFMs)
 
 LEHRLERN in *The Mother*
 
@@ -740,9 +740,9 @@ lehrlern_mother_gpo_count
 ```
 
 
-# Dates of Publication with Counts
+# 6. Dates of Publication with Counts
 
-## Create Tables
+## a. Create Tables
 
 ### General
 
@@ -872,7 +872,7 @@ dates_tib_lubridate %>%
   arrange(desc(n))
 ```
 
-## Date Ranges, Time Lengths, etc.
+## b. Date Ranges, Time Lengths, etc.
 
 ### Time Length in Years
 
@@ -994,7 +994,7 @@ articles_mother_premiere_week_perc <-
 `r articles_mother_premiere_week_perc`% of articles on *The Mother* were 
 published within one week of the premiere.
 
-## Articles on *The Measures Taken* published in 1932 (with full dates)
+## c. Articles on *The Measures Taken* published in 1932 (with full dates)
 
 ```{r}
 dates_tib_lubridate %>% 
@@ -1004,7 +1004,7 @@ dates_tib_lubridate %>%
 ```
 
 
-# Visualizations
+# 7. Visualizations
 
 Create color scheme:
 
@@ -1019,7 +1019,7 @@ Create English labels for both works:
 labels_english <- c(measures = "Measures Taken", mother = "Mother")
 ```
 
-## Visual Summary of Reduced Corpus
+## a. Visual Summary of Reduced Corpus
 
 Set-up for boxplot:
 
@@ -1129,7 +1129,7 @@ toks_grouped %>%
     knitr::kable()
 ```
 
-## Wordclouds
+## b. Wordclouds
 
 Grouped by Piece:
 
@@ -1160,7 +1160,7 @@ wordcloud_mother_gpo <-
 ```
 
 
-## Word Frequency 
+## c. Word Frequency 
 
 By Piece:
 
@@ -1245,8 +1245,7 @@ freq_piece_gpo_plot <- ggplot(freq_grouped_wt,
 freq_piece_gpo_plot
 ```
 
-## Correspondence Analysis
-
+## d. Correspondence Analysis
 
 Main
 
