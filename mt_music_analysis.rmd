@@ -144,6 +144,7 @@ voice_analysis_list <-
                                     "numeric", # AI. notes_b1
                                     "numeric", # AJ. notes_b2
                                     "numeric", # AK. notes_sum
+                                    "numeric", # AL. tones_s1
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
@@ -151,10 +152,8 @@ voice_analysis_list <-
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "text", 
-                                    "numeric", # tones
+                                    "numeric", # AT. tones_sum
+                                    "text", # AU. tones
                                     "numeric", 
                                     "numeric", # spoken, acapella
                                     "numeric", 
