@@ -48,12 +48,19 @@ Noah Zeldin
       - [7.1 Create Tables](#create-tables)
           - [7.1.1 General](#general)
           - [7.1.2 By Piece](#by-piece-1)
+              - [7.1.2.1 *The Measures Taken*](#the-measures-taken)
+              - [7.1.2.2 *The Mother*](#the-mother)
       - [7.2 Date Ranges, Time Lengths,
         etc.](#date-ranges-time-lengths-etc.)
           - [7.2.1 Time Length in Years](#time-length-in-years)
           - [7.2.2 Range / Interval](#range-interval)
+              - [7.2.2.1 All](#all)
+              - [7.2.2.2 *The Measures Taken*](#the-measures-taken-1)
+              - [7.2.2.3 *The Mother*](#the-mother-1)
           - [7.2.3 Proportion of Articles Published near
             Premieres](#proportion-of-articles-published-near-premieres)
+              - [7.2.3.1 *The Measures Taken*](#the-measures-taken-2)
+              - [7.2.3.2 *The Mother*](#the-mother-2)
       - [7.3 Articles on *The Measures Taken* published in 1932 (with
         full
         dates)](#articles-on-the-measures-taken-published-in-1932-with-full-dates)
@@ -92,9 +99,8 @@ The **main goals** of this analysis are:
     
       - Hence the notion of the “political-aesthetic space.”
 
-**NB: Further refinements to the code are forthcoming.** The final
-version will be included in the supplementary materials of the
-dissertation.
+The final version of the code will be included in the supplementary
+materials of the dissertation.
 
 In the near future, I will upload the corresponding write-up included in
 ch. 2 of my dissertation to this repository.

@@ -6,6 +6,7 @@ date: "4/27/2021"
 output: 
   github_document:
     toc: true
+    toc_depth: 4
     number_sections: true
 ---
 
@@ -40,9 +41,8 @@ politics
 
     - Hence the notion of the "political-aesthetic space."
 
-**NB: Further refinements to the code are forthcoming.** The 
-final version will be included in the supplementary materials of the 
-dissertation.
+The final version of the code will be included in the supplementary materials of 
+the dissertation.
 
 In the near future, I will upload the corresponding write-up included in ch. 2 
 of my dissertation to this repository.

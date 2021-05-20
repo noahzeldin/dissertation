@@ -21,19 +21,33 @@ Noah Zeldin
           - [5.1.1 Total Duration in
             Minutes](#total-duration-in-minutes)
           - [5.1.2 Duration by Piece](#duration-by-piece)
+              - [5.1.2.1 In Lubridate Format (properly displaying
+                seconds)](#in-lubridate-format-properly-displaying-seconds)
           - [5.1.3 Duration by Category](#duration-by-category)
           - [5.1.4 Duration by Subcategory](#duration-by-subcategory)
       - [5.2 Meter and Tempo](#meter-and-tempo)
           - [5.2.1 Rates of Change](#rates-of-change)
           - [5.2.2 Most Common Meters](#most-common-meters)
+              - [5.2.2.1 Grouped by Duple
+                vs. Triple](#grouped-by-duple-vs.-triple)
+              - [5.2.2.2 Special Case: 6/4](#special-case-64)
       - [5.3 Durations: Choir](#durations-choir)
           - [5.3.1 Choir Total Durations](#choir-total-durations)
           - [5.3.2 Choir Sung Durations](#choir-sung-durations)
           - [5.3.3 Choir Acapella Durations](#choir-acapella-durations)
           - [5.3.4 Choir Spoken Durations](#choir-spoken-durations)
           - [5.3.5 Choir Voice Durations](#choir-voice-durations)
+              - [5.3.5.1 Check for measures where duration of 1st and
+                2nd parts don’t
+                align.](#check-for-measures-where-duration-of-1st-and-2nd-parts-dont-align.)
+              - [5.3.5.2 Check for measures where 2nd sings but 1st
+                doesn’t](#check-for-measures-where-2nd-sings-but-1st-doesnt)
+              - [5.3.5.3 Computations for male
+                vs. female](#computations-for-male-vs.-female)
       - [5.4 Texture](#texture)
           - [5.4.1 Whole Work](#whole-work)
+              - [5.4.1.1 By Measure Count](#by-measure-count)
+              - [5.4.1.2 By Duration](#by-duration)
           - [5.4.2 Individual Pieces (By
             Duration)](#individual-pieces-by-duration)
       - [5.5 Pitch](#pitch)
@@ -45,7 +59,14 @@ Noah Zeldin
       - [5.6 Groupings](#groupings)
           - [5.6.1 Combinations of
             Groupings](#combinations-of-groupings)
+              - [5.6.1.1 By Number of Measures](#by-number-of-measures)
+              - [5.6.1.2 By Duration (of
+                Measures)](#by-duration-of-measures)
           - [5.6.2 Separate Groupings](#separate-groupings)
+              - [5.6.2.1 By Number of
+                Measures](#by-number-of-measures-1)
+              - [5.6.2.2 By Duration (of
+                Measures)](#by-duration-of-measures-1)
 
 # 1 Introductory Remarks
 
