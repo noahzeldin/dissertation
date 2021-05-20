@@ -24,7 +24,7 @@ Data sets will be made available to researchers upon request.
 
 **NB: Further refinements to the code are forthcoming.** 
 
-# Load Packages  
+# 1. Load Packages  
 
 ```{r}
 library(tidyverse)
@@ -32,7 +32,7 @@ library(lubridate)
 library(readxl)
 ```
 
-# Importation 
+# 2. Importation 
 
 There are **two** separate spreadsheets:
 
@@ -51,7 +51,7 @@ NB: Several column types in both spreadsheets must be converted to **factors**
 in a separate step because this is not an option with `readxl()` (explained 
 again below).
 
-## Duration
+## a. Duration
 
 Import all sheets into a single list and specify column types:  
 
@@ -88,7 +88,7 @@ From `durations_list` create single data frame and save as tibble:
 dur_tib <- as_tibble(bind_rows(durations_list))
 ```
 
-## Voice Analysis
+## b. Voice Analysis
 
 Check worksheets and ensure that there is a sheet for each piece containing 
 choral material:
@@ -185,7 +185,7 @@ gen_tib <- as_tibble(bind_rows(voice_analysis_list))
 
 
 
-# Cleaning and Manipulation: 1. Durations
+# 3. Cleaning and Manipulation: 1. Durations
 
 Convert **piece_no**, **category** and **subcategory** to factors (not possible 
 with `readxl()`):
@@ -211,9 +211,9 @@ dur_tib$subcategory %>%
 ```
 
 
-# Cleaning and Manipulation: 2. Voice Analysis
+# 4. Cleaning and Manipulation: 2. Voice Analysis
 
-## General Tibble: gen_tib
+## a. General Tibble: gen_tib
 
 Convert **piece_no** to factor (not possible with `readxl()`):
 
@@ -247,7 +247,7 @@ gen_tib <- gen_tib %>%
 ```
 
 
-## Tibble for Choral Portions: gen_tib_sung
+## b. Tibble for Choral Portions: gen_tib_sung
 
 Filter out parts without choral singing (includes passages *spoken* by choir):
 
@@ -259,7 +259,7 @@ gen_tib_sung <- gen_tib %>%
 ```
 
 
-## Tibble for Pitch: pitch_tib
+## c. Tibble for Pitch: pitch_tib
 
 Create tibble containing data on choir's pitch material in each measure:
 
@@ -286,14 +286,14 @@ pitch_tib <- gen_tib_sung %>%
 ```
 
 
-# Stats
+# 5. Stats
 
 This section contains calculations derived from the tibbles generated and 
 cleaned in the previous sections. These calculations formed the basis of my
 formal analysis and some of the values were used in the write-up included in
 the chapter.
 
-## Durations: General
+## a. Durations: General
 
 The following calculations derive from the data set: 
 `mt_data_durations_meters.xlsx` (post-importation and -processing: `dur_tib`).
@@ -414,7 +414,7 @@ knitr::kable(dur_subcategory)
 ```
 
 
-## Meter and Tempo
+## b. Meter and Tempo
 
 An important feature of Eisler's music for *The Measures Taken* are the frequent
 meter changes. These, along with the frequent tempo changes in a handful of 
@@ -606,7 +606,7 @@ dur_6_4_duple_perc <- round((dur_meter %>%
 `r dur_6_4_duple_perc` % of measures with duple meters are in 6/4.
 
 
-## Durations: Choir
+## c. Durations: Choir
 
 This section is very significant to my analysis, which focuses on the choral
 material. The calculations here determine the proportions of choral material 
@@ -946,7 +946,7 @@ dur_men_extra_from_5_and_7a_perc
 ```
 
 
-## Texture
+## d. Texture
 
 The texture of the choral writing plays a pivotal role in my analysis. The 
 calculations in this section confirm implicitly statistical observations made in
@@ -958,6 +958,9 @@ claim that there is a strong relationship between choral texture and textual
 content. In short, Eisler tends to set texts with concrete political content to 
 sparser choral textures (monophony and reduced homophony). This claim is fully
 developed in ch. 2.
+
+To be clear, **a** refers to antiphony, **h** to homophony, **m** to monophony 
+and **p** to polyphony.
 
 
 ### Whole Work
@@ -1088,7 +1091,7 @@ dur_texture_piece_mosaic_plot
 * included in ch. 2
 
 
-## Pitch
+## e. Pitch
 
 Although pitch is a secondary consideration in my analysis, I wanted to get a 
 sense of the chromaticism of each piece. As I point out in ch. 2, the pieces
@@ -1132,6 +1135,9 @@ pitch_long <- pitch_tib %>%
 ```
 
 ### Pitch Distribution
+
+NB: While this chart is not included in the chapter write-up, I found it helpful 
+for exploratory analysis and am therefore including it here.
 
 ```{r}
 pitch_distribution_plot <- pitch_long %>% 
@@ -1181,7 +1187,7 @@ knitr::kable(pitch_no_piece)
 ```
 
 
-## Groupings 
+## f. Groupings 
 
 Eisler frequently grouped voices together, which relates directly to his heavy 
 use of reduced choral textures (monophony and homophony). The calculations in 
