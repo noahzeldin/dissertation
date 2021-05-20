@@ -13,8 +13,6 @@ Noah Zeldin
   - [Cleaning and Manipulation: 2. Voice
     Analysis](#cleaning-and-manipulation-2.-voice-analysis)
       - [General Tibble: gen\_tib](#general-tibble-gen_tib)
-          - [Additional Calculations for
-            Density](#additional-calculations-for-density)
       - [Tibble for Choral Portions:
         gen\_tib\_sung](#tibble-for-choral-portions-gen_tib_sung)
       - [Tibble for Pitch: pitch\_tib](#tibble-for-pitch-pitch_tib)
@@ -165,7 +163,7 @@ voice_analysis_list <-
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
-                                    "numeric", # soprano:ratio
+                                    "numeric", # ratio
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
@@ -174,7 +172,7 @@ voice_analysis_list <-
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
-                                    "numeric", # rests
+                                    "numeric", # rests_all
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
@@ -183,7 +181,7 @@ voice_analysis_list <-
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
-                                    "numeric", # quarters
+                                    "numeric", # quarters_sum
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
@@ -193,7 +191,7 @@ voice_analysis_list <-
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
-                                    "numeric", # notes
+                                    "numeric", # notes_sum_pairings
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
@@ -328,72 +326,6 @@ gen_tib <- gen_tib %>%
     rowid_to_column("id")
 ```
 
-### Additional Calculations for Density
-
-**NB: This section will in all likelihood be deleted, since it
-ultimately was not included in the final analysis.** The goal was to
-find a formula that would allow for a quantitative comparison of the
-informational density of the choral material in each measure.
-
-Translate texture to numeric value in new column:
-
-  - monophony = 1
-
-  - homophony = 1.5
-
-  - antiphony = 1.5
-
-  - polyphony = 2
-
-<!-- end list -->
-
-``` r
-gen_tib <- gen_tib %>% 
-    mutate(texture_value = case_when(texture == "na" ~ "0", 
-                                   texture == "m" ~ "1", 
-                                   texture == "h" ~ "1.5", 
-                                   texture == "a" ~ "1.5", # added 12.26.20
-                                   texture == "p" ~ "2",)) %>% 
-    mutate(texture_value = as.numeric(texture_value)) %>% 
-    relocate(texture_value, .after = texture)
-```
-
-Add density column for each voice:
-
-``` r
-gen_tib <- gen_tib %>% 
-    mutate(dm_s1 = (notes_s1+tones_s1)/quarters_per_bar,
-                      dm_s2 = (notes_s2+tones_s2)/quarters_per_bar,
-                      dm_a1 = (notes_a1+tones_a1)/quarters_per_bar,
-                      dm_a2 = (notes_a2+tones_a2)/quarters_per_bar,
-                      dm_t1 = (notes_t1+tones_t1)/quarters_per_bar,
-                      dm_t2 = (notes_t2+tones_t2)/quarters_per_bar,
-                      dm_b1 = (notes_b1+tones_b1)/quarters_per_bar,
-                      dm_b2 = (notes_b2+tones_b2)/quarters_per_bar)
-```
-
-Create a **dm\_sum** column from 8 individual **dm** columns:
-
-``` r
-gen_tib <- gen_tib %>% 
-    rowwise() %>% 
-    mutate(dm_sum = sum(c_across(dm_s1:dm_b2)))
-```
-
-With new **dm\_sum** column, create **dmc** column:
-
-``` r
-gen_tib <- gen_tib %>% 
-    rowwise() %>% 
-    mutate(dmc = (dm_sum/4)*texture_value)
-```
-
-Reconvert gen\_tib to tibble after performing `rowwise()`:
-
-``` r
-gen_tib <- gen_tib %>% as_tibble()
-```
-
 ## Tibble for Choral Portions: gen\_tib\_sung
 
 Filter out parts without choral singing (includes passages *spoken* by
@@ -412,8 +344,8 @@ Create tibble containing data on choir’s pitch material in each measure:
 
 ``` r
 pitch_tib <- gen_tib_sung %>% 
-    select(id, piece_no, measure, tones, dur_choir, dmc) %>%
-    relocate(tones, .after = dmc) %>% 
+    select(id, piece_no, measure, tones, dur_choir) %>%
+    relocate(tones, .after = dur_choir) %>% 
     mutate(
         c = str_count(tones, "c$|c\\,"),
         c_sharp_d_flat = str_count(tones, "c-sharp|d-flat"),
@@ -1568,7 +1500,7 @@ texture_tib_mm %>%
     geom_col(aes(x = texture, y = prop_of_sung, fill = texture))
 ```
 
-![](mt_music_analysis_files/figure-gfm/unnamed-chunk-65-1.png)<!-- -->
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-60-1.png)<!-- -->
 
   - Homophony clearly dominates, followed by monophony.
 
@@ -1595,7 +1527,7 @@ texture_tib_dur %>%
     geom_col(aes(x = texture, y = prop_of_sung, fill = texture))
 ```
 
-![](mt_music_analysis_files/figure-gfm/unnamed-chunk-67-1.png)<!-- -->
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-62-1.png)<!-- -->
 
   - Again, homophony clearly dominates, followed by monophony.
 
@@ -1666,7 +1598,7 @@ dur_texture_piece_mosaic_plot <- ggplot(dur_texture_piece_mosaic_table,
 dur_texture_piece_mosaic_plot
 ```
 
-![](mt_music_analysis_files/figure-gfm/unnamed-chunk-69-1.png)<!-- -->
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-64-1.png)<!-- -->
 
   - included in ch. 2
 
@@ -1843,7 +1775,7 @@ pitch_distribution_plot <- pitch_long %>%
 pitch_distribution_plot
 ```
 
-![](mt_music_analysis_files/figure-gfm/unnamed-chunk-71-1.png)<!-- -->
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-66-1.png)<!-- -->
 
 ### Chromaticism of Each Piece
 

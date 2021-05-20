@@ -250,71 +250,6 @@ gen_tib <- gen_tib %>%
 ```
 
 
-### Additional Calculations for Density
-
-**NB: This section will in all likelihood be deleted, since it ultimately was 
-not included in the final analysis.** The goal was to find a formula that would
-allow for a quantitative comparison of the informational density of the choral
-material in each measure.
-
-Translate texture to numeric value in new column:
-
-* monophony = 1
-
-* homophony = 1.5
-
-* antiphony = 1.5
-
-* polyphony = 2
-
-```{r}
-gen_tib <- gen_tib %>% 
-    mutate(texture_value = case_when(texture == "na" ~ "0", 
-                                   texture == "m" ~ "1", 
-                                   texture == "h" ~ "1.5", 
-                                   texture == "a" ~ "1.5", # added 12.26.20
-                                   texture == "p" ~ "2",)) %>% 
-    mutate(texture_value = as.numeric(texture_value)) %>% 
-    relocate(texture_value, .after = texture)
-```
-
-Add density column for each voice:
-
-```{r}
-gen_tib <- gen_tib %>% 
-    mutate(dm_s1 = (notes_s1+tones_s1)/quarters_per_bar,
-                      dm_s2 = (notes_s2+tones_s2)/quarters_per_bar,
-                      dm_a1 = (notes_a1+tones_a1)/quarters_per_bar,
-                      dm_a2 = (notes_a2+tones_a2)/quarters_per_bar,
-                      dm_t1 = (notes_t1+tones_t1)/quarters_per_bar,
-                      dm_t2 = (notes_t2+tones_t2)/quarters_per_bar,
-                      dm_b1 = (notes_b1+tones_b1)/quarters_per_bar,
-                      dm_b2 = (notes_b2+tones_b2)/quarters_per_bar)
-```
-
-Create a **dm_sum** column from 8 individual **dm** columns:
-
-```{r}
-gen_tib <- gen_tib %>% 
-    rowwise() %>% 
-    mutate(dm_sum = sum(c_across(dm_s1:dm_b2)))
-```
-
-With new **dm_sum** column, create **dmc** column:
-
-```{r}
-gen_tib <- gen_tib %>% 
-    rowwise() %>% 
-    mutate(dmc = (dm_sum/4)*texture_value)
-```
-
-Reconvert gen_tib to tibble after performing `rowwise()`:
-
-```{r}
-gen_tib <- gen_tib %>% as_tibble()
-```
-
-
 ## Tibble for Choral Portions: gen_tib_sung
 
 Filter out parts without choral singing (includes passages *spoken* by choir):
@@ -333,8 +268,8 @@ Create tibble containing data on choir's pitch material in each measure:
 
 ```{r}
 pitch_tib <- gen_tib_sung %>% 
-    select(id, piece_no, measure, tones, dur_choir, dmc) %>%
-    relocate(tones, .after = dmc) %>% 
+    select(id, piece_no, measure, tones, dur_choir) %>%
+    relocate(tones, .after = dur_choir) %>% 
     mutate(
         c = str_count(tones, "c$|c\\,"),
         c_sharp_d_flat = str_count(tones, "c-sharp|d-flat"),
