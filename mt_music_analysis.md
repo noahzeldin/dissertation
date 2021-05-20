@@ -3,57 +3,62 @@ Formal Analysis of Hanns Eisler’s music to *The Measures Taken*
 Noah Zeldin
 4/26/2021
 
-  - [Introductory Remarks](#introductory-remarks)
-  - [1. Load Packages](#load-packages)
-  - [2. Importation](#importation)
-      - [a. Duration and Meter](#a.-duration-and-meter)
-      - [b. Voice Analysis](#b.-voice-analysis)
-  - [3. Cleaning and Manipulation:](#cleaning-and-manipulation)
-      - [a. Duration and Meter](#a.-duration-and-meter-1)
-      - [b. Voice Analysis](#b.-voice-analysis-1)
-          - [General Tibble: gen\_tib](#general-tibble-gen_tib)
-          - [Tibble for Choral Portions:
+  - [1 Introductory Remarks](#introductory-remarks)
+  - [2 Load Packages](#load-packages)
+  - [3 Importation](#importation)
+      - [3.1 Duration and Meter](#duration-and-meter)
+      - [3.2 Voice Analysis](#voice-analysis)
+  - [4 Cleaning and Manipulation:](#cleaning-and-manipulation)
+      - [4.1 Duration and Meter](#duration-and-meter-1)
+      - [4.2 Voice Analysis](#voice-analysis-1)
+          - [4.2.1 General Tibble: gen\_tib](#general-tibble-gen_tib)
+          - [4.2.2 Tibble for Choral Portions:
             gen\_tib\_sung](#tibble-for-choral-portions-gen_tib_sung)
-          - [Tibble for Pitch: pitch\_tib](#tibble-for-pitch-pitch_tib)
-  - [4. Stats](#stats)
-      - [a. Durations: General](#a.-durations-general)
-          - [Total Duration in Minutes](#total-duration-in-minutes)
-          - [Duration by Piece](#duration-by-piece)
-          - [Duration by Category](#duration-by-category)
-          - [Duration by Subcategory](#duration-by-subcategory)
-      - [b. Meter and Tempo](#b.-meter-and-tempo)
-          - [Rates of Change](#rates-of-change)
-          - [Most Common Meters](#most-common-meters)
-      - [c. Durations: Choir](#c.-durations-choir)
-          - [Choir Total Durations](#choir-total-durations)
-          - [Choir Sung Durations](#choir-sung-durations)
-          - [Choir Acapella Durations](#choir-acapella-durations)
-          - [Choir Spoken Durations](#choir-spoken-durations)
-          - [Choir Voice Durations](#choir-voice-durations)
-      - [d. Texture](#d.-texture)
-          - [Whole Work](#whole-work)
-          - [Individual Pieces (By
+          - [4.2.3 Tibble for Pitch:
+            pitch\_tib](#tibble-for-pitch-pitch_tib)
+  - [5 Stats](#stats)
+      - [5.1 Durations: General](#durations-general)
+          - [5.1.1 Total Duration in
+            Minutes](#total-duration-in-minutes)
+          - [5.1.2 Duration by Piece](#duration-by-piece)
+          - [5.1.3 Duration by Category](#duration-by-category)
+          - [5.1.4 Duration by Subcategory](#duration-by-subcategory)
+      - [5.2 Meter and Tempo](#meter-and-tempo)
+          - [5.2.1 Rates of Change](#rates-of-change)
+          - [5.2.2 Most Common Meters](#most-common-meters)
+      - [5.3 Durations: Choir](#durations-choir)
+          - [5.3.1 Choir Total Durations](#choir-total-durations)
+          - [5.3.2 Choir Sung Durations](#choir-sung-durations)
+          - [5.3.3 Choir Acapella Durations](#choir-acapella-durations)
+          - [5.3.4 Choir Spoken Durations](#choir-spoken-durations)
+          - [5.3.5 Choir Voice Durations](#choir-voice-durations)
+      - [5.4 Texture](#texture)
+          - [5.4.1 Whole Work](#whole-work)
+          - [5.4.2 Individual Pieces (By
             Duration)](#individual-pieces-by-duration)
-      - [e. Pitch](#e.-pitch)
-          - [Set-Up for Pitch
+      - [5.5 Pitch](#pitch)
+          - [5.5.1 Set-Up for Pitch
             Computations](#set-up-for-pitch-computations)
-          - [Pitch Distribution](#pitch-distribution)
-          - [Chromaticism of Each Piece](#chromaticism-of-each-piece)
-      - [f. Groupings](#f.-groupings)
-          - [Combinations of Groupings](#combinations-of-groupings)
-          - [Separate Groupings](#separate-groupings)
+          - [5.5.2 Pitch Distribution](#pitch-distribution)
+          - [5.5.3 Chromaticism of Each
+            Piece](#chromaticism-of-each-piece)
+      - [5.6 Groupings](#groupings)
+          - [5.6.1 Combinations of
+            Groupings](#combinations-of-groupings)
+          - [5.6.2 Separate Groupings](#separate-groupings)
 
-# Introductory Remarks
+# 1 Introductory Remarks
 
 Below is the annotated set-up for my formal analysis of Hanns Eisler’s
 music to *The Measures Taken*, which is included in the second chapter
-of my dissertation. This analysis was conducted in R. (I have tried to
-use [tidyverse](https://www.tidyverse.org/) syntax as consistently as
+of my dissertation. This analysis was conducted in
+[R](https://www.r-project.org/). (I have tried to use
+[tidyverse](https://www.tidyverse.org/) syntax as consistently as
 possible. I therefore refer to tables as
 [“tibbles”](https://tibble.tidyverse.org/).) Data sets will be made
 available to researchers upon request.
 
-# 1\. Load Packages
+# 2 Load Packages
 
 ``` r
 library(tidyverse)
@@ -61,7 +66,7 @@ library(lubridate)
 library(readxl)
 ```
 
-# 2\. Importation
+# 3 Importation
 
 There are **two** separate spreadsheets:
 
@@ -84,7 +89,7 @@ NB: Several column types in both spreadsheets must be converted to
 **factors** in a separate step because this is not an option with
 `readxl()` (explained again below).
 
-## a. Duration and Meter
+## 3.1 Duration and Meter
 
 Import all sheets into a single list and specify column types:
 
@@ -121,7 +126,7 @@ From `durations_list` create single data frame and save as tibble:
 dur_tib <- as_tibble(bind_rows(durations_list))
 ```
 
-## b. Voice Analysis
+## 3.2 Voice Analysis
 
 Check worksheets and ensure that there is a sheet for each piece
 containing choral material:
@@ -225,9 +230,9 @@ From `voice_analysis_list` create single data frame and save as tibble:
 gen_tib <- as_tibble(bind_rows(voice_analysis_list))
 ```
 
-# 3\. Cleaning and Manipulation:
+# 4 Cleaning and Manipulation:
 
-## a. Duration and Meter
+## 4.1 Duration and Meter
 
 Convert **piece\_no**, **category** and **subcategory** to factors (not
 possible with `readxl()`):
@@ -266,9 +271,9 @@ dur_tib$subcategory %>%
     ##  9 4c        1
     ## 10 4d        4
 
-## b. Voice Analysis
+## 4.2 Voice Analysis
 
-### General Tibble: gen\_tib
+### 4.2.1 General Tibble: gen\_tib
 
 Convert **piece\_no** to factor (not possible with `readxl()`):
 
@@ -322,7 +327,7 @@ gen_tib <- gen_tib %>%
     rowid_to_column("id")
 ```
 
-### Tibble for Choral Portions: gen\_tib\_sung
+### 4.2.2 Tibble for Choral Portions: gen\_tib\_sung
 
 Filter out parts without choral singing (includes passages *spoken* by
 choir):
@@ -334,7 +339,7 @@ gen_tib_sung <- gen_tib %>%
                spoken == 0) 
 ```
 
-### Tibble for Pitch: pitch\_tib
+### 4.2.3 Tibble for Pitch: pitch\_tib
 
 Create tibble containing data on choir’s pitch material in each measure:
 
@@ -360,20 +365,20 @@ pitch_tib <- gen_tib_sung %>%
     mutate(tones_sum = sum(c_across(c:b))) 
 ```
 
-# 4\. Stats
+# 5 Stats
 
 This section contains calculations derived from the tibbles generated
 and cleaned in the previous sections. These calculations formed the
 basis of my formal analysis and some of the values were used in the
 write-up included in the chapter.
 
-## a. Durations: General
+## 5.1 Durations: General
 
 The following calculations derive from the data set:
 `mt_data_durations_meters.xlsx` (post-importation and -processing:
 `dur_tib`).
 
-### Total Duration in Minutes
+### 5.1.1 Total Duration in Minutes
 
 ``` r
 dur_total_min <- sum(dur_tib$duration) / 60
@@ -381,7 +386,7 @@ dur_total_min <- sum(dur_tib$duration) / 60
 
 Total duration in minutes: 38.58.
 
-### Duration by Piece
+### 5.1.2 Duration by Piece
 
 Create tibble with durations for all pieces:
 
@@ -454,7 +459,7 @@ dur_piece %>%
 | 6a        |          0.06 |           0.2 |
 | 7b        |          0.04 |           0.1 |
 
-#### In Lubridate Format (properly displaying seconds)
+#### 5.1.2.1 In Lubridate Format (properly displaying seconds)
 
 Create new table with Lubridate that expresses min. and sec. properly
 (`dur_piece_lubridate`):
@@ -520,7 +525,7 @@ dur_piece_lubridate %>%
 | 13b       |      28S |
 | 14        |   2M 22S |
 
-### Duration by Category
+### 5.1.3 Duration by Category
 
 I assigned one of four categories to each of the pieces. These are:
 
@@ -549,7 +554,7 @@ dur_tib %>%
 | 3        |  791.31549 |         34.19 |
 | 4        |   92.04448 |          3.98 |
 
-### Duration by Subcategory
+### 5.1.4 Duration by Subcategory
 
 Each of the four categories was then subdivided, resulting in a total of
 ten different subcategories of music. (All of this is laid out in
@@ -579,7 +584,7 @@ knitr::kable(dur_subcategory)
 | 4c          |   14.54545 |     0.2424242 |     0.0062845 |
 | 4d          |   36.67471 |     0.6112452 |     0.0158456 |
 
-## b. Meter and Tempo
+## 5.2 Meter and Tempo
 
 An important feature of Eisler’s music for *The Measures Taken* are the
 frequent meter changes. These, along with the frequent tempo changes in
@@ -589,7 +594,7 @@ array of professional musicians is an important part of my argument in
 the dissertation, as it contradicts much of the previous, text-oriented
 scholarship on the work by Brecht scholars.)
 
-### Rates of Change
+### 5.2.1 Rates of Change
 
 Construct tibble with following stats for each piece:
 
@@ -708,7 +713,7 @@ knitr::kable(tempo_ch_count_and_rate_piece)
 | 8b        |                7 |                26.73 |   187.13 |
 | 3a        |                4 |                57.50 |   230.00 |
 
-### Most Common Meters
+### 5.2.2 Most Common Meters
 
 Create tibble with meter, number of meters and duration (`dur_meter`):
 
@@ -766,7 +771,7 @@ dur_meter %>%
 | 4\_4  |    41.87 |
 | 1\_4  |     3.17 |
 
-#### Grouped by Duple vs. Triple
+#### 5.2.2.1 Grouped by Duple vs. Triple
 
 Exploring the proportion of duple vs. triple meters allows one to
 determine Eisler’s engagement with march-like anthems (duple meters) and
@@ -802,7 +807,7 @@ knitr::kable(dur_meter_groups)
 | duple  | 1219.870389 | 0.5271397 |        53 |
 | triple | 1091.094253 | 0.4714919 |        47 |
 
-#### Special Case: 6/4
+#### 5.2.2.2 Special Case: 6/4
 
 6/4 is compound duple and therefore a special case. NB: 6/4 is the only
 compound duple meter present in the work.
@@ -894,7 +899,7 @@ dur_6_4_duple_perc <- round((dur_meter %>%
 
 9.2 % of measures with duple meters are in 6/4.
 
-## c. Durations: Choir
+## 5.3 Durations: Choir
 
 This section is very significant to my analysis, which focuses on the
 choral material. The calculations here determine the proportions of
@@ -904,7 +909,7 @@ accompaniment) or spoken.
 The following calculations derive from the data set:
 `mt_data_choir.xlsx` (post-importation and -processing: `dur_choir`).
 
-### Choir Total Durations
+### 5.3.1 Choir Total Durations
 
 Create tibble containing only measures with choir:
 
@@ -933,7 +938,7 @@ dur_choir_prop <- round((dur_choir_total_min / dur_total_min), digits = 4)*100
 
 The choir is active for 51.94 % of total duration of music.
 
-### Choir Sung Durations
+### 5.3.2 Choir Sung Durations
 
 Create table listing the pieces with the greatest durations of **sung**
 choral material:
@@ -968,7 +973,7 @@ gen_tib %>%
 | 8b        |      10.57 |            0.010 |
 | 13a       |       4.76 |            0.004 |
 
-### Choir Acapella Durations
+### 5.3.3 Choir Acapella Durations
 
 Create list of pieces with **acapella** choral material (saved as
 `dur_acapella`):
@@ -1023,7 +1028,7 @@ sum(dur_acapella$dur_choir) / dur_choir_total_sec
 
     ## [1] 0.1236756
 
-### Choir Spoken Durations
+### 5.3.4 Choir Spoken Durations
 
 Create list of works with greatest durations of **spoken** choral
 material:
@@ -1053,9 +1058,9 @@ gen_tib %>%
 | 10        |       3.00 |            0.027 |
 | 7b        |       1.80 |            0.016 |
 
-### Choir Voice Durations
+### 5.3.5 Choir Voice Durations
 
-#### Check for measures where duration of 1st and 2nd parts don’t align.
+#### 5.3.5.1 Check for measures where duration of 1st and 2nd parts don’t align.
 
 NB: As is typical for choral music, Eisler sometimes splits the part of
 one or more of the four voices. The calculations below account for this.
@@ -1125,7 +1130,7 @@ gen_tib_sung %>%
   - Only the final measure of “Streiklied.” As is the case with the
     tenors, this doesn’t matter, because b1 and b2 overlap.
 
-#### Check for measures where 2nd sings but 1st doesn’t
+#### 5.3.5.2 Check for measures where 2nd sings but 1st doesn’t
 
 NB: Similar goal as in previous section.
 
@@ -1196,7 +1201,7 @@ gen_tib_sung %>%
 
     ## [1] 0
 
-##### Same but with duration
+##### 5.3.5.2.1 Same but with duration
 
 1.  Sopranos
 
@@ -1260,7 +1265,7 @@ gen_tib_sung %>%
 
   - Again, this doesn’t matter because of the overlap.
 
-#### Computations for male vs. female
+#### 5.3.5.3 Computations for male vs. female
 
 The introduction of mixed choirs into the German worker-singers’
 movement was a widely discussed and highly politicized topic in the
@@ -1365,7 +1370,7 @@ dur_men_extra_from_5_and_7a_perc
 
     ## [1] 53
 
-## d. Texture
+## 5.4 Texture
 
 The texture of the choral writing plays a pivotal role in my analysis.
 The calculations in this section confirm implicitly statistical
@@ -1381,13 +1386,13 @@ homophony). This claim is fully developed in ch. 2.
 To be clear, **a** refers to antiphony, **h** to homophony, **m** to
 monophony and **p** to polyphony.
 
-### Whole Work
+### 5.4.1 Whole Work
 
 As a precaution, I compute the proportions of each texture in relation
 to both **measure count** and **duration**. The results differ very
 little from each other.
 
-#### By Measure Count
+#### 5.4.1.1 By Measure Count
 
 Generate tibble for whole work (`texture_tib_mm`):
 
@@ -1413,7 +1418,7 @@ texture_tib_mm %>%
 
   - Homophony clearly dominates, followed by monophony.
 
-#### By Duration
+#### 5.4.1.2 By Duration
 
 Create tibble:
 
@@ -1440,7 +1445,7 @@ texture_tib_dur %>%
 
   - Again, homophony clearly dominates, followed by monophony.
 
-### Individual Pieces (By Duration)
+### 5.4.2 Individual Pieces (By Duration)
 
 Create tibble (`texture_piece_dur`):
 
@@ -1511,14 +1516,14 @@ dur_texture_piece_mosaic_plot
 
   - included in ch. 2
 
-## e. Pitch
+## 5.5 Pitch
 
 Although pitch is a secondary consideration in my analysis, I wanted to
 get a sense of the chromaticism of each piece. As I point out in ch. 2,
 the pieces with more concretely political texts tend to be less
 chromatic.
 
-### Set-Up for Pitch Computations
+### 5.5.1 Set-Up for Pitch Computations
 
 Create new, elongated table with pitches:
 
@@ -1555,7 +1560,7 @@ pitch_long <- pitch_tib %>%
                                         "b")))
 ```
 
-### Pitch Distribution
+### 5.5.2 Pitch Distribution
 
 NB: While this chart is not included in the chapter write-up, I found it
 helpful for exploratory analysis and am therefore including it here.
@@ -1593,7 +1598,7 @@ pitch_distribution_plot
 
 ![](mt_music_analysis_files/figure-gfm/unnamed-chunk-66-1.png)<!-- -->
 
-### Chromaticism of Each Piece
+### 5.5.3 Chromaticism of Each Piece
 
 Sort pieces by number of pitches that appear in choral writing.
 
@@ -1625,7 +1630,7 @@ knitr::kable(pitch_no_piece)
 | 13a       |               5 |
 | 11        |               4 |
 
-## f. Groupings
+## 5.6 Groupings
 
 Eisler frequently grouped voices together, which relates directly to his
 heavy use of reduced choral textures (monophony and homophony). The
@@ -1643,9 +1648,9 @@ reveals the duration of the grouping sopranos-tenors, while the second
 will reveals the duration of this grouping *plus* the grouping
 altos-basses.
 
-### Combinations of Groupings
+### 5.6.1 Combinations of Groupings
 
-#### By Number of Measures
+#### 5.6.1.1 By Number of Measures
 
 Generate basic tibble for whole work:
 
@@ -1680,7 +1685,7 @@ groupings_5 %>%
 | st        |                   5 |
 | b1b2      |                   4 |
 
-#### By Duration (of Measures)
+#### 5.6.1.2 By Duration (of Measures)
 
 Create tibble with groupings, duration and proportion:
 
@@ -1719,7 +1724,7 @@ This differs only slightly from previous computation (by number of
 measures). Top 3 and no. 5 are same as `groupings_5` but 4th place is
 now **satb** (rather than **st**).
 
-##### Separated by Texture
+##### 5.6.1.2.1 Separated by Texture
 
 ``` r
 groupings_texture_dur <- gen_tib_sung %>% 
@@ -1866,9 +1871,9 @@ gen_tib_sung %>%
 | -----: | -------: | ------------: |
 |      2 | 104.7582 |             1 |
 
-### Separate Groupings
+### 5.6.2 Separate Groupings
 
-#### By Number of Measures
+#### 5.6.2.1 By Number of Measures
 
 Create basic tibble for whole work:
 
@@ -1910,7 +1915,7 @@ groupings_separate_10 %>%
 | stb       |                1.30 |
 | sat       |                0.94 |
 
-#### By Duration (of Measures)
+#### 5.6.2.2 By Duration (of Measures)
 
 Create tibble with each separate grouping and its total duration:
 

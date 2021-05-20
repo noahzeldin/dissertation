@@ -5,6 +5,7 @@ date: "4/26/2021"
 output: 
   github_document:
     toc: true
+    number_sections: true
 ---
 
 
@@ -17,12 +18,13 @@ knitr::opts_knit$set(root.dir = "C:/Users/Noah Zeldin/Desktop/Proposal/R materia
 
 Below is the annotated set-up for my formal analysis of Hanns Eisler's music to
 *The Measures Taken*, which is included in the second chapter of my 
-dissertation. This analysis was conducted in R. (I have tried to use 
-[tidyverse](https://www.tidyverse.org/) syntax as consistently as possible. I
-therefore refer to tables as ["tibbles"](https://tibble.tidyverse.org/).) 
-Data sets will be made available to researchers upon request.
+dissertation. This analysis was conducted in [R](https://www.r-project.org/). 
+(I have tried to use [tidyverse](https://www.tidyverse.org/) syntax as 
+consistently as possible. I therefore refer to tables as 
+["tibbles"](https://tibble.tidyverse.org/).) Data sets will be made available to 
+researchers upon request.
 
-# 1. Load Packages  
+# Load Packages  
 
 ```{r}
 library(tidyverse)
@@ -30,7 +32,7 @@ library(lubridate)
 library(readxl)
 ```
 
-# 2. Importation 
+# Importation 
 
 There are **two** separate spreadsheets:
 
@@ -49,7 +51,7 @@ NB: Several column types in both spreadsheets must be converted to **factors**
 in a separate step because this is not an option with `readxl()` (explained 
 again below).
 
-## a. Duration and Meter
+## Duration and Meter
 
 Import all sheets into a single list and specify column types:  
 
@@ -86,7 +88,7 @@ From `durations_list` create single data frame and save as tibble:
 dur_tib <- as_tibble(bind_rows(durations_list))
 ```
 
-## b. Voice Analysis
+## Voice Analysis
 
 Check worksheets and ensure that there is a sheet for each piece containing 
 choral material:
@@ -183,9 +185,9 @@ gen_tib <- as_tibble(bind_rows(voice_analysis_list))
 
 
 
-# 3. Cleaning and Manipulation:
+# Cleaning and Manipulation:
 
-## a. Duration and Meter
+## Duration and Meter
 
 Convert **piece_no**, **category** and **subcategory** to factors (not possible 
 with `readxl()`):
@@ -211,7 +213,7 @@ dur_tib$subcategory %>%
 ```
 
 
-## b. Voice Analysis
+## Voice Analysis
 
 ### General Tibble: gen_tib
 
@@ -286,14 +288,14 @@ pitch_tib <- gen_tib_sung %>%
 ```
 
 
-# 4. Stats
+# Stats
 
 This section contains calculations derived from the tibbles generated and 
 cleaned in the previous sections. These calculations formed the basis of my
 formal analysis and some of the values were used in the write-up included in
 the chapter.
 
-## a. Durations: General
+## Durations: General
 
 The following calculations derive from the data set: 
 `mt_data_durations_meters.xlsx` (post-importation and -processing: `dur_tib`).
@@ -414,7 +416,7 @@ knitr::kable(dur_subcategory)
 ```
 
 
-## b. Meter and Tempo
+## Meter and Tempo
 
 An important feature of Eisler's music for *The Measures Taken* are the frequent
 meter changes. These, along with the frequent tempo changes in a handful of 
@@ -606,7 +608,7 @@ dur_6_4_duple_perc <- round((dur_meter %>%
 `r dur_6_4_duple_perc` % of measures with duple meters are in 6/4.
 
 
-## c. Durations: Choir
+## Durations: Choir
 
 This section is very significant to my analysis, which focuses on the choral
 material. The calculations here determine the proportions of choral material 
@@ -946,7 +948,7 @@ dur_men_extra_from_5_and_7a_perc
 ```
 
 
-## d. Texture
+## Texture
 
 The texture of the choral writing plays a pivotal role in my analysis. The 
 calculations in this section confirm implicitly statistical observations made in
@@ -1091,7 +1093,7 @@ dur_texture_piece_mosaic_plot
 * included in ch. 2
 
 
-## e. Pitch
+## Pitch
 
 Although pitch is a secondary consideration in my analysis, I wanted to get a 
 sense of the chromaticism of each piece. As I point out in ch. 2, the pieces
@@ -1187,7 +1189,7 @@ knitr::kable(pitch_no_piece)
 ```
 
 
-## f. Groupings 
+## Groupings 
 
 Eisler frequently grouped voices together, which relates directly to his heavy 
 use of reduced choral textures (monophony and homophony). The calculations in 
