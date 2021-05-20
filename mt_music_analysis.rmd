@@ -154,16 +154,16 @@ voice_analysis_list <-
                                     "numeric", 
                                     "numeric", # AT. tones_sum
                                     "text", # AU. tones
-                                    "numeric", 
-                                    "numeric", # spoken, acapella
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", # meter etc.
+                                    "numeric", # AV. spoken
+                                    "numeric", # AW. acapella
+                                    "numeric", # AX. meter_1
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
-                                    "numeric", # general dur's
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
@@ -171,7 +171,7 @@ voice_analysis_list <-
                                     "numeric", 
                                     "numeric", 
                                     "numeric",
-                                    "numeric" # dur's of voices
+                                    "numeric" 
                                     )
                       ))
 ```

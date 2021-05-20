@@ -153,47 +153,44 @@ voice_analysis_list <-
          function(x) 
            read_excel("mt_data_choir.xlsx", 
                       sheet = x, 
-                      col_types = c("text", # piece_no
-                                    "numeric", # measure
-                                    "text", # texture
-                                    "numeric", # voices
-                                    "text", # groupings
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", # ratio
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", # rests_all
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", # quarters_sum
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", # notes_sum_pairings
-                                    "numeric", 
-                                    "numeric", 
+                      col_types = c("text", # A. piece_no
+                                    "numeric", # B. measure
+                                    "text", # C. texture
+                                    "numeric", # D. voices
+                                    "text", # E. groupings
+                                    "numeric", # F. soprano
+                                    "numeric", # G. alto
+                                    "numeric", # H. tenor
+                                    "numeric", # I. bass
+                                    "numeric", # J. parts_active
+                                    "numeric", # K. rests_s1
+                                    "numeric", # L. rests_s2
+                                    "numeric", # M. rests_a1
+                                    "numeric", # N. rests_a2
+                                    "numeric", # O. rests_t1
+                                    "numeric", # P. rests_t2
+                                    "numeric", # Q. rests_b1
+                                    "numeric", # R. rests_b2
+                                    "numeric", # S. rests_all
+                                    "numeric", # T. quarters_s1
+                                    "numeric", # U. quarters_s2
+                                    "numeric", # V. quarters_a1
+                                    "numeric", # W. quarters_a2
+                                    "numeric", # X. quarters_t1
+                                    "numeric", # Y. quarters_t2
+                                    "numeric", # Z. quarters_b1
+                                    "numeric", # AA. quarters_b2
+                                    "numeric", # AB. quarters_sum
+                                    "numeric", # AC. notes_s1
+                                    "numeric", # AD. notes_s2
+                                    "numeric", # AE. notes_a1
+                                    "numeric", # AF. notes_a2
+                                    "numeric", # AG. notes_t1
+                                    "numeric", # AH. notes_t2
+                                    "numeric", # AI. notes_b1
+                                    "numeric", # AJ. notes_b2
+                                    "numeric", # AK. notes_sum
+                                    "numeric", # AL. tones_s1
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
@@ -201,18 +198,18 @@ voice_analysis_list <-
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
-                                    "text", 
-                                    "numeric", # tones
-                                    "numeric", 
-                                    "numeric", # spoken, acapella
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", # meter etc.
+                                    "numeric", # AT. tones_sum
+                                    "text", # AU. tones
+                                    "numeric", # AV. spoken
+                                    "numeric", # AW. acapella
+                                    "numeric", # AX. meter_1
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
-                                    "numeric", # general dur's
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
+                                    "numeric", 
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
@@ -220,7 +217,7 @@ voice_analysis_list <-
                                     "numeric", 
                                     "numeric", 
                                     "numeric",
-                                    "numeric" # dur's of voices
+                                    "numeric" 
                                     )
                       ))
 ```
