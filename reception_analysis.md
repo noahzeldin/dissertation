@@ -4,69 +4,68 @@ Political-Aesthetic Space of the Weimar Republic
 Noah Zeldin
 4/27/2021
 
-  - [Introductory Remarks](#introductory-remarks)
-  - [1. Load Packages](#load-packages)
-  - [2. Importation](#importation)
-  - [3. Quanteda Set-Up](#quanteda-set-up)
-      - [a. Create Corpora from Data
-        Sets](#a.-create-corpora-from-data-sets)
-          - [General Corpora](#general-corpora)
-          - [Corpora Grouped by Piece](#corpora-grouped-by-piece)
-          - [Corpora of Title Texts](#corpora-of-title-texts)
-      - [b. Corpus Summary - Article Lengths,
-        etc.](#b.-corpus-summary---article-lengths-etc.)
-      - [c. Dictionaries and Additional
-        Stopwords](#c.-dictionaries-and-additional-stopwords)
-      - [d. Tokenize and Filter
-        Corpora](#d.-tokenize-and-filter-corpora)
-      - [e. Document-Feature Matrices
-        (dfm)](#e.-document-feature-matrices-dfm)
-          - [Group dfm’s by General Political Orientation
+  - [1 Introductory Remarks](#introductory-remarks)
+  - [2 Load Packages](#load-packages)
+  - [3 Importation](#importation)
+  - [4 Quanteda Set-Up](#quanteda-set-up)
+      - [4.1 Create Corpora from Data
+        Sets](#create-corpora-from-data-sets)
+          - [4.1.1 General Corpora](#general-corpora)
+          - [4.1.2 Corpora Grouped by Piece](#corpora-grouped-by-piece)
+          - [4.1.3 Corpora of Title Texts](#corpora-of-title-texts)
+      - [4.2 Corpus Summary - Article Lengths,
+        etc.](#corpus-summary---article-lengths-etc.)
+      - [4.3 Dictionaries and Additional
+        Stopwords](#dictionaries-and-additional-stopwords)
+      - [4.4 Tokenize and Filter Corpora](#tokenize-and-filter-corpora)
+      - [4.5 Document-Feature Matrices
+        (dfm)](#document-feature-matrices-dfm)
+          - [4.5.1 Group dfm’s by General Political Orientation
             (GPO)](#group-dfms-by-general-political-orientation-gpo)
-          - [Create GPO grouped dfm’s for each
+          - [4.5.2 Create GPO grouped dfm’s for each
             piece](#create-gpo-grouped-dfms-for-each-piece)
-          - [Less Specific Groupings](#less-specific-groupings)
-          - [By GPO](#by-gpo)
-          - [By Piece](#by-piece)
-      - [f. Convert general (reduced) corpus and dfm to dataframes for
+          - [4.5.3 Less Specific Groupings](#less-specific-groupings)
+          - [4.5.4 By GPO](#by-gpo)
+          - [4.5.5 By Piece](#by-piece)
+      - [4.6 Convert general (reduced) corpus and dfm to dataframes for
         later
-        use](#f.-convert-general-reduced-corpus-and-dfm-to-dataframes-for-later-use)
-      - [g. Create corpus, dfm, ca, etc. of each piece without unknown
+        use](#convert-general-reduced-corpus-and-dfm-to-dataframes-for-later-use)
+      - [4.7 Create corpus, dfm, ca, etc. of each piece without unknown
         GPO (for
-        CA)](#g.-create-corpus-dfm-ca-etc.-of-each-piece-without-unknown-gpo-for-ca)
-  - [4. FactoMineR Set-Up (for CA)](#factominer-set-up-for-ca)
-  - [5. Keywords In Context (KWIC) and Keyword
+        CA)](#create-corpus-dfm-ca-etc.-of-each-piece-without-unknown-gpo-for-ca)
+  - [5 FactoMineR Set-Up (for CA)](#factominer-set-up-for-ca)
+  - [6 Keywords In Context (KWIC) and Keyword
     Exploration](#keywords-in-context-kwic-and-keyword-exploration)
-      - [a. Create function to link KWIC with
-        data](#a.-create-function-to-link-kwic-with-data)
-      - [b. Explore various KWIC](#b.-explore-various-kwic)
-          - [Special Case: LEHRLERN in rightwing articles on *The
+      - [6.1 Create function to link KWIC with
+        data](#create-function-to-link-kwic-with-data)
+      - [6.2 Explore various KWIC](#explore-various-kwic)
+          - [6.2.1 Special Case: LEHRLERN in rightwing articles on *The
             Mother*](#special-case-lehrlern-in-rightwing-articles-on-the-mother)
-      - [c. Additional Terms Post-Processing
-        (DFMs)](#c.-additional-terms-post-processing-dfms)
-  - [6. Dates of Publication with
+      - [6.3 Additional Terms Post-Processing
+        (DFMs)](#additional-terms-post-processing-dfms)
+  - [7 Dates of Publication with
     Counts](#dates-of-publication-with-counts)
-      - [a. Create Tables](#a.-create-tables)
-          - [General](#general)
-          - [By Piece](#by-piece-1)
-      - [b. Date Ranges, Time Lengths,
-        etc.](#b.-date-ranges-time-lengths-etc.)
-          - [Time Length in Years](#time-length-in-years)
-          - [Range / Interval](#range-interval)
-          - [Proportion of Articles Published near
+      - [7.1 Create Tables](#create-tables)
+          - [7.1.1 General](#general)
+          - [7.1.2 By Piece](#by-piece-1)
+      - [7.2 Date Ranges, Time Lengths,
+        etc.](#date-ranges-time-lengths-etc.)
+          - [7.2.1 Time Length in Years](#time-length-in-years)
+          - [7.2.2 Range / Interval](#range-interval)
+          - [7.2.3 Proportion of Articles Published near
             Premieres](#proportion-of-articles-published-near-premieres)
-      - [c. Articles on *The Measures Taken* published in 1932 (with
+      - [7.3 Articles on *The Measures Taken* published in 1932 (with
         full
-        dates)](#c.-articles-on-the-measures-taken-published-in-1932-with-full-dates)
-  - [7. Visualizations](#visualizations)
-      - [a. Visual Summary of Reduced
-        Corpus](#a.-visual-summary-of-reduced-corpus)
-          - [Very Long Articles](#very-long-articles)
-      - [b. Wordclouds](#b.-wordclouds)
-      - [c. Word Frequency](#c.-word-frequency)
-      - [d. Correspondence Analysis](#d.-correspondence-analysis)
+        dates)](#articles-on-the-measures-taken-published-in-1932-with-full-dates)
+  - [8 Visualizations](#visualizations)
+      - [8.1 Visual Summary of Reduced
+        Corpus](#visual-summary-of-reduced-corpus)
+          - [8.1.1 Very Long Articles](#very-long-articles)
+      - [8.2 Wordclouds](#wordclouds)
+      - [8.3 Word Frequency](#word-frequency)
+      - [8.4 Correspondence Analysis](#correspondence-analysis)
 
-# Introductory Remarks
+# 1 Introductory Remarks
 
 Below is the annotated set-up for my quantitative analysis of the
 Weimar-era reception of Brecht and Eisler’s *The Measures Taken* and
@@ -99,7 +98,7 @@ dissertation.
 In the near future, I will upload the corresponding write-up included in
 ch. 2 of my dissertation to this repository.
 
-# 1\. Load Packages
+# 2 Load Packages
 
 ``` r
 library(tidyverse)
@@ -110,7 +109,7 @@ library(FactoMineR)
 library(lubridate)
 ```
 
-# 2\. Importation
+# 3 Importation
 
 NB: Several articles had to be removed because of their distortionary
 effects. This resulted in three versions of the data, as shown below.
@@ -148,16 +147,16 @@ data_reduced <- data_no_erfurt %>%
 
   - 10 articles removed from original data set (`data_main`).
 
-# 3\. Quanteda Set-Up
+# 4 Quanteda Set-Up
 
-## a. Create Corpora from Data Sets
+## 4.1 Create Corpora from Data Sets
 
 In addition to the main corpora, I create additional corpora, e.g. based
 on piece, to provide greater flexibility for later analysis, for
 instance, finding and/or counting instances of a keyword in articles on
 *The Mother*.
 
-### General Corpora
+### 4.1.1 General Corpora
 
 General Corpus from `data_main` (`corp`):
 
@@ -177,7 +176,7 @@ Corpus from `data_reduced` (`corp_reduced` ):
 corp_reduced <- corpus(data_reduced, text_field = "text")
 ```
 
-### Corpora Grouped by Piece
+### 4.1.2 Corpora Grouped by Piece
 
 *Measures Taken* Corpus (`mt_corp`):
 
@@ -201,7 +200,7 @@ mt_corp_no_erfurt <- corpus_subset(corp_no_erfurt, piece == "measures")
 mother_corp <- corpus_subset(corp, piece == "mother")
 ```
 
-### Corpora of Title Texts
+### 4.1.3 Corpora of Title Texts
 
 This allows for later analysis of the texts of the article titles,
 e.g. keyword frequencies.
@@ -218,7 +217,7 @@ corp_title <- corpus(data_main, text_field = "title")
 mother_corp_title <- corpus_subset(corp_title, piece == "mother")
 ```
 
-## b. Corpus Summary - Article Lengths, etc.
+## 4.2 Corpus Summary - Article Lengths, etc.
 
 For later reference; used sparingly in analysis.
 
@@ -236,7 +235,7 @@ corp_reduced_summary <- corp_reduced_summary %>%
   select(-c(text, other_metadata:Comp_Doc))
 ```
 
-## c. Dictionaries and Additional Stopwords
+## 4.3 Dictionaries and Additional Stopwords
 
 General Dictionary
 
@@ -322,7 +321,7 @@ sw_add <- c("dass", "wurde", "schon", "mehr", "ganz*", "immer", "gibt", "ja",
             "müssen", "kommt", "sei", "tun")
 ```
 
-## d. Tokenize and Filter Corpora
+## 4.4 Tokenize and Filter Corpora
 
 Create function for tokenizing and removing stopwords, punctuation and
 other symbols:
@@ -364,7 +363,7 @@ mother_toks <- tokenize_and_remove_stopwords(mother_corp)
 mother_title_toks <- tokenize_and_remove_stopwords(mother_corp_title)
 ```
 
-## e. Document-Feature Matrices (dfm)
+## 4.5 Document-Feature Matrices (dfm)
 
 Create function for converting tokenized items from previous section
 (ending in `_toks`) to dfm and applying dictionaries:
@@ -397,7 +396,7 @@ mother_dfm <- convert_to_dfm_and_apply_dictionaries(mother_toks)
 mother_title_dfm <- convert_to_dfm_and_apply_dictionaries(mother_title_toks)
 ```
 
-### Group dfm’s by General Political Orientation (GPO)
+### 4.5.1 Group dfm’s by General Political Orientation (GPO)
 
 **GPO** or “general political orientation” is a variable included in the
 original data set and is used extensively in the later analyses. It must
@@ -427,7 +426,7 @@ grouped_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
                                              "general_political_orientation"))
 ```
 
-### Create GPO grouped dfm’s for each piece
+### 4.5.2 Create GPO grouped dfm’s for each piece
 
 NB: Only the third of these (`mother_dfm_gpo`) is used in the analysis
 but all three have been kept for consistency.
@@ -446,7 +445,7 @@ mother_dfm_gpo <- dfm_group(mother_dfm,
                             groups = "general_political_orientation")
 ```
 
-### Less Specific Groupings
+### 4.5.3 Less Specific Groupings
 
 NB: The first two, which contain articles related to the Erfurt
 performance of *The Measures Taken*, have been created for the sake of
@@ -473,7 +472,7 @@ gpo_dfm_no_erfurt <- dfm_group(gen_dfm_no_erfurt,
                                groups = "general_political_orientation")
 ```
 
-### By GPO
+### 4.5.4 By GPO
 
 Not currently used in the analysis but leaving for the moment.
 
@@ -495,7 +494,7 @@ unknown_sub <- dfm_subset(grouped_dfm,
                           general_political_orientation == "unknown")
 ```
 
-### By Piece
+### 4.5.5 By Piece
 
 Not currently used in the analysis but leaving for the moment.
 
@@ -509,7 +508,7 @@ mother_sub <- dfm_subset(grouped_dfm,
                          piece == "mother")
 ```
 
-## f. Convert general (reduced) corpus and dfm to dataframes for later use
+## 4.6 Convert general (reduced) corpus and dfm to dataframes for later use
 
 ``` r
 # convert gen_dfm_reduced to dataframe
@@ -519,7 +518,7 @@ gen_datafr_reduced <- convert(gen_dfm_reduced, to = "data.frame")
 corp_reduced_datafr <- convert(corp_reduced, to = "data.frame")
 ```
 
-## g. Create corpus, dfm, ca, etc. of each piece without unknown GPO (for CA)
+## 4.7 Create corpus, dfm, ca, etc. of each piece without unknown GPO (for CA)
 
 This is necessary for the CA, where I exclude those articles for which
 the GPO is unknown.
@@ -594,7 +593,7 @@ mother_dfm_gpo_no_unknown <-
             groups = "general_political_orientation")
 ```
 
-# 4\. FactoMineR Set-Up (for CA)
+# 5 FactoMineR Set-Up (for CA)
 
 Create dfm with proper group names (will appear in CA graph) and apply
 above-defined function:
@@ -645,9 +644,9 @@ grouped_ca_no_erfurt_or_unknown
   - Researchers can of course explore the results in further detail,
     following the instructions printed above.
 
-# 5\. Keywords In Context (KWIC) and Keyword Exploration
+# 6 Keywords In Context (KWIC) and Keyword Exploration
 
-## a. Create function to link KWIC with data
+## 6.1 Create function to link KWIC with data
 
 ``` r
 combine_kwic_with_data <- function(corpus, words, window) {
@@ -668,7 +667,7 @@ combine_kwic_with_data <- function(corpus, words, window) {
     }
 ```
 
-## b. Explore various KWIC
+## 6.2 Explore various KWIC
 
 All of these keywords relate to claims made in ch. 2 of the
 dissertation. (All words are written lowercase to reflect how they
@@ -825,7 +824,7 @@ combine_kwic_with_data(corp, "Kantate*", 25) %>%
 
 No results.
 
-### Special Case: LEHRLERN in rightwing articles on *The Mother*
+### 6.2.1 Special Case: LEHRLERN in rightwing articles on *The Mother*
 
 As I explain in ch. 2, **LEHRLERN** is the only term in the keyword
 diction (see above) that can be considered an interpretative combination
@@ -856,7 +855,7 @@ lehrlern_kwic_mother_right <- lehrlern_kwic %>%
   filter(piece == "mother" & general_political_orientation == "right")
 ```
 
-## c. Additional Terms Post-Processing (DFMs)
+## 6.3 Additional Terms Post-Processing (DFMs)
 
 LEHRLERN in *The Mother*
 
@@ -876,11 +875,11 @@ lehrlern_mother_gpo_count
     ## 3 right         15
     ## 4 unknown       15
 
-# 6\. Dates of Publication with Counts
+# 7 Dates of Publication with Counts
 
-## a. Create Tables
+## 7.1 Create Tables
 
-### General
+### 7.1.1 General
 
 All articles:
 
@@ -939,9 +938,9 @@ articles_perc_with_full_dates <- 100 - articles_perc_without_full_dates
 
 88% of articles have full dates.
 
-### By Piece
+### 7.1.2 By Piece
 
-#### *The Measures Taken*
+#### 7.1.2.1 *The Measures Taken*
 
 <!-- may not need this first one (non-Lubridate) -->
 
@@ -1003,7 +1002,7 @@ dates_tib_lubridate %>%
     ## 19 1932-11-22     1
     ## 20 1932-11-25     1
 
-#### *The Mother*
+#### 7.1.2.2 *The Mother*
 
 All
 
@@ -1063,9 +1062,9 @@ dates_tib_lubridate %>%
     ## 19 1932-03-05     1
     ## 20 1932-12-09     1
 
-## b. Date Ranges, Time Lengths, etc.
+## 7.2 Date Ranges, Time Lengths, etc.
 
-### Time Length in Years
+### 7.2.1 Time Length in Years
 
 All Articles (edited for Lubridate):
 
@@ -1097,9 +1096,9 @@ difftime(tail(dates_mother_lubridate$date, 1),
 
     ## [1] 0.9637235
 
-### Range / Interval
+### 7.2.2 Range / Interval
 
-#### All
+#### 7.2.2.1 All
 
 Save general start and end dates as variables for write-up:
 
@@ -1118,7 +1117,7 @@ interval(start = articles_first_date,
 
     ## [1] 1930-06-04 UTC--1932-12-09 UTC
 
-#### *The Measures Taken*
+#### 7.2.2.2 *The Measures Taken*
 
 ``` r
 interval(start = head(dates_mt_lubridate$date, 1),
@@ -1127,7 +1126,7 @@ interval(start = head(dates_mt_lubridate$date, 1),
 
     ## [1] 1930-06-04 UTC--1932-11-25 UTC
 
-#### *The Mother*
+#### 7.2.2.3 *The Mother*
 
 ``` r
 interval(start = head(dates_mother_lubridate$date, 1),
@@ -1136,9 +1135,9 @@ interval(start = head(dates_mother_lubridate$date, 1),
 
     ## [1] 1931-12-23 UTC--1932-12-09 UTC
 
-### Proportion of Articles Published near Premieres
+### 7.2.3 Proportion of Articles Published near Premieres
 
-#### *The Measures Taken*
+#### 7.2.3.1 *The Measures Taken*
 
 Save date of premiere as variable (cf.
 [GBA](https://www.suhrkamp.de/werkausgabe/werke_grosse_kommentierte_berliner_und_frankfurter_ausgabe_30_baende_in_32_teilbaenden_und_ein_registerband_leinen_24.html)
@@ -1167,7 +1166,7 @@ articles_mt_premiere_week_perc <-
 45% of articles on *The Measures Taken* were published within one week
 of the premiere.
 
-#### *The Mother*
+#### 7.2.3.2 *The Mother*
 
 Save date of premiere (cf.
 [GBA](https://www.suhrkamp.de/werkausgabe/werke_grosse_kommentierte_berliner_und_frankfurter_ausgabe_30_baende_in_32_teilbaenden_und_ein_registerband_leinen_24.html)
@@ -1196,7 +1195,7 @@ articles_mother_premiere_week_perc <-
 74% of articles on *The Mother* were published within one week of the
 premiere.
 
-## c. Articles on *The Measures Taken* published in 1932 (with full dates)
+## 7.3 Articles on *The Measures Taken* published in 1932 (with full dates)
 
 ``` r
 dates_tib_lubridate %>% 
@@ -1218,7 +1217,7 @@ dates_tib_lubridate %>%
     ## #   other_metadata <chr>, other_notes <chr>, AdK <chr>, AdK_Duplicate <chr>,
     ## #   Comp_Doc <chr>, piece.y <chr>
 
-# 7\. Visualizations
+# 8 Visualizations
 
 Create color scheme:
 
@@ -1232,7 +1231,7 @@ Create English labels for both works:
 labels_english <- c(measures = "Measures Taken", mother = "Mother")
 ```
 
-## a. Visual Summary of Reduced Corpus
+## 8.1 Visual Summary of Reduced Corpus
 
 Set-up for boxplot:
 
@@ -1328,7 +1327,7 @@ detail:
   - Articles on *The Measures Taken* are overwhelmingly from leftwing
     publications.
 
-### Very Long Articles
+### 8.1.1 Very Long Articles
 
 The goal is to identify the very long articles in ***The Measures Taken*
 Unknown** category, because they stretch out the IQR. Here, a list of
@@ -1356,7 +1355,7 @@ toks_grouped %>%
 |       7 |       152 | Brecht-Eisler / Die Maßnahme/Philharmonie     | Klaus Pringsheim          | Münchner\_Merkur        | 15.12.1930 |
 |      37 |       128 | Kommunistische »Musik«.                       | k.                        | Bayrische-Staatszeitung | 25.11.1932 |
 
-## b. Wordclouds
+## 8.2 Wordclouds
 
 Grouped by Piece:
 
@@ -1390,7 +1389,7 @@ wordcloud_mother_gpo <-
 
 ![](reception_analysis_files/figure-gfm/unnamed-chunk-84-1.png)<!-- -->
 
-## c. Word Frequency
+## 8.3 Word Frequency
 
 By Piece:
 
@@ -1479,7 +1478,7 @@ freq_piece_gpo_plot
 
 ![](reception_analysis_files/figure-gfm/unnamed-chunk-86-1.png)<!-- -->
 
-## d. Correspondence Analysis
+## 8.4 Correspondence Analysis
 
 Main
 
