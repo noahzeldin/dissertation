@@ -535,19 +535,6 @@ mother_dfm_gpo_no_unknown <-
 
 # 4. FactoMineR Set-Up (for CA)
 
-Create function for converting dfm to dataframe and performing CA:
-
-```{r}
-convert_to_dataframe_and_perform_ca <- function(i) {
-    convert(i, to = "data.frame") %>% 
-        CA(quali.sup = 1, graph = FALSE)
-}
-```
-
-* NB: I originally created this function, because I performed the CA on 
-multiple versions of the data set. I may delete it in the future and integrate 
-the necessary code in the step below.
-
 Create dfm with proper group names (will appear in CA graph) and apply 
 above-defined function:
 
@@ -557,12 +544,24 @@ grouped_dfm_no_erfurt_or_unknown <-
   dfm_group(grouped_dfm_no_erfurt_or_unknown,
             groups = c("Measures.Center", "Mother.Center", "Measures.Left",
                        "Mother.Left", "Measures.Right", "Mother.Right"))
-
-grouped_ca_no_erfurt_or_unknown <- 
-  convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown)
 ```
 
+Conduct CA:
 
+```{r}
+grouped_ca_no_erfurt_or_unknown <- grouped_dfm_no_erfurt_or_unknown %>% 
+    as.data.frame() %>% 
+    CA(quali.sup = 1, graph = FALSE)
+```
+
+View results (mainly to get p-value):
+
+```{r}
+grouped_ca_no_erfurt_or_unknown
+```
+
+* Researchers can of course explore the results in further detail, following the 
+instructions printed above.
 
 # 5. Keywords In Context (KWIC) and Keyword Exploration
 

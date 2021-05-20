@@ -596,19 +596,6 @@ mother_dfm_gpo_no_unknown <-
 
 # 4\. FactoMineR Set-Up (for CA)
 
-Create function for converting dfm to dataframe and performing CA:
-
-``` r
-convert_to_dataframe_and_perform_ca <- function(i) {
-    convert(i, to = "data.frame") %>% 
-        CA(quali.sup = 1, graph = FALSE)
-}
-```
-
-  - NB: I originally created this function, because I performed the CA
-    on multiple versions of the data set. I may delete it in the future
-    and integrate the necessary code in the step below.
-
 Create dfm with proper group names (will appear in CA graph) and apply
 above-defined function:
 
@@ -618,10 +605,45 @@ grouped_dfm_no_erfurt_or_unknown <-
   dfm_group(grouped_dfm_no_erfurt_or_unknown,
             groups = c("Measures.Center", "Mother.Center", "Measures.Left",
                        "Mother.Left", "Measures.Right", "Mother.Right"))
-
-grouped_ca_no_erfurt_or_unknown <- 
-  convert_to_dataframe_and_perform_ca(grouped_dfm_no_erfurt_or_unknown)
 ```
+
+Conduct CA:
+
+``` r
+grouped_ca_no_erfurt_or_unknown <- grouped_dfm_no_erfurt_or_unknown %>% 
+    as.data.frame() %>% 
+    CA(quali.sup = 1, graph = FALSE)
+```
+
+View results (mainly to get p-value):
+
+``` r
+grouped_ca_no_erfurt_or_unknown
+```
+
+    ## **Results of the Correspondence Analysis (CA)**
+    ## The row variable has  6  categories; the column variable has 7796 categories
+    ## The chi square of independence between the two variables is equal to 48474.43 (p-value =  1.896141e-219 ).
+    ## *The results are available in the following objects:
+    ## 
+    ##    name               description                                
+    ## 1  "$eig"             "eigenvalues"                              
+    ## 2  "$col"             "results for the columns"                  
+    ## 3  "$col$coord"       "coord. for the columns"                   
+    ## 4  "$col$cos2"        "cos2 for the columns"                     
+    ## 5  "$col$contrib"     "contributions of the columns"             
+    ## 6  "$row"             "results for the rows"                     
+    ## 7  "$row$coord"       "coord. for the rows"                      
+    ## 8  "$row$cos2"        "cos2 for the rows"                        
+    ## 9  "$row$contrib"     "contributions of the rows"                
+    ## 10 "$quali.sup$coord" "coord. for supplementary categorical var."
+    ## 11 "$quali.sup$cos2"  "cos2 for supplementary categorical var."  
+    ## 12 "$call"            "summary called parameters"                
+    ## 13 "$call$marge.col"  "weights of the columns"                   
+    ## 14 "$call$marge.row"  "weights of the rows"
+
+  - Researchers can of course explore the results in further detail,
+    following the instructions printed above.
 
 # 5\. Keywords In Context (KWIC) and Keyword Exploration
 
@@ -1292,7 +1314,7 @@ toks_summary_boxplot <- toks_grouped %>%
 toks_summary_boxplot
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-80-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-81-1.png)<!-- -->
 
 A couple of quick points, which I review in the write-up in greater
 detail:
@@ -1351,7 +1373,7 @@ textplot_wordcloud(piece_dfm_no_erfurt_english,
                    labelcolor = "black")
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-82-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-83-1.png)<!-- -->
 
 *Mother* - Grouped by GPO (no unknown):
 
@@ -1366,7 +1388,7 @@ wordcloud_mother_gpo <-
                    labelcolor = "black")
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-83-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-84-1.png)<!-- -->
 
 ## c. Word Frequency
 
@@ -1401,7 +1423,7 @@ freq_piece_plot <-
 freq_piece_plot
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-84-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-85-1.png)<!-- -->
 
 By Piece + GPO:
 
@@ -1455,7 +1477,7 @@ freq_piece_gpo_plot <- ggplot(freq_grouped_wt,
 freq_piece_gpo_plot
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-85-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-86-1.png)<!-- -->
 
 ## d. Correspondence Analysis
 
@@ -1479,7 +1501,7 @@ ca_main <- ca_main +
 ca_main
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-86-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-87-1.png)<!-- -->
 
 *Measures Taken*
 
@@ -1502,7 +1524,7 @@ ca_measures <- ca_measures +
 ca_measures
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-87-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-88-1.png)<!-- -->
 
 *Mother*
 
@@ -1525,4 +1547,4 @@ ca_mother <- ca_mother +
 ca_mother
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-88-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-89-1.png)<!-- -->
