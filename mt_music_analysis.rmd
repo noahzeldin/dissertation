@@ -107,17 +107,16 @@ voice_analysis_list <-
          function(x) 
            read_excel("mt_data_choir.xlsx", 
                       sheet = x, 
-                      col_types = c("text", # piece_no
-                                    "numeric", # measure
-                                    "text", # texture
-                                    "numeric", # voices
-                                    "text", # groupings
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", 
-                                    "numeric", # ratio
+                      col_types = c("text", # A. piece_no
+                                    "numeric", # B. measure
+                                    "text", # C. texture
+                                    "numeric", # D. voices
+                                    "text", # E. groupings
+                                    "numeric", # F. soprano
+                                    "numeric", # G. alto
+                                    "numeric", # H. tenor
+                                    "numeric", # I. bass
+                                    "numeric", # J. parts_active
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
