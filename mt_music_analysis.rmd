@@ -117,7 +117,7 @@ voice_analysis_list <-
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
-                                    "numeric", # soprano:ratio
+                                    "numeric", # ratio
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
@@ -126,7 +126,7 @@ voice_analysis_list <-
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
-                                    "numeric", # rests
+                                    "numeric", # rests_all
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
@@ -135,7 +135,7 @@ voice_analysis_list <-
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
-                                    "numeric", # quarters
+                                    "numeric", # quarters_sum
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
@@ -145,7 +145,7 @@ voice_analysis_list <-
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
-                                    "numeric", # notes
+                                    "numeric", # notes_sum_pairings
                                     "numeric", 
                                     "numeric", 
                                     "numeric", 
