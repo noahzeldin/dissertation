@@ -1,5 +1,5 @@
 ---
-title: "Measures Taken Formal Musical Analysis"
+title: "Formal Analysis of Hanns Eisler's music to *The Measures Taken*"
 author: "Noah Zeldin"
 date: "4/26/2021"
 output: 
@@ -21,8 +21,6 @@ dissertation. This analysis was conducted in R. (I have tried to use
 [tidyverse](https://www.tidyverse.org/) syntax as consistently as possible. I
 therefore refer to tables as ["tibbles"](https://tibble.tidyverse.org/).) 
 Data sets will be made available to researchers upon request.
-
-**NB: Further refinements to the code are forthcoming.** 
 
 # 1. Load Packages  
 
@@ -51,7 +49,7 @@ NB: Several column types in both spreadsheets must be converted to **factors**
 in a separate step because this is not an option with `readxl()` (explained 
 again below).
 
-## a. Duration
+## a. Duration and Meter
 
 Import all sheets into a single list and specify column types:  
 
@@ -185,7 +183,9 @@ gen_tib <- as_tibble(bind_rows(voice_analysis_list))
 
 
 
-# 3. Cleaning and Manipulation: 1. Durations
+# 3. Cleaning and Manipulation:
+
+## a. Duration and Meter
 
 Convert **piece_no**, **category** and **subcategory** to factors (not possible 
 with `readxl()`):
@@ -211,9 +211,9 @@ dur_tib$subcategory %>%
 ```
 
 
-# 4. Cleaning and Manipulation: 2. Voice Analysis
+## b. Voice Analysis
 
-## a. General Tibble: gen_tib
+### General Tibble: gen_tib
 
 Convert **piece_no** to factor (not possible with `readxl()`):
 
@@ -247,7 +247,7 @@ gen_tib <- gen_tib %>%
 ```
 
 
-## b. Tibble for Choral Portions: gen_tib_sung
+### Tibble for Choral Portions: gen_tib_sung
 
 Filter out parts without choral singing (includes passages *spoken* by choir):
 
@@ -259,7 +259,7 @@ gen_tib_sung <- gen_tib %>%
 ```
 
 
-## c. Tibble for Pitch: pitch_tib
+### Tibble for Pitch: pitch_tib
 
 Create tibble containing data on choir's pitch material in each measure:
 
@@ -286,7 +286,7 @@ pitch_tib <- gen_tib_sung %>%
 ```
 
 
-# 5. Stats
+# 4. Stats
 
 This section contains calculations derived from the tibbles generated and 
 cleaned in the previous sections. These calculations formed the basis of my

@@ -1,4 +1,4 @@
-Measures Taken Formal Musical Analysis
+Formal Analysis of Hanns Eisler’s music to *The Measures Taken*
 ================
 Noah Zeldin
 4/26/2021
@@ -6,18 +6,16 @@ Noah Zeldin
   - [Introductory Remarks](#introductory-remarks)
   - [1. Load Packages](#load-packages)
   - [2. Importation](#importation)
-      - [a. Duration](#a.-duration)
+      - [a. Duration and Meter](#a.-duration-and-meter)
       - [b. Voice Analysis](#b.-voice-analysis)
-  - [3. Cleaning and Manipulation: 1.
-    Durations](#cleaning-and-manipulation-1.-durations)
-  - [4. Cleaning and Manipulation: 2. Voice
-    Analysis](#cleaning-and-manipulation-2.-voice-analysis)
-      - [a. General Tibble: gen\_tib](#a.-general-tibble-gen_tib)
-      - [b. Tibble for Choral Portions:
-        gen\_tib\_sung](#b.-tibble-for-choral-portions-gen_tib_sung)
-      - [c. Tibble for Pitch:
-        pitch\_tib](#c.-tibble-for-pitch-pitch_tib)
-  - [5. Stats](#stats)
+  - [3. Cleaning and Manipulation:](#cleaning-and-manipulation)
+      - [a. Duration and Meter](#a.-duration-and-meter-1)
+      - [b. Voice Analysis](#b.-voice-analysis-1)
+          - [General Tibble: gen\_tib](#general-tibble-gen_tib)
+          - [Tibble for Choral Portions:
+            gen\_tib\_sung](#tibble-for-choral-portions-gen_tib_sung)
+          - [Tibble for Pitch: pitch\_tib](#tibble-for-pitch-pitch_tib)
+  - [4. Stats](#stats)
       - [a. Durations: General](#a.-durations-general)
           - [Total Duration in Minutes](#total-duration-in-minutes)
           - [Duration by Piece](#duration-by-piece)
@@ -55,8 +53,6 @@ possible. I therefore refer to tables as
 [“tibbles”](https://tibble.tidyverse.org/).) Data sets will be made
 available to researchers upon request.
 
-**NB: Further refinements to the code are forthcoming.**
-
 # 1\. Load Packages
 
 ``` r
@@ -88,7 +84,7 @@ NB: Several column types in both spreadsheets must be converted to
 **factors** in a separate step because this is not an option with
 `readxl()` (explained again below).
 
-## a. Duration
+## a. Duration and Meter
 
 Import all sheets into a single list and specify column types:
 
@@ -229,7 +225,9 @@ From `voice_analysis_list` create single data frame and save as tibble:
 gen_tib <- as_tibble(bind_rows(voice_analysis_list))
 ```
 
-# 3\. Cleaning and Manipulation: 1. Durations
+# 3\. Cleaning and Manipulation:
+
+## a. Duration and Meter
 
 Convert **piece\_no**, **category** and **subcategory** to factors (not
 possible with `readxl()`):
@@ -268,9 +266,9 @@ dur_tib$subcategory %>%
     ##  9 4c        1
     ## 10 4d        4
 
-# 4\. Cleaning and Manipulation: 2. Voice Analysis
+## b. Voice Analysis
 
-## a. General Tibble: gen\_tib
+### General Tibble: gen\_tib
 
 Convert **piece\_no** to factor (not possible with `readxl()`):
 
@@ -324,7 +322,7 @@ gen_tib <- gen_tib %>%
     rowid_to_column("id")
 ```
 
-## b. Tibble for Choral Portions: gen\_tib\_sung
+### Tibble for Choral Portions: gen\_tib\_sung
 
 Filter out parts without choral singing (includes passages *spoken* by
 choir):
@@ -336,7 +334,7 @@ gen_tib_sung <- gen_tib %>%
                spoken == 0) 
 ```
 
-## c. Tibble for Pitch: pitch\_tib
+### Tibble for Pitch: pitch\_tib
 
 Create tibble containing data on choir’s pitch material in each measure:
 
@@ -362,7 +360,7 @@ pitch_tib <- gen_tib_sung %>%
     mutate(tones_sum = sum(c_across(c:b))) 
 ```
 
-# 5\. Stats
+# 4\. Stats
 
 This section contains calculations derived from the tibbles generated
 and cleaned in the previous sections. These calculations formed the
