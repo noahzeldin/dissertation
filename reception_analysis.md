@@ -127,7 +127,15 @@ effects. This resulted in three versions of the data, as shown below.
 Main data set containing all articles (`data_main`):
 
 ``` r
-data_main <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs_lowercase")
+data_main <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs")
+```
+
+Remove columns containing information that is unnecessary for analysis
+(e.g.  references for republications):
+
+``` r
+data_main <- data_main %>% 
+  select(-c(other_metadata:duplicate_source_adk))
 ```
 
 `data_main` w/o articles on the Erfurt performance *The Measures Taken*
@@ -242,7 +250,7 @@ corp_reduced_summary <- corp_reduced_summary %>%
   mutate(document = as.numeric(document)) %>% 
   rename(article = document) %>% 
   left_join(data_main, by = "article") %>% 
-  select(-c(text, other_metadata:Comp_Doc))
+  select(-text)
 ```
 
 ## 4.3 Dictionaries and Additional Stopwords
@@ -670,9 +678,7 @@ combine_kwic_with_data <- function(corpus, words, window) {
         rename(article = docname) %>% 
         left_join(
           data_reduced, 
-          by = "article") %>% 
-        select(-c(text, other_metadata:Comp_Doc))
-    
+          by = "article") 
     }
 ```
 
@@ -803,13 +809,13 @@ combine_kwic_with_data(corp, "stalin*", 30) %>%
   print()
 ```
 
-    ## # A tibble: 3 x 16
-    ##   article  from    to pre   keyword post  pattern title newspaper publisher
-    ##     <dbl> <int> <int> <chr> <chr>   <chr> <fct>   <chr> <chr>     <chr>    
-    ## 1      62    23    23 Gork~ Stalin  "- h~ stalin* "Die~ Germania  Zentrum  
-    ## 2      66    55    55 Best~ Stalin  "und~ stalin* "Gor~ Sächsisc~ SPD      
-    ## 3      83   662   662 und ~ Stalin~ "von~ stalin* "Ber~ Der_Aben~ SPD      
-    ## # ... with 6 more variables: political_affiliation <chr>,
+    ## # A tibble: 3 x 17
+    ##   article  from    to pre   keyword post  pattern title text  newspaper
+    ##     <dbl> <int> <int> <chr> <chr>   <chr> <fct>   <chr> <chr> <chr>    
+    ## 1      62    23    23 Gork~ Stalin  "- h~ stalin* "Die~ "Gor~ Germania 
+    ## 2      66    55    55 Best~ Stalin  "und~ stalin* "Gor~ "Max~ Sächsisc~
+    ## 3      83   662   662 und ~ Stalin~ "von~ stalin* "Ber~ "Ein~ Der_Aben~
+    ## # ... with 7 more variables: publisher <chr>, political_affiliation <chr>,
     ## #   general_political_orientation <chr>, date <chr>, author <chr>,
     ## #   complete_or_incomplete <chr>, piece <chr>
 
@@ -824,10 +830,10 @@ combine_kwic_with_data(corp, "Kantate*", 25) %>%
   print()
 ```
 
-    ## # A tibble: 0 x 16
-    ## # ... with 16 variables: article <dbl>, from <int>, to <int>, pre <chr>,
-    ## #   keyword <chr>, post <chr>, pattern <fct>, title <chr>, newspaper <chr>,
-    ## #   publisher <chr>, political_affiliation <chr>,
+    ## # A tibble: 0 x 17
+    ## # ... with 17 variables: article <dbl>, from <int>, to <int>, pre <chr>,
+    ## #   keyword <chr>, post <chr>, pattern <fct>, title <chr>, text <chr>,
+    ## #   newspaper <chr>, publisher <chr>, political_affiliation <chr>,
     ## #   general_political_orientation <chr>, date <chr>, author <chr>,
     ## #   complete_or_incomplete <chr>, piece <chr>
 
@@ -854,7 +860,7 @@ lehrlern_kwic <- lehrlern_kwic %>%
   mutate(docname = as.numeric(docname)) %>% 
   rename(article = docname) %>% 
   left_join(data_main, by = "article") %>% 
-  select(-c(text, other_metadata:Comp_Doc))
+  select(-text)
 ```
 
 Filter for *The Mother* and right GPO:
@@ -1213,7 +1219,7 @@ dates_tib_lubridate %>%
     left_join(data_main, by = "article")
 ```
 
-    ## # A tibble: 5 x 18
+    ## # A tibble: 5 x 13
     ##   article date.x     piece.x title text  newspaper publisher political_affil~
     ##     <dbl> <date>     <chr>   <chr> <chr> <chr>     <chr>     <chr>           
     ## 1      35 1932-02-19 measur~ "Leh~ "Nic~ Literari~ Welt Ver~ Unknown         
@@ -1221,10 +1227,8 @@ dates_tib_lubridate %>%
     ## 3      34 1932-09-24 measur~ "Die~ "Die~ Arbeiter~ Sozialde~ SPÖ             
     ## 4      36 1932-11-22 measur~ "Ers~ "In ~ General-~ Independ~ Unknown         
     ## 5      37 1932-11-25 measur~ "Kom~ "Am ~ Bayrisch~ Independ~ Unknown         
-    ## # ... with 10 more variables: general_political_orientation <chr>,
-    ## #   date.y <chr>, author <chr>, complete_or_incomplete <chr>,
-    ## #   other_metadata <chr>, other_notes <chr>, AdK <chr>, AdK_Duplicate <chr>,
-    ## #   Comp_Doc <chr>, piece.y <chr>
+    ## # ... with 5 more variables: general_political_orientation <chr>, date.y <chr>,
+    ## #   author <chr>, complete_or_incomplete <chr>, piece.y <chr>
 
 # 8 Visualizations
 
@@ -1322,7 +1326,7 @@ toks_summary_boxplot <- toks_grouped %>%
 toks_summary_boxplot
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-81-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-82-1.png)<!-- -->
 
 A couple of quick points, which I review in the write-up in greater
 detail:
@@ -1381,7 +1385,7 @@ textplot_wordcloud(piece_dfm_no_erfurt_english,
                    labelcolor = "black")
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-83-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-84-1.png)<!-- -->
 
 *Mother* - Grouped by GPO (no unknown):
 
@@ -1396,7 +1400,7 @@ wordcloud_mother_gpo <-
                    labelcolor = "black")
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-84-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-85-1.png)<!-- -->
 
 ## 8.3 Word Frequency
 
@@ -1431,7 +1435,7 @@ freq_piece_plot <-
 freq_piece_plot
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-85-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-86-1.png)<!-- -->
 
 By Piece + GPO:
 
@@ -1485,7 +1489,7 @@ freq_piece_gpo_plot <- ggplot(freq_grouped_wt,
 freq_piece_gpo_plot
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-86-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-87-1.png)<!-- -->
 
 ## 8.4 Correspondence Analysis
 
@@ -1507,7 +1511,7 @@ ca_main <- ca_main +
 ca_main
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-87-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-88-1.png)<!-- -->
 
 *Measures Taken*
 
@@ -1528,7 +1532,7 @@ ca_measures <- ca_measures +
 ca_measures
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-88-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-89-1.png)<!-- -->
 
 *Mother*
 
@@ -1549,4 +1553,4 @@ ca_mother <- ca_mother +
 ca_mother
 ```
 
-![](reception_analysis_files/figure-gfm/unnamed-chunk-89-1.png)<!-- -->
+![](reception_analysis_files/figure-gfm/unnamed-chunk-90-1.png)<!-- -->

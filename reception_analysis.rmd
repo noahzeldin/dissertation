@@ -68,8 +68,17 @@ This resulted in three versions of the data, as shown below.
 Main data set containing all articles (`data_main`): 
 
 ```{r}
-data_main <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs_lowercase")
+data_main <- read_excel("reception_analysis_data.xlsx", sheet = "all_docs")
 ```
+
+Remove columns containing information that is unnecessary for analysis (e.g. 
+references for republications):
+
+```{r}
+data_main <- data_main %>% 
+  select(-c(other_metadata:duplicate_source_adk))
+```
+
 
 `data_main` w/o articles on the Erfurt performance *The Measures Taken* 
 (`data_no_erfurt`):
@@ -186,7 +195,7 @@ corp_reduced_summary <- corp_reduced_summary %>%
   mutate(document = as.numeric(document)) %>% 
   rename(article = document) %>% 
   left_join(data_main, by = "article") %>% 
-  select(-c(text, other_metadata:Comp_Doc))
+  select(-text)
 ```
 
 
@@ -584,9 +593,7 @@ combine_kwic_with_data <- function(corpus, words, window) {
         rename(article = docname) %>% 
         left_join(
           data_reduced, 
-          by = "article") %>% 
-        select(-c(text, other_metadata:Comp_Doc))
-    
+          by = "article") 
     }
 ```
 
@@ -720,7 +727,7 @@ lehrlern_kwic <- lehrlern_kwic %>%
   mutate(docname = as.numeric(docname)) %>% 
   rename(article = docname) %>% 
   left_join(data_main, by = "article") %>% 
-  select(-c(text, other_metadata:Comp_Doc))
+  select(-text)
 ```
 
 Filter for *The Mother* and right GPO:
