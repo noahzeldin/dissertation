@@ -15,6 +15,8 @@ for other sources, as full references are available in the bibliography.
 
 **Note: Further refinements are forthcoming.**
 
+## Write-Up
+
 Complementing the analyses of the music and theatrical elements of *The
 Measures Taken* and *The Mother* and the discussions of their
 performance histories, the final section of this chapter treats these
@@ -103,7 +105,7 @@ considered a serious contribution to scholarship on either the political
 history of the Weimar Republic or the history of the Republic’s media.
 
 Let us begin with some basic figures for the data. The corpus includes
-123 articles in total, 0 of which are about *The Measures Taken* and 0
+123 articles in total, 43 of which are about *The Measures Taken* and 80
 of which are about *The Mother*. The dates of publication\[8\] range
 from June 4, 1930 to December 9, 1932, representing a two-and-a-half
 year period.\[9\] Importantly, a very substantial proportion of the
@@ -433,7 +435,7 @@ Additionally, this passage contains one of only three appearances of
 “Stalin” or “Stalinism” in the entire corpus. (Given postwar
 scholarship’s obsession with comparing *The Measures Taken* with the
 Great Purge of 1936-38 and Stalinism in general, it is significant not
-one of the 0 articles on *The Measures Taken* contained in this corpus
+one of the 43 articles on *The Measures Taken* contained in this corpus
 mentions Stalin.) Another can be found in the SPD newspaper in Zwickau,
 in which Gorky’s recent pledge of support for Stalin is criticized as
 betrayal of his origins. One of the others can be found in the SPD
@@ -676,8 +678,8 @@ unique place and time.
     single token \[*LIED*\] to be rather harmless.
 
 15. Perhaps somewhat surprisingly, this keyword grouping appears most
-    frequently in centrist articles (NA% of appearances) on *The Mother*
-    and much less frequently in leftwing articles (NA%).
+    frequently in centrist articles (38% of appearances) on *The Mother*
+    and much less frequently in leftwing articles (23%).
 
 16. Richard Biedrynski, “Gruppe junger Schauspieler im Komödienhaus.
     Marxistische Theaterschule. Bert Brecht - Maxim Gorki: ‘Die
@@ -708,7 +710,7 @@ unique place and time.
 23. See L. Sp., “Musik im Propagandakampf. ‘Die Maßnahme’ in der
     Philharmonie,” *Vossische Zeitung*, Dec. 15, 1930.
 
-24. These constitute NaN% of articles on *The Mother*.
+24. These constitute 21% of articles on *The Mother*.
 
 25. Dümling, *Lasst euch*, 335-39 notes Brecht and Eisler’s desire to
     engage with a diverse working-class audience, including
@@ -733,8 +735,8 @@ unique place and time.
 
 29. In the word cloud above, the word appears to be associated with the
     rightwing press on *The Mother*, because the majority of appearances
-    of the term were in rightwing publications. However, 0 centrist
-    articles also use the word, while only 0 articles from leftwing
+    of the term were in rightwing publications. However, 15 centrist
+    articles also use the word, while only 2 articles from leftwing
     outlets include the word “primitive,” one on *The Measures Taken*
     and one on *The Mother*. The former, which appeared in the Communist
     *Welt am Abend* on Dec. 15, 1930, i.e. immediately after the
@@ -824,7 +826,7 @@ unique place and time.
     the same R package, FactoMineR.
 
 41. Articles with “unknown” political orientation have been excluded,
-    constituting 0% of the corpus.
+    constituting 19% of the corpus.
 
 42. K. P., “‘Die Maßnahme.’ Nachtvorstellung in der Philharmonie,”
     *Vorwärts*, Dec. 15, 1930. Note that although this article does not

@@ -143,7 +143,7 @@ mother_rank_lehrlern <- mother_freq_top_30 %>%
 
 primitiv_center_no_articles <- 
   primitiv_kwic %>% 
-  filter(general_political_orientation == "Center") %>% 
+  filter(general_political_orientation == "center") %>% 
   count(article) %>% 
   nrow() %>% 
   as.numeric()
@@ -156,7 +156,7 @@ primitiv_center_no_articles <-
 
 primitiv_left_no_articles <- 
   primitiv_kwic %>% 
-  filter(general_political_orientation == "Left") %>% 
+  filter(general_political_orientation == "left") %>% 
   count(article) %>% 
   nrow() %>% 
   as.numeric()
@@ -193,7 +193,7 @@ oratorium_mt_no_articles <- oratorium_mt_kwic %>%
 
 lehrlern_mother_center_no_appearances <- 
   lehrlern_mother_gpo_count %>% 
-  filter(doc_id == "Center") %>% 
+  filter(doc_id == "center") %>% 
   select(LEHRLERN) %>% 
   as.numeric()
 ```
@@ -216,7 +216,7 @@ lehrlern_mother_center_perc <-
 
 lehrlern_mother_left_no_appearances <- 
   lehrlern_mother_gpo_count %>% 
-  filter(doc_id == "Left") %>% 
+  filter(doc_id == "left") %>% 
   select(LEHRLERN) %>% 
   as.numeric()
 ```
@@ -239,7 +239,7 @@ lehrlern_mother_left_perc <-
 # Percent with Unknown GPO - Both Pieces
 
 articles_unknown_gpo_perc <- round((data_reduced %>% 
-   filter(general_political_orientation == "Unknown") %>% 
+   filter(general_political_orientation == "unknown") %>% 
    nrow()) /
     data_reduced %>% nrow() * 100)    
 ```
@@ -250,10 +250,10 @@ articles_unknown_gpo_perc <- round((data_reduced %>%
 # Percent with Unknown GPO - Mutter
 
 articles_unknown_gpo_mother_perc <- round((data_reduced %>% 
-   filter(general_political_orientation == "Unknown" &
-            piece == "Mutter") %>% 
+   filter(general_political_orientation == "unknown" &
+            piece == "mother") %>% 
    nrow()) /
-    data_reduced %>% filter(piece == "Mutter") %>% nrow() * 100)    
+    data_reduced %>% filter(piece == "mother") %>% nrow() * 100)    
 ```
 
 
@@ -297,8 +297,7 @@ The following text is taken from section 7 of chapter 2 of my dissertation. The 
 
 **Note: Further refinements are forthcoming.**
 
-
-
+## Write-Up
 
 Complementing the analyses of the music and theatrical elements of *The Measures Taken* and *The Mother* and the discussions of their performance histories, the final section of this chapter treats these works’ reception in the Weimar Republic’s press, which will also serve as an extension of the examination of the sociopolitical aspects of these works outlined in chapter 1. The brazen and well-documented partisanship of the Republic’s press, together with the significant number of surviving articles on the two works, provides a natural motivation to pursue questions regarding the existence of a meaningful relationship between politics and aesthetics at the time and if this had an impact on contemporary reception of *The Measures Taken* and *The Mother*. That is, given the aesthetic split between Communists and Social Democrats, discussed at length in chapter 1, were there any sort of comparable divisions in the political spectrum at large? For instance, what did liberal and rightwing outlets think about these two learning-pieces? And, is there any relationship between the political affiliation of a particular newspaper or magazine and the aspects of the work discussed in the review, e.g. music, staging, political content, pedagogical orientation? 
 
@@ -319,7 +318,7 @@ Next, the categorization of the political orientation of each publication, which
 
 
 
-Let us begin with some basic figures for the data. The corpus includes `r nrow(data_reduced)` articles in total, `r ndoc(corpus_subset(corp_reduced, piece == "Massnahme"))` of which are about *The Measures Taken* and `r ndoc(corpus_subset(corp_reduced, piece == "Mutter"))` of which are about *The Mother*. The dates of publication^[The following remarks about dates pertain only to those articles for which precise publication dates were available, i.e. those with day, month and year. These constitute `r articles_perc_with_full_dates`% of the articles in the corpus.] range from `r articles_first_date_written` to `r articles_last_date_written`, representing a two-and-a-half year period.^[The first article, published months before the premiere of *The Measures Taken* by Durus [A. Kemeny] in *Die Rote Fahne* criticizes the oft discussed censoring of the piece by the board of Neue Musik Berlin. d. [Durus], "Kulturreaktion: Revolutionäre Kunst verboten...," *Rote Fahne*, June 4, 1930. Cf. GBA 3:431 and 440 and 24:97-98. I decided to include this article in the corpus on account of its substantive political content, despite that fact that it is of course not a review. Also, note that given that *The Mother* premiered thirteen months after *The Measures Taken*, the publication period of articles pertaining to it is obviously much shorter (slightly under a year). Note too that the aforementioned exclusion of press releases pertaining to the performance of *The Measures Taken* held on Jan. 28, 1933 truncated the time period given above by a over a month and a half.] Importantly, a very substantial proportion of the articles considered here were published within a week of the respective work's premiere: `r articles_mt_premiere_week_perc`% for *The Measures Taken* and `r articles_mother_premiere_week_perc`% for *The Mother*.^[Again, *The Measures Taken* premiered in the late hours of the evening between Dec. 13 and 14, 1930, and *The Mother* premiered on Jan. 17, 1932. BFA 3: 431 and 478.] Especially for the latter, it must be kept in mind that much of the corpus analyzed here consists of articles written about the premiere performances, both of which were held in Berlin.
+Let us begin with some basic figures for the data. The corpus includes `r nrow(data_reduced)` articles in total, `r ndoc(corpus_subset(corp_reduced, piece == "measures"))` of which are about *The Measures Taken* and `r ndoc(corpus_subset(corp_reduced, piece == "mother"))` of which are about *The Mother*. The dates of publication^[The following remarks about dates pertain only to those articles for which precise publication dates were available, i.e. those with day, month and year. These constitute `r articles_perc_with_full_dates`% of the articles in the corpus.] range from `r articles_first_date_written` to `r articles_last_date_written`, representing a two-and-a-half year period.^[The first article, published months before the premiere of *The Measures Taken* by Durus [A. Kemeny] in *Die Rote Fahne* criticizes the oft discussed censoring of the piece by the board of Neue Musik Berlin. d. [Durus], "Kulturreaktion: Revolutionäre Kunst verboten...," *Rote Fahne*, June 4, 1930. Cf. GBA 3:431 and 440 and 24:97-98. I decided to include this article in the corpus on account of its substantive political content, despite that fact that it is of course not a review. Also, note that given that *The Mother* premiered thirteen months after *The Measures Taken*, the publication period of articles pertaining to it is obviously much shorter (slightly under a year). Note too that the aforementioned exclusion of press releases pertaining to the performance of *The Measures Taken* held on Jan. 28, 1933 truncated the time period given above by a over a month and a half.] Importantly, a very substantial proportion of the articles considered here were published within a week of the respective work's premiere: `r articles_mt_premiere_week_perc`% for *The Measures Taken* and `r articles_mother_premiere_week_perc`% for *The Mother*.^[Again, *The Measures Taken* premiered in the late hours of the evening between Dec. 13 and 14, 1930, and *The Mother* premiered on Jan. 17, 1932. BFA 3: 431 and 478.] Especially for the latter, it must be kept in mind that much of the corpus analyzed here consists of articles written about the premiere performances, both of which were held in Berlin.
 
 These articles vary significantly in length. The figure below (**Tokens per Article**) provides a visualization, comparing the lengths of articles after processing (e.g. removing the most commonly used words that provide no relevant information, like pronouns and basic verbs), expressed in number of words or "tokens." These are grouped first by piece and then by political orientation.  
 
@@ -413,7 +412,7 @@ However, perhaps one of the most intriguing reviews of *The Mother* contained in
 
 Although Hochdorf makes no reference to agitprop (as mentioned above, astoundingly, no article on *The Mother* included in the corpus uses the term), his critique in this passage, especially the final points, imply a disdain for anti-psychological, propagandistic theater. This disdain for a different set of aesthetic values separates Hochdorf and like-minded critics from Communists, who advocated for them, and made any sort of aesthetic-based reconciliation impossible. 
 
-Additionally, this passage contains one of only three appearances of "Stalin" or "Stalinism" in the entire corpus. (Given postwar scholarship’s obsession with comparing *The Measures Taken* with the Great Purge of 1936-38 and Stalinism in general, it is significant not one of the `r ndoc(corpus_subset(corp_reduced, piece == "Massnahme"))` articles on *The Measures Taken* contained in this corpus mentions Stalin.) Another can be found in the SPD newspaper in Zwickau, in which Gorky’s recent pledge of support for Stalin is criticized as betrayal of his origins. One of the others can be found in the SPD newspaper in Zwickau, in which Gorky's recent pledge of support for Stalin is criticized as betrayal of his origins. The third appearance of "Stalin" is in a long, extraordinarily critical review of *The Mother*, published two days after the work's premiere in *Germania*, the paper of the Catholic Zentrum [Center] party, which, in the final years of the Weimar Republic, drifted continually to the right.^[H. Bachmann, "Die kommunistische 'Mutter.' Gastspiel im Komödienhaus," *Germania*, Jan. 19, 1932. Brecht was evidently quite familiar with this article. See GBA 24:184, 185 and 187.] "The Communist 'Mother,'" as the article's title refers to the piece, opens with a criticism of Gorky's return to Russia and "his father Stalin, who has long resented him." Like the Social Democrat Hochdorf, the author, H. Bachmann, criticizes Brecht's "Epic Theater" as "primitive." Additionally, Bachmann lambastes the lack of individuality and Vlassova's tactic of deceit in the work's penultimate scene,^[Scene 14. “Vor einer Vaterländischen Kupfersammelstelle.” GBA 3:319-323.] in other words, the work's agitprop-like qualities and strong endorsement of political realism. The article ends with a sweeping criticism and call for the work to be banned:
+Additionally, this passage contains one of only three appearances of "Stalin" or "Stalinism" in the entire corpus. (Given postwar scholarship’s obsession with comparing *The Measures Taken* with the Great Purge of 1936-38 and Stalinism in general, it is significant not one of the `r ndoc(corpus_subset(corp_reduced, piece == "measures"))` articles on *The Measures Taken* contained in this corpus mentions Stalin.) Another can be found in the SPD newspaper in Zwickau, in which Gorky’s recent pledge of support for Stalin is criticized as betrayal of his origins. One of the others can be found in the SPD newspaper in Zwickau, in which Gorky's recent pledge of support for Stalin is criticized as betrayal of his origins. The third appearance of "Stalin" is in a long, extraordinarily critical review of *The Mother*, published two days after the work's premiere in *Germania*, the paper of the Catholic Zentrum [Center] party, which, in the final years of the Weimar Republic, drifted continually to the right.^[H. Bachmann, "Die kommunistische 'Mutter.' Gastspiel im Komödienhaus," *Germania*, Jan. 19, 1932. Brecht was evidently quite familiar with this article. See GBA 24:184, 185 and 187.] "The Communist 'Mother,'" as the article's title refers to the piece, opens with a criticism of Gorky's return to Russia and "his father Stalin, who has long resented him." Like the Social Democrat Hochdorf, the author, H. Bachmann, criticizes Brecht's "Epic Theater" as "primitive." Additionally, Bachmann lambastes the lack of individuality and Vlassova's tactic of deceit in the work's penultimate scene,^[Scene 14. “Vor einer Vaterländischen Kupfersammelstelle.” GBA 3:319-323.] in other words, the work's agitprop-like qualities and strong endorsement of political realism. The article ends with a sweeping criticism and call for the work to be banned:
 
 > Das Ganze ist eine eindeutige, klipp und klare Heroisierung eines revolutionären Frauentyps, herausgeführt aus der bürgerlichen in die klassenkämpferische, proletarische Welt. Ein Lehrstück, - [*sic*] das (wie wohl auch schon vorgesehen) nur ins Russische und in allen anderen Sprachen übersetzt zu werden braucht, um die primitiven Argumentationen der Bolschewiken und ihrer Weltrevolution vor den einfältigsten Hirnen (allerdings nur vor ihnen) beweiskräftig zu machen. Das Stück opponiert hundertprozentig gegen das bei uns herrschende Staatssystem und plädiert für Moskau. Also – [*sic*] muss es verboten werden!
 
