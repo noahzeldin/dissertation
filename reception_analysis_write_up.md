@@ -4,7 +4,7 @@ Political-Aesthetic Space of the Weimar Press: A Quantitative Approach
 ================
 Noah Zeldin
 
-## Introductory Remarks
+**Introductory Remarks**
 
 The following text is taken from section 7 of chapter 2 of my
 dissertation. The code for the computations and visualizations can be
@@ -15,7 +15,7 @@ for other sources, as full references are available in the bibliography.
 
 **Note: Further refinements are forthcoming.**
 
-## Write-Up
+-----
 
 Complementing the analyses of the music and theatrical elements of *The
 Measures Taken* and *The Mother* and the discussions of their
@@ -122,7 +122,7 @@ that provide no relevant information, like pronouns and basic verbs),
 expressed in number of words or “tokens.” These are grouped first by
 piece and then by political orientation.
 
-![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 From this chart,\[11\] the following can be concluded: Although the
 corpus contains significantly more articles about *The Mother*, the
@@ -143,7 +143,7 @@ present several visualizations, which will help answer these and related
 questions.
 
 Note that in the following visualizations, words in majuscules are in
-fact groupings of different forms of the same term.\[13\] (All other
+fact groupings of different forms of the same term.\[12\] (All other
 words, including nouns, have been lowercased as part of the data
 processing. Below, I write the keywords exactly as they appear
 post-processing, meaning that nouns, unless they belong to a grouping in
@@ -153,12 +153,12 @@ single grouping is *LEHRLERN*, which includes all terms related to the
 verbs *Lernen* \[to learn\] and *Lehren* \[to teach\], as well as terms
 related to “pedagogy” and “didacticism.” I felt this expanded grouping
 was appropriate, because it highlights discussions related to pedagogy
-terms that might otherwise have remained hidden.\[14\]
+terms that might otherwise have remained hidden.\[13\]
 
 Let us begin with an examination of a straightforward count of the word
 frequencies for each piece.
 
-![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-26-1.png)<!-- -->
+![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 One sees immediately how terms related to music dominate the reception
 of *The Measures Taken*, while those related to theater dominate the
@@ -166,7 +166,7 @@ reception of *The Mother*.
 
 We can further divide this further by political orientation.
 
-![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
+![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 This subcategorization reveals a few striking tendencies. First, notice
 that “Communism” (*KOMMUNISMUS*) is absent from the leftwing reception
@@ -194,7 +194,7 @@ Furthermore, the terms related to learning and teaching that I have
 grouped together under the keyword *LEHRLERN* appear in 44% of the
 articles on *The Mother* and is the 9th most frequently used term,
 demonstrating that pedagogy was a major concern for contemporary
-reception of the work.\[15\] However, uses of terms in this keyword
+reception of the work.\[14\] However, uses of terms in this keyword
 grouping are of course not necessarily positive, which is the case
 especially for reviews published by the rightwing press. To give just
 one example, the *Deutsche Zeitung*, aligned with the rightwing DNVP,
@@ -205,7 +205,7 @@ criticism:
 > herauskommt, lehrt dieser Abend eines marxistischen Theaterseminars:
 > Es ist angewandter Kommunismus für analphabetische Bedürfnisse, für
 > den Massenwahn der Aufklärung, für die Predigt der ökonomischen
-> Erlösung durch das Gesellschaftseigentum.\[16\]
+> Erlösung durch das Gesellschaftseigentum.\[15\]
 
 In addition to lampooning the pedagogical orientation of the work, this
 review also ridicules its target audience – unskilled workers with low
@@ -219,7 +219,7 @@ that just because a word appears in one group does not mean it is wholly
 absent from another, but rather that it is more strongly associated with
 a particular group.
 
-![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
+![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 Most immediately clear is the association of terms related to theater
 (*THEATER*, *EPISCH*, *DRAMA*) with *The Mother* and those related to
@@ -240,22 +240,22 @@ The word “oratorio” appears in 9 articles on *The Measures Taken*. A
 mixed review of the performance held in Vienna on September 20, 1932
 published in the main organ of the Austrian Social Democrats states
 plainly, “Its form is by no means that of a play \[*Theaterstück*\] but
-rather that of an oratorio of today\[.\]”\[17\]Similarly, a positive
+rather that of an oratorio of today\[.\]”\[16\]Similarly, a positive
 review in Münzenberg’s, i.e. Communist-aligned, *Berlin am Morgen* bears
-the title, “The Oratorio of Tomorrow. The Measures Taken.”\[18\] The
+the title, “The Oratorio of Tomorrow. The Measures Taken.”\[17\] The
 glowing review by the well-known music critic and champion of modernism,
 Hans Heinz Stuckenschmidt, published in the liberal *Berliner Zeitung*,
 even includes the word in its title, calling the work a “political
-oratorio.”\[19\] Uses of the term are a mixture of neutral description,
+oratorio.”\[18\] Uses of the term are a mixture of neutral description,
 praise and criticism. For instance, the Communist *Welt am Abend* viewed
 the work as having superseded the antiquated religious oratorio, thereby
 implying a strong formal or generic affinity: “The form of the
 learning-piece opens up great possibilities, especially for the working
 class, which wants to create its own art and culture. The musical
 oratorio, which draws its strength from religious sources, is dead. The
-proletarian learning-piece has the chance to take its place.”\[20\]
+proletarian learning-piece has the chance to take its place.”\[19\]
 Another article by Durus (Alfred Kemeny), published in the
-Communist-controlled\[21\] ATBD’s periodical, *Arbeiterbühne und Film*,
+Communist-controlled\[20\] ATBD’s periodical, *Arbeiterbühne und Film*,
 takes a similar stance:
 
 > From the perspective of the worker-singers’ movement, *The Measures
@@ -264,12 +264,12 @@ takes a similar stance:
 > works for worker-singers, but instead a literary and musically high
 > quality composition \[*Gestaltung*\], which not only and also not
 > primarily delivers aesthetic pleasures but also challenges the
-> listener to assume a political position.”\[22\]
+> listener to assume a political position.”\[21\]
 
 We see that references to the oratorio are largely general and apply to
 the work as a whole. In fact, the only piece singled out for association
 with the oratorio is “Lob der illegalen Arbeit,” which arguably contains
-some of the most involved choral material in the whole work.\[23\]
+some of the most involved choral material in the whole work.\[22\]
 
 All of this presents further evidence for my claim that *The Measures
 Taken* should be considered first and foremost an oratorio or at the
@@ -282,9 +282,9 @@ A final, informative word cloud is that for keywords in the reception of
 given that there are only two clearly identifiable rightwing articles on
 *The Measures Taken*, it makes little sense to present a comparable word
 cloud for that piece.) Articles with unknown political orientation have
-been omitted.\[24\]
+been omitted.\[23\]
 
-![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 One immediately notices the words “proletarian” (*PROLETARISCH*), a
 positively connoted keyword for the leftwing press, and “Communism”
@@ -299,7 +299,7 @@ Mother*. This contrasts greatly with *The Measures Taken*, which is
 filled with references to the Communist Party and the Soviet Union.
 Additionally, it is plausible that the Communist press played down the
 “Communistic” angle of the piece, in the hope that it would attract
-Social Democratic and unaffiliated workers.\[25\] Conversely, rightwing
+Social Democratic and unaffiliated workers.\[24\] Conversely, rightwing
 outlets would have been motivated to defame the piece as little more
 than “Communist propaganda.” Indeed, among the keywords for the
 rightwing press are “propaganda” and “Bolshevism” (*BOLSCHEWISMUS*),
@@ -320,8 +320,8 @@ political aspects of the piece. And indeed, we see political keywords
 like “strike,” “worker,” “job,” “businessman,” “employees,” “masses,”
 “arrested,” and “flag” are all associated with leftwing outlets.
 Interestingly, there is no strong association with either
-“learning-piece” (*LEHRSTÜCK*) or *LEHRLERN*\[26\] with any of the
-political groupings.\[27\] However, the word cloud, to repeat, measures
+“learning-piece” (*LEHRSTÜCK*) or *LEHRLERN*\[25\] with any of the
+political groupings.\[26\] However, the word cloud, to repeat, measures
 keyness or relative frequency and not absolute figures. I demonstrated
 above that the the word “learning-piece” is a significant feature of the
 reception of *The Mother*.
@@ -329,11 +329,11 @@ reception of *The Mother*.
 A final remark about this word cloud: The keyword “primitive”
 (*PRIMITIV*) is associated with rightwing outlets. This corresponds to
 Brecht’s remark that “in a certain part of the bourgeois press\[,\]”
-*The Mother* was labeled “primitive.”\[28\] In fact, both centrist and
-rightwing publications used the word in their reviews.\[29\] Similarly,
+*The Mother* was labeled “primitive.”\[27\] In fact, both centrist and
+rightwing publications used the word in their reviews.\[28\] Similarly,
 words relating to “boredom” (the grouping *LANGWEILIG* includes both
 “boredom” \[*Langeweile*\] and “boring” \[*langweilig*\]) were also
-used by the centrist and rightwing press.\[30\]
+used by the centrist and rightwing press.\[29\]
 
 The macro-level statistical analysis confirms my observation from
 reading the individual reviews for the piece: The non-leftwing press was
@@ -342,7 +342,7 @@ content and aesthetic features, while the leftwing press universally
 praised it. Let us examine a couple of notable examples.
 
 One of the most critical articles on *The Mother* was unsurprisingly
-published in the Nazi *Völkischer Beobachter*.\[31\] The subtle title,
+published in the Nazi *Völkischer Beobachter*.\[30\] The subtle title,
 “Brecht’s Bolshevist ‘Mother’-Propaganda,” indicates the direction the
 article will take. It is worth reproducing text in its entirety, in
 order to give an impression of the extreme politicization of Weimar
@@ -378,16 +378,16 @@ published an article with the title, “The Mother. Proletarian
 Organizations Recommend the New Work,” which not only praised the work
 but, as the title indicates, stated that “\[a\] whole array of
 proletarian organizations” (all aligned with the KPD, of course) “highly
-recommend that their members attend performances \[of the work\].”\[32\]
+recommend that their members attend performances \[of the work\].”\[31\]
 Another short article, published a week later in the same newspaper
 under the title, “***Are you familiar with*** the Learning-piece ‘The
 Mother’?”, contains a similar urging to its readership: “Go with your
 wife to *The Mother*. Every woman, every mother must see the new
-Marxist, ***lebendige***, innovative drama *The Mother*.”\[33\] Given,
+Marxist, ***lebendige***, innovative drama *The Mother*.”\[32\] Given,
 however, that, for example, these and other the main KPD organ, the Rote
 FahneCommunist aligned newspapers, including KPD organs, advertised the
 piece and offered discounted tickets to their subscribers, this kind of
-encouragement is unsurprising.\[34\]
+encouragement is unsurprising.\[33\]
 
 One of the most detailed and laudatory leftwing articles on *The Mother*
 was published shortly after the premiere in the *Rote Fahne* under the
@@ -404,8 +404,8 @@ critics.
 However, perhaps one of the most intriguing reviews of *The Mother*
 contained in the corpus was published in the main SPD organ *Vorwärts*
 (to be precise, in the evening edition, *Der Abend*), the day after the
-work’s premiere.\[35\] The author, Max Hochdorf, tries to reclaim
-Gorky’s novel for the Social Democrats\[36\] and criticizes Brecht,
+work’s premiere.\[34\] The author, Max Hochdorf, tries to reclaim
+Gorky’s novel for the Social Democrats\[35\] and criticizes Brecht,
 who “racks his brains on his epic theater\[,\]” which Hochdorf later
 calls a “pseudo-theater” \[*Halbtheater*\]. Hochdorf’s aesthetic
 conservatism, arguably a manifestation of some of the trends discussed
@@ -444,13 +444,13 @@ Stalin is criticized as betrayal of his origins. The third appearance of
 “Stalin” is in a long, extraordinarily critical review of *The Mother*,
 published two days after the work’s premiere in *Germania*, the paper of
 the Catholic Zentrum \[Center\] party, which, in the final years of the
-Weimar Republic, drifted continually to the right.\[37\] “The Communist
+Weimar Republic, drifted continually to the right.\[36\] “The Communist
 ‘Mother,’” as the article’s title refers to the piece, opens with a
 criticism of Gorky’s return to Russia and “his father Stalin, who has
 long resented him.” Like the Social Democrat Hochdorf, the author, H.
 Bachmann, criticizes Brecht’s “Epic Theater” as “primitive.”
 Additionally, Bachmann lambastes the lack of individuality and
-Vlassova’s tactic of deceit in the work’s penultimate scene,\[38\] in
+Vlassova’s tactic of deceit in the work’s penultimate scene,\[37\] in
 other words, the work’s agitprop-like qualities and strong endorsement
 of political realism. The article ends with a sweeping criticism and
 call for the work to be banned:
@@ -467,7 +467,7 @@ call for the work to be banned:
 > muss es verboten werden\!
 
 This corresponds to the similarly dramatic ending of the above-discussed
-review in the rightwing *Deutsche Zeitung*:\[39\]
+review in the rightwing *Deutsche Zeitung*:\[38\]
 
 > Der politische Marxismus hat – das lehrt diese primitive, aber
 > gefährliche Aufführung – seinen dramaturgischen Stil und seine
@@ -486,7 +486,7 @@ I will conclude the examination of the reception of *The Measures Taken*
 and *The Mother* with a concretization of what I have referred to as the
 political-aesthetic space of the Weimar Press via correspondence
 analysis (CA), a spatial representation of the associations between
-variables.\[40\] The goal of conducting the CA is to measure (and
+variables.\[39\] The goal of conducting the CA is to measure (and
 visualize) the tendencies described above, that is, the association of
 certain words and thus the reception of *The Measures Taken* and *The
 Mother* and political affiliation. In other words, the CA will determine
@@ -497,23 +497,23 @@ deviation in vocabulary. Note that I use the same processed data set for
 the CA that I used for the above visualizations and analysis.
 
 The figure below presents the CA with six groups, corresponding to the
-known political affiliations for each work,\[41\] with the top twenty
+known political affiliations for each work,\[40\] with the top twenty
 contributing keywords, several of which are recognizable from the
 visualizations presented above. The horizontal axis represents the
 aesthetic space. Terms associated with *The Mother* are pulled to the
 left, while those associated with *The Measures Taken* are pulled to the
 right. The vertical axis represents the political space.
 
-![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 The following two figures provide cropped reproductions of the left and
 right halves of the previous figure for additional readability.
 
-![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
+![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
  
 
-![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
+![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 There is incredible consistency on the vertical plane, i.e. in the
 political space. For both works, the centrist and rightwing press are
@@ -536,7 +536,7 @@ more strongly associated with non-leftwing reviews of *The Measures
 Taken*. At the same time, however, the keyword grouping *ARBEITERSÄNGER*
 \[worker-singers\] is strongly associated with the leftwing press. (NB:
 The analyzed corpus includes only one article on *The Measures Taken*
-published in an official SPD organ.)\[42\] This indicate that leftwing
+published in an official SPD organ.)\[41\] This indicate that leftwing
 (and therefore Communist) outlets were, in comparison to the
 non-leftwing press, relatively more concerned with the political content
 of the work and with the worker-singers’ movement than with the
@@ -663,63 +663,61 @@ unique place and time.
     “Politische Musik zu Brecht-Eislers ‘Maßnahme,’” *Der Anbruch*
     XIII, vol. 1, 1931.
 
-12. See appendix ***???*** for a complete list of these groupings.
-
-13. For instance, “music”, “musical” and “musically” have been grouped
+12. For instance, “music”, “musical” and “musically” have been grouped
     under the keyword *MUSIK*, so that they are counted as a single
     token, which of course increases their significance in the
-    statistical analysis.\[12\] This practice is particularly relevant
-    for German texts, because the same adjective with a different
+    statistical analysis. This practice is particularly relevant for
+    German texts, because the same adjective with a different
     declination (e.g. *musikalische* versus *musikalischen*) would
     otherwise count as a separate token.
 
-14. On the other hand, I take my decision to group the various forms of
+13. On the other hand, I take my decision to group the various forms of
     *Lied*, the German word for song, and the Anglicism *Song* under a
     single token \[*LIED*\] to be rather harmless.
 
-15. Perhaps somewhat surprisingly, this keyword grouping appears most
+14. Perhaps somewhat surprisingly, this keyword grouping appears most
     frequently in centrist articles (38% of appearances) on *The Mother*
     and much less frequently in leftwing articles (23%).
 
-16. Richard Biedrynski, “Gruppe junger Schauspieler im Komödienhaus.
+15. Richard Biedrynski, “Gruppe junger Schauspieler im Komödienhaus.
     Marxistische Theaterschule. Bert Brecht - Maxim Gorki: ‘Die
     Mutter,’” *Deutsche Zeitung*, Jan. 18, 1932.
 
-17. D. J. Bach, “Die revolutionäre Aufgabe und der einzelne. ‘Die
+16. D. J. Bach, “Die revolutionäre Aufgabe und der einzelne. ‘Die
     Maßnahme’, Lehrstück von Brecht und Eisler,” *Arbeiter-Zeitung*,
     Sept. 24, 1932. The author is highly critical of the work’s plot and
     text and lukewarm on Eisler’s music but praises the performance and
     actually calls for additional performances to be organized.
 
-18. F.C.W. and P.H., “Das Oratorium von morgen,” *Berlin am Morgen*,
+17. F.C.W. and P.H., “Das Oratorium von morgen,” *Berlin am Morgen*,
     Dec. 16, 1930.
 
-19. Hans Heinz Stuckenschmidt, “Ein politisches Oratorium. Brecht-Eisler
+18. Hans Heinz Stuckenschmidt, “Ein politisches Oratorium. Brecht-Eisler
     ‘Die Maßnahme,’” *Berliner Zeitung*, Dec. 15, 1930. See the
     discussion of Stuckenschmidt and his reception of The Measures Taken
     in Brecht et al., *Die Maßnahme*, ed. Krüger, 93.
 
-20. Paul Friedländer, “Die Maßnahme. Zur Wiederaufführung im Großen
+19. Paul Friedländer, “Die Maßnahme. Zur Wiederaufführung im Großen
     Schauspielhaus,” *Welt am Abend*, Jan. 24, 1931.
 
-21. Discussed in ch. 1.8.
+20. Discussed in ch. 1.8.
 
-22. Durus \[A. Kemeny\], “Die ‘Maßnahme’, ein Lehrstück,” *Arbeiterbühne
+21. Durus \[A. Kemeny\], “Die ‘Maßnahme’, ein Lehrstück,” *Arbeiterbühne
     und Film* (Feb. 1931).
 
-23. See L. Sp., “Musik im Propagandakampf. ‘Die Maßnahme’ in der
+22. See L. Sp., “Musik im Propagandakampf. ‘Die Maßnahme’ in der
     Philharmonie,” *Vossische Zeitung*, Dec. 15, 1930.
 
-24. These constitute 21% of articles on *The Mother*.
+23. These constitute 21% of articles on *The Mother*.
 
-25. Dümling, *Lasst euch*, 335-39 notes Brecht and Eisler’s desire to
+24. Dümling, *Lasst euch*, 335-39 notes Brecht and Eisler’s desire to
     engage with a diverse working-class audience, including
     non-Communists, in the early 1930s.
 
-26. As explained above, this is a collection of the various forms of the
+25. As explained above, this is a collection of the various forms of the
     terms “learning” and “teaching.”
 
-27. Other terms related to pedagogy, “knowledge” \[*Wissen*\] and
+26. Other terms related to pedagogy, “knowledge” \[*Wissen*\] and
     *Bildung* occur infrequently but are strongly associated with the
     leftwing press. All four instances of Bildung occur in just two
     Communist articles, both on *The Mother*. “Knowledge” \[*Wissen*\]
@@ -731,9 +729,9 @@ unique place and time.
     Wissen nichts Langweiliges, dass Theorie das Lebendigste des Alltags
     ist, wenn sie sich mit der Praxis verwebt.”
 
-28. See GBA 24:114-15.
+27. See GBA 24:114-15.
 
-29. In the word cloud above, the word appears to be associated with the
+28. In the word cloud above, the word appears to be associated with the
     rightwing press on *The Mother*, because the majority of appearances
     of the term were in rightwing publications. However, 15 centrist
     articles also use the word, while only 2 articles from leftwing
@@ -759,7 +757,7 @@ unique place and time.
     Aufführung der ‘Gruppe Junger Schauspieler,’” *Welt am Abend*,
     18.01.1932.
 
-30. Only a single leftwing article - Paul Brand, “Brechts Lehrstück in
+29. Only a single leftwing article - Paul Brand, “Brechts Lehrstück in
     großer Erfolg. Gorkis ‘Mutter’ von Bert Brecht, Eisler und
     Weisenborn”, *Rote Fahne*, Jan. 19, 1932 - uses any variant of
     “boring” or “boredom” and uses it simply to state that, relating
@@ -768,22 +766,22 @@ unique place and time.
     keyword groupings (“boring” and “primitive”), none of which are
     leftwing.
 
-31. "Brechts bolschewistische ‘Mutter“-Propaganda,’ *Völkischer
+30. "Brechts bolschewistische ‘Mutter“-Propaganda,’ *Völkischer
     Beobachter*
 
-32. “Die Mutter. Proletarische Organisationen empfehlen das neue Stück,”
+31. “Die Mutter. Proletarische Organisationen empfehlen das neue Stück,”
     *Berlin am Morgen*, Jan. 17, 1932.
 
-33. “Kennen sie schon das Lehrstück ‘die Mutter’?”
+32. “Kennen sie schon das Lehrstück ‘die Mutter’?”
 
-34. Virtually identical advertisements for The Mother, including
+33. Virtually identical advertisements for The Mother, including
     exclusive (and presumably, discounted) tickets for subscribers,
     occupies the bottom third of p. 13 of the *Rote Fahne*, Jan. 22,
     1932 and on p. 12 of the issue from Jan. 24, 1932. The latter page
     also contains an article on the political feuds within the DASB:
     “Rote Front der Arbeitersänger.”
 
-35. Max Hochdorf, “Bert Brechts Episches Theater,” *Der Abend*, Jan. 18,
+34. Max Hochdorf, “Bert Brechts Episches Theater,” *Der Abend*, Jan. 18,
     1932. As a reminder of the political situation of the time, the
     previous page of the issue contains both an article on two recent
     attacks by Nazis on youth members of the Social Democratic defense
@@ -795,20 +793,20 @@ unique place and time.
     “Selbstschuss der Demokratie. Unparteiische Entwaffnung in
     Deutschösterreich,” ibid.
 
-36. Hochdorf notes correctly that the German translation of the novel
+35. Hochdorf notes correctly that the German translation of the novel
     was first published in Vorwärts in 1907 (also noted in GBA 3:479 and
     BHB 1:295).
 
-37. H. Bachmann, “Die kommunistische ‘Mutter.’ Gastspiel im
+36. H. Bachmann, “Die kommunistische ‘Mutter.’ Gastspiel im
     Komödienhaus,” *Germania*, Jan. 19, 1932. Brecht was evidently
     quite familiar with this article. See GBA 24:184, 185 and 187.
 
-38. Scene 14. “Vor einer Vaterländischen Kupfersammelstelle.” GBA
+37. Scene 14. “Vor einer Vaterländischen Kupfersammelstelle.” GBA
     3:319-323.
 
-39. Biedrynski, “Marxistische Theaterschule.”
+38. Biedrynski, “Marxistische Theaterschule.”
 
-40. To put it somewhat more technically, “The objective is to construct
+39. To put it somewhat more technically, “The objective is to construct
     a low-dimensional map that well summarizes the data, which in the
     case of CA are the associations between two categorical variables.”
     Michailidis, “Correspondence Analysis,” n.p. As the reader may be
@@ -825,10 +823,10 @@ unique place and time.
     Deschamps, “Correspondence Analysis” provides a tutorial that uses
     the same R package, FactoMineR.
 
-41. Articles with “unknown” political orientation have been excluded,
+40. Articles with “unknown” political orientation have been excluded,
     constituting 19% of the corpus.
 
-42. K. P., “‘Die Maßnahme.’ Nachtvorstellung in der Philharmonie,”
+41. K. P., “‘Die Maßnahme.’ Nachtvorstellung in der Philharmonie,”
     *Vorwärts*, Dec. 15, 1930. Note that although this article does not
     mention “worker-singers,” it does discuss the DASB and the three
     choirs which participated in the premiere performance. While I am

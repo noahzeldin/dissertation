@@ -71,6 +71,9 @@ Noah Zeldin
       - [8.2 Wordclouds](#wordclouds)
       - [8.3 Word Frequency](#word-frequency)
       - [8.4 Correspondence Analysis](#correspondence-analysis)
+  - [9 Additional Values for In-Line Code included in
+    Write-Up](#additional-values-for-in-line-code-included-in-write-up)
+  - [10 Final Step: Save Workspace](#final-step-save-workspace)
 
 # 1 Introductory Remarks
 
@@ -1554,3 +1557,228 @@ ca_mother
 ```
 
 ![](reception_analysis_files/figure-gfm/unnamed-chunk-90-1.png)<!-- -->
+
+# 9 Additional Values for In-Line Code included in Write-Up
+
+The following variables are used as in-line code in the
+[write-up](https://github.com/noahzeldin/dissertation/blob/main/reception_analysis_write_up.md)
+included in ch. 2.7 and have been provided here in the interest of
+transparency and reproducibility.
+
+``` r
+# Create tibble with top 15 most frequent terms in titles.
+mother_title_freq_top_15 <- textstat_frequency(mother_title_dfm, n = 15) %>% 
+    as_tibble() 
+```
+
+``` r
+# Docfreq of Lehrstück
+mother_title_docfreq_lehrstueck <- mother_title_freq_top_15 %>% 
+  filter(feature == "LEHRSTÜCK") %>% 
+  select(docfreq) %>% 
+  as.numeric()
+```
+
+``` r
+# Percent of titles in which Lehrstück appears
+mother_title_docfreq_lehrstueck_perc <- 
+  round(mother_title_docfreq_lehrstueck/ndoc(mother_title_dfm) * 100)
+```
+
+``` r
+# Rank of Lehrstück
+mother_title_rank_lehrstueck <- mother_title_freq_top_15 %>% 
+  filter(feature == "LEHRSTÜCK") %>% 
+  select(rank) %>% 
+  as.numeric()
+```
+
+``` r
+# Create tibble with top 30 most frequent terms in texts
+mother_freq_top_30 <- textstat_frequency(mother_dfm, n = 30) %>% 
+    as_tibble() 
+```
+
+``` r
+# Freq of Lehrstück in Mutter Texts
+mother_freq_lehrstueck <- mother_freq_top_30 %>% 
+  filter(feature == "LEHRSTÜCK") %>% 
+  select(frequency) %>% 
+  as.numeric()
+```
+
+``` r
+# Docfreq of Lehrstück
+mother_docfreq_lehrstueck <- mother_freq_top_30 %>% 
+  filter(feature == "LEHRSTÜCK") %>% 
+  select(docfreq) %>% 
+  as.numeric()
+```
+
+``` r
+# Percent of articles in which Lehrstück appears
+mother_docfreq_lehrstueck_perc <- 
+  round(mother_docfreq_lehrstueck/ndoc(mother_dfm) * 100)
+```
+
+``` r
+# Docfreq of LEHRLERN
+mother_docfreq_lehrlern <- mother_freq_top_30 %>% 
+  filter(feature == "LEHRLERN") %>% 
+  select(docfreq) %>% 
+  as.numeric()
+```
+
+``` r
+# Percent of articles in which LEHRLERN appears
+mother_docfreq_lehrlern_perc <- 
+  round(mother_docfreq_lehrlern/ndoc(mother_dfm) * 100)
+```
+
+``` r
+# Rank of LEHRLERN
+mother_rank_lehrlern <- mother_freq_top_30 %>% 
+  filter(feature == "LEHRLERN") %>% 
+  select(rank) %>% 
+  as.numeric()
+```
+
+``` r
+# center + primitiv
+primitiv_center_no_articles <- 
+  primitiv_kwic %>% 
+  filter(general_political_orientation == "center") %>% 
+  count(article) %>% 
+  nrow() %>% 
+  as.numeric()
+```
+
+``` r
+# left + primitiv
+primitiv_left_no_articles <- 
+  primitiv_kwic %>% 
+  filter(general_political_orientation == "left") %>% 
+  count(article) %>% 
+  nrow() %>% 
+  as.numeric()
+```
+
+``` r
+# langweilig + primitiv
+langweilig_primitiv_no_articles <- 
+  langweilig_primitiv_kwic %>% 
+  count(article) %>% 
+  nrow() %>% 
+  as.numeric()
+```
+
+``` r
+# Oratorium in Measures Taken
+oratorium_mt_no_articles <- oratorium_mt_kwic %>% 
+  count(article) %>% 
+  nrow() %>% 
+  as.numeric()
+```
+
+``` r
+# Appearances in Centrist Press
+lehrlern_mother_center_no_appearances <- 
+  lehrlern_mother_gpo_count %>% 
+  filter(doc_id == "center") %>% 
+  select(LEHRLERN) %>% 
+  as.numeric()
+```
+
+``` r
+# Percent of appearances in Centrist Press
+lehrlern_mother_center_perc <- 
+  round((lehrlern_mother_center_no_appearances / 
+           lehrlern_mother_gpo_count$LEHRLERN %>% sum())
+        * 100)
+```
+
+``` r
+# Appearances in Leftwing Press
+lehrlern_mother_left_no_appearances <- 
+  lehrlern_mother_gpo_count %>% 
+  filter(doc_id == "left") %>% 
+  select(LEHRLERN) %>% 
+  as.numeric()
+```
+
+``` r
+# Percent of appearances in Leftwing Press
+lehrlern_mother_left_perc <- 
+  round((lehrlern_mother_left_no_appearances / 
+           lehrlern_mother_gpo_count$LEHRLERN %>% sum())
+        * 100)
+```
+
+``` r
+# Percent with Unknown GPO - Both Pieces
+articles_unknown_gpo_perc <- round((data_reduced %>% 
+  filter(general_political_orientation == "unknown") %>% 
+  nrow()) /
+    data_reduced %>% nrow() * 100)    
+```
+
+``` r
+# Percent with Unknown GPO - Mutter
+articles_unknown_gpo_mother_perc <- round((data_reduced %>% 
+  filter(general_political_orientation == "unknown" &
+            piece == "mother") %>% 
+  nrow()) /
+    data_reduced %>% filter(piece == "mother") %>% nrow() * 100)    
+```
+
+``` r
+# DATES
+
+# first article
+## save individual components as strings
+articles_first_month <- month(articles_first_date, 
+                              label = TRUE, abbr = FALSE) %>%
+  as.character()
+
+articles_first_day <- day(articles_first_date) %>% as.character()
+
+articles_first_year <- year(articles_first_date) %>% as.character()
+
+## combine into single string
+articles_first_date_written <- str_c(articles_first_month, 
+                                     articles_first_day, 
+                                sep = " ")
+
+articles_first_date_written <- str_c(articles_first_date_written,
+                                     articles_first_year, 
+                                sep = ", ")
+
+# last article
+## save individual components as strings
+articles_last_month <- month(articles_last_date, label = TRUE, abbr = FALSE) %>%
+  as.character()
+
+articles_last_day <- day(articles_last_date) %>% as.character()
+
+articles_last_year <- year(articles_last_date) %>% as.character()
+
+## combine into single string
+articles_last_date_written <- str_c(articles_last_month, 
+                                    articles_last_day, 
+                                sep = " ")
+
+articles_last_date_written <- str_c(articles_last_date_written,
+                                    articles_last_year, 
+                                sep = ", ")
+```
+
+# 10 Final Step: Save Workspace
+
+It is necessary to save the workspace as a `.Rdata` file so that the
+code included in the write-up can access the data from the global
+environment of the code in this script. It will look something like
+this:
+
+``` r
+save.image(file = "SPECIFIED DIRECTORY/reception_analysis.Rdata")
+```
