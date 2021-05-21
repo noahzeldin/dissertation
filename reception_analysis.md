@@ -39,8 +39,8 @@ Noah Zeldin
       - [6.1 Create function to link KWIC with
         data](#create-function-to-link-kwic-with-data)
       - [6.2 Explore various KWIC](#explore-various-kwic)
-          - [6.2.1 Special Case: LEHRLERN in rightwing articles on *The
-            Mother*](#special-case-lehrlern-in-rightwing-articles-on-the-mother)
+          - [6.2.1 Special Cases: LEHRLERN in rightwing articles on *The
+            Mother*](#special-cases-lehrlern-in-rightwing-articles-on-the-mother)
       - [6.3 Additional Terms Post-Processing
         (DFMs)](#additional-terms-post-processing-dfms)
   - [7 Dates of Publication with
@@ -77,11 +77,14 @@ Noah Zeldin
 Below is the annotated set-up for my quantitative analysis of the
 Weimar-era reception of Brecht and Eisler’s *The Measures Taken* and
 *The Mother*, which is included in the second chapter of my
-dissertation. This analysis was conducted in
-[R](https://www.r-project.org/) and relies heavily on the
-[quanteda](https://quanteda.io/) package (for general manipulation, word
-counts, etc.) and [FactoMineR](http://factominer.free.fr/index.html)
-package (for correspondence analysis). (Also, I have tried to use
+dissertation. The write-up is available
+[here](https://github.com/noahzeldin/dissertation/blob/main/reception_analysis_write_up.md).
+
+This analysis was conducted in [R](https://www.r-project.org/) and
+relies heavily on the [quanteda](https://quanteda.io/) package (for
+general manipulation, word counts, etc.) and
+[FactoMineR](http://factominer.free.fr/index.html) package (for
+correspondence analysis). (Also, I have tried to use
 [tidyverse](https://www.tidyverse.org/) syntax as consistently as
 possible.) The data set will be made available to researchers upon
 request.
@@ -830,7 +833,7 @@ combine_kwic_with_data(corp, "Kantate*", 25) %>%
 
 No results.
 
-### 6.2.1 Special Case: LEHRLERN in rightwing articles on *The Mother*
+### 6.2.1 Special Cases: LEHRLERN in rightwing articles on *The Mother*
 
 As I explain in ch. 2, **LEHRLERN** is the only term in the keyword
 diction (see above) that can be considered an interpretative combination

@@ -4,6 +4,17 @@ Political-Aesthetic Space of the Weimar Press: A Quantitative Approach
 ================
 Noah Zeldin
 
+## Introductory Remarks
+
+The following text is taken from section 7 of chapter 2 of my
+dissertation. The code for the computations and visualizations can be
+found
+[here](https://github.com/noahzeldin/dissertation/blob/main/reception_analysis.md).
+As with the rest of the dissertation, I provide abbreviated references
+for other sources, as full references are available in the bibliography.
+
+**Note: Further refinements are forthcoming.**
+
 Complementing the analyses of the music and theatrical elements of *The
 Measures Taken* and *The Mother* and the discussions of their
 performance histories, the final section of this chapter treats these

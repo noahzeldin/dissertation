@@ -291,6 +291,12 @@ articles_last_date_written <- str_c(articles_last_date_written,
 ```
 
 
+## Introductory Remarks
+
+The following text is taken from section 7 of chapter 2 of my dissertation. The code for the computations and visualizations can be found [here](https://github.com/noahzeldin/dissertation/blob/main/reception_analysis.md). As with the rest of the dissertation, I provide abbreviated references for other sources, as full references are available in the bibliography.
+
+**Note: Further refinements are forthcoming.**
+
 
 
 
