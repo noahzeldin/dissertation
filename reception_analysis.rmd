@@ -698,7 +698,7 @@ combine_kwic_with_data(corp, "Kantate*", 25) %>%
 
 No results.
 
-### Special Case: LEHRLERN in rightwing articles on *The Mother*
+### Special Cases: LEHRLERN in rightwing articles on *The Mother*
 
 As I explain in ch. 2, **LEHRLERN** is the only term in the keyword diction (see
 above) that can be considered an interpretative combination of different words, 
@@ -727,6 +727,7 @@ Filter for *The Mother* and right GPO:
 lehrlern_kwic_mother_right <- lehrlern_kwic %>% 
   filter(piece == "mother" & general_political_orientation == "right")
 ```
+
 
 ## Additional Terms Post-Processing (DFMs)
 
@@ -1302,6 +1303,14 @@ ca_mother <- ca_mother +
   theme_bw() 
 
 ca_mother
+```
+
+
+
+
+```{r, include = FALSE}
+# save workspace to reuse data in write_up file
+save.image(file = "C:/Users/Noah Zeldin/Documents/R stuff/R projects/dissertation/reception_analysis_files/reception_analysis.Rdata")
 ```
 
 
