@@ -71,10 +71,11 @@ Noah Zeldin
 # 1 Introductory Remarks
 
 Below is the annotated set-up for my formal analysis of Hanns Eisler’s
-music to *The Measures Taken*, which is included in the second chapter
-of my dissertation. This analysis was conducted in
-[R](https://www.r-project.org/). (I have tried to use
-[tidyverse](https://www.tidyverse.org/) syntax as consistently as
+music to [*The Measures
+Taken*](https://www.universaledition.com/hanns-eisler-199/works/die-massnahme-2040),
+which is included in the second chapter of my dissertation. This
+analysis was conducted in [R](https://www.r-project.org/). (I have tried
+to use [tidyverse](https://www.tidyverse.org/) syntax as consistently as
 possible. I therefore refer to tables as
 [“tibbles”](https://tibble.tidyverse.org/).) Data sets will be made
 available to researchers upon request.
