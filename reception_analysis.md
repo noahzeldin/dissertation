@@ -87,9 +87,9 @@ This analysis was conducted in [R](https://www.r-project.org/) and
 relies heavily on the [quanteda](https://quanteda.io/) package (for
 general manipulation, word counts, etc.) and
 [FactoMineR](http://factominer.free.fr/index.html) package (for
-correspondence analysis). (Also, I have tried to use
+correspondence analysis). Also, I have tried to use
 [tidyverse](https://www.tidyverse.org/) syntax as consistently as
-possible.) The data set will be made available to researchers upon
+possible. The data set will be made available to researchers upon
 request.
 
 The **main goals** of this analysis are:
@@ -107,9 +107,6 @@ The **main goals** of this analysis are:
 
 The final version of the code will be included in the supplementary
 materials of the dissertation.
-
-In the near future, I will upload the corresponding write-up included in
-ch. 2 of my dissertation to this repository.
 
 # 2 Load Packages
 
