@@ -1006,7 +1006,7 @@ texture_tib_mm %>%
 Create tibble:
 
 ```{r}
-texture_tib_dur <- gen_tib %>% 
+texture_tib_dur <- gen_tib %>% # same results w/ gen_tib_sung
     filter(texture != "na") %>% 
     group_by(texture) %>% 
     summarize(duration = dur_choir) %>% 
@@ -1028,26 +1028,6 @@ texture_tib_dur %>%
 
 
 ### Individual Pieces (By Duration)
-
-Create tibble (`texture_piece_dur`):
-
-```{r}
-texture_piece_dur <- gen_tib %>% 
-    filter(texture != "na") %>% 
-    group_by(piece_no, texture) %>% 
-    summarize(duration = dur_choir) %>% 
-    summarize(duration = sum(duration)) %>% 
-    mutate(prop_of_piece = round((duration/sum(duration)), 
-                                 digits = 2)) %>% 
-    group_by(piece_no) %>% 
-    mutate(dur_piece = sum(duration)
-           ) %>% 
-    relocate(dur_piece, .after = duration) %>% 
-    ungroup() %>% 
-    mutate(prop_of_work = round((duration / sum(duration)), 
-                                digits = 3),
-           prop_piece_of_work = dur_piece/sum(dur_piece)) # check if necessary
-```
 
 Create mosaic plot, displaying proportion of each texture in each piece:
 
