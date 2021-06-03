@@ -2,7 +2,7 @@
 title: "Measures Taken Formal Analysis Chapter Write-Up"
 author: "Noah Zeldin"
 date: "6/2/2021"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
