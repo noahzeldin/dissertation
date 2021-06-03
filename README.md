@@ -13,6 +13,8 @@ final years of the Weimar Republic.
 
   + The code (annotated) is available [here](https://github.com/noahzeldin/dissertation/blob/main/mt_music_analysis.md). 
 
+  + An excerpt from the corresponding write-up included in my dissertation is available [here](https://github.com/noahzeldin/dissertation/blob/main/mt_music_analysis_write_up.md).
+
 * The second is a quantitative analysis of over 120 articles on *The Measures 
 Taken* and *The Mother* from the notoriously partisan press of the Weimar 
 Republic.
