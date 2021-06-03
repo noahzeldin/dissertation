@@ -1413,6 +1413,247 @@ Results show that factoring in duration makes *very* little difference.
 
 
 
+# Additional Values for In-Line Code included in Write-Up
+
+The following variables are used as in-line code in the 
+[write-up](https://github.com/noahzeldin/dissertation/blob/main/reception_analysis_write_up.md) 
+included in ch. 2.7 and have been provided here in the interest of transparency 
+and reproducibility.
+
+## Texture
+
+### Unweighted (number of mm.)
+
+1. Antiphony
+
+```{r}
+antiphony_percent_unweighted <- texture_tib_mm %>%
+    filter(texture == "a") %>%
+    select(prop_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+2. Homophony
+
+```{r}
+homophony_percent_unweighted <- texture_tib_mm %>%
+    filter(texture == "h") %>%
+    select(prop_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+3. Monophony
+
+```{r}
+monophony_percent_unweighted <- texture_tib_mm %>%
+    filter(texture == "m") %>%
+    select(prop_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+4. Polyphony
+
+```{r}
+polyphony_percent_unweighted <- texture_tib_mm %>%
+    filter(texture == "p") %>%
+    select(prop_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+### Weighted (duration)
+
+1. Antiphony
+
+```{r}
+antiphony_percent_weighted <- texture_tib_dur %>%
+    filter(texture == "a") %>%
+    select(perc_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+2. Homophony
+
+```{r}
+homophony_percent_weighted <- texture_tib_dur %>%
+    filter(texture == "h") %>%
+    select(perc_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+3. Monophony
+
+```{r}
+monophony_percent_weighted <- texture_tib_dur %>%
+    filter(texture == "m") %>%
+    select(perc_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+4. Polyphony
+
+```{r}
+polyphony_percent_weighted <- texture_tib_dur %>%
+    filter(texture == "p") %>%
+    select(perc_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+
+## Groupings
+
+### Top 4 by Duration
+
+1. st_ab
+
+```{r}
+grouping_perc_dur_st_ab <- groupings_5_dur %>%
+    filter(groupings == "st_ab") %>%
+    select(perc_of_dur) %>%
+    as.numeric()
+```
+
+2. none
+
+```{r}
+grouping_perc_dur_none <- groupings_5_dur %>%
+    filter(groupings == "none") %>%
+    select(perc_of_dur) %>%
+    as.numeric()
+```
+
+3. tb
+
+```{r}
+grouping_perc_dur_tb <- groupings_5_dur %>%
+    filter(groupings == "tb") %>%
+    select(perc_of_dur) %>%
+    as.numeric()
+```
+
+4. satb
+
+```{r}
+grouping_perc_dur_satb <- groupings_5_dur %>%
+    filter(groupings == "satb") %>%
+    select(perc_of_dur) %>%
+    as.numeric()
+```
+
+
+### Separated by Texture
+
+1. homophony - st_ab
+
+```{r}
+grouping_perc_dur_homophony_st_ab <- groupings_homophony_dur %>% 
+    filter(groupings == "st_ab") %>% 
+    select(perc_of_dur) %>% 
+    as.numeric()
+```
+
+2. homophony - none
+
+```{r}
+grouping_perc_dur_homophony_none <- groupings_homophony_dur %>% 
+    filter(groupings == "none") %>% 
+    select(perc_of_dur) %>% 
+    as.numeric()
+```
+
+
+## Meter
+
+### Percentages of duple and triple meters
+
+1. Duple
+
+```{r}
+dur_meter_groups_perc_duple <- dur_meter_groups %>% 
+  filter(group == "duple") %>% 
+  select(perc_dur) %>% 
+  as.numeric()
+```
+
+2. Triple
+
+```{r}
+dur_meter_groups_perc_triple <- dur_meter_groups %>% 
+  filter(group == "triple") %>% 
+  select(perc_dur) %>% 
+  as.numeric()
+```
+
+### Tables for Top 5 Pieces by Meter Change Count and Rate
+
+```{r}
+meter_ch_count_table <- knitr::kable(meter_ch_count_piece_top_5, 
+             col.names = c("Piece No.", 
+                           "Meter Changes", 
+                           "Avg. Rate of Meter Change (sec)", 
+                           "Duration of Piece (sec)"), 
+             "pipe")
+
+meter_rate_count_table <- knitr::kable(meter_ch_rate_piece_top_5, 
+             col.names = c("Piece No.", 
+                           "Meter Changes", 
+                           "Avg. Rate of Meter Change (sec)", 
+                           "Duration of Piece (sec)"),
+             "pipe")
+```
+
+## Tempo
+
+1. Tempo change count + rate - 5. Gesang der Reiskahnschlepper
+
+```{r}
+tempo_ch_count_piece_5 <- tempo_ch_count_and_rate_piece %>% 
+  filter(piece_no == "5") %>% 
+  select(tempo_ch_count) %>% 
+  as.numeric()
+
+tempo_ch_rate_piece_5 <- tempo_ch_count_and_rate_piece %>% 
+  filter(piece_no == "5") %>% 
+  select(tempo_ch_rate_sec) %>% 
+  as.numeric()
+```
+
+2. Tempo change count + rate - 8b. Song von der Ware
+
+```{r}
+tempo_ch_count_piece_8b <- tempo_ch_count_and_rate_piece %>% 
+  filter(piece_no == "8b") %>% 
+  select(tempo_ch_count) %>% 
+  as.numeric()
+
+tempo_ch_rate_piece_8b <- tempo_ch_count_and_rate_piece %>% 
+  filter(piece_no == "8b") %>% 
+  select(tempo_ch_rate_sec) %>% 
+  as.numeric()
+```
+
+
+# Final Step: Save Workspace
+
+It is necessary to save the workspace as a `.Rdata` file so that the code 
+included in the write-up can access the data from the global environment of the 
+code in this script. It will look something like this:
+
+```{r, eval = FALSE}
+save.image(file = "SPECIFIED DIRECTORY/reception_analysis.Rdata")
+```
+
+```{r, include = FALSE}
+# save workspace to reuse data in write_up file
+save.image(file = "C:/Users/Noah Zeldin/Documents/R stuff/R projects/dissertation/mt_music_analysis_files/mt_music_analysis.Rdata")
+```
 
 
 
