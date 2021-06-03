@@ -74,7 +74,7 @@ references for republications):
 
 ```{r}
 data_main <- data_main %>% 
-  select(-c(other_metadata:duplicate_source_adk))
+  select(-c(other_source:other_notes))
 ```
 
 
