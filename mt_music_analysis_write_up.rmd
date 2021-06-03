@@ -28,7 +28,7 @@ As a proportion of the total number of measures (weighted by duration), in which
 
 Let us now examine choral texture at a more local level. Below is a chart showing the textural proportions of each piece.  
 
-```{r, include = TRUE, echo = FALSE, fig.width = 7, fig.align = "center"}
+```{r, include = TRUE, echo = FALSE, fig.align = "center"}
 dur_texture_piece_mosaic_plot
 ```
 
