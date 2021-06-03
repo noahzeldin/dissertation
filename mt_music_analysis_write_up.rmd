@@ -1,5 +1,5 @@
 ---
-title: "Measures Taken Formal Analysis Chapter Write-Up"
+title: "*The Measures Taken* Formal Analysis Chapter Write-Up"
 author: "Noah Zeldin"
 date: "6/2/2021"
 output: github_document
@@ -7,12 +7,6 @@ output: github_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(include = FALSE)
-```
-
-```{r}
-library(tidyverse)
-library(lubridate)
-library(readxl)
 ```
 
 ```{r}

@@ -1,4 +1,4 @@
-Measures Taken Formal Analysis Chapter Write-Up
+*The Measures Taken* Formal Analysis Chapter Write-Up
 ================
 Noah Zeldin
 6/2/2021
@@ -34,7 +34,7 @@ the remaining 3%.\[3\]
 Let us now examine choral texture at a more local level. Below is a
 chart showing the textural proportions of each piece.
 
-<img src="mt_music_analysis_write_up_files/figure-gfm/unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
+<img src="mt_music_analysis_write_up_files/figure-gfm/unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
 
 The domination of homophony is also apparent here. In fact, it is the
 only texture that appears in all fourteen of the pieces, in which the
