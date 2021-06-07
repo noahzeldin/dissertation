@@ -1324,6 +1324,14 @@ agitprop_kwic %>%
   tally()
 ```
 
+```{r}
+# No mention of Blutmai [Blood May] 1929 in corpus
+combine_kwic_with_data(corp, c("blut", "mai"), 5) %>% 
+  select(-c(from, to, text, publisher, political_affiliation, 
+            complete_or_incomplete)) %>%
+  knitr::kable("simple")
+```
+
 
 
 # 11. Additional Values for In-Line Code included in Write-Up

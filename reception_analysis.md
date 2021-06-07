@@ -1573,6 +1573,22 @@ agitprop_kwic %>%
     ##   <chr>    <int>
     ## 1 measures     8
 
+``` r
+# No mention of Blutmai [Blood May] 1929 in corpus
+combine_kwic_with_data(corp, c("blut", "mai"), 5) %>% 
+  select(-c(from, to, text, publisher, political_affiliation, 
+            complete_or_incomplete)) %>%
+  knitr::kable("simple")
+```
+
+|    article | pre                              | keyword | post                                   | pattern | title                                                                                         | newspaper                            | general\_political\_orientation | date       | author | piece    |
+| ---------: | :------------------------------- | :------ | :------------------------------------- | :------ | :-------------------------------------------------------------------------------------------- | :----------------------------------- | :------------------------------ | :--------- | :----- | :------- |
+|         24 | Uraufführung zugegen war . Im    | Mai     | dieses Jahres findet das Gausängerfest | mai     | »Die Maßnahme« von »Eisler« und die »Maßnahme« des Gauvorstandes Berlin-Brandenburg des DASB. | Kampfmusik                           | left                            | xx.01.1931 | NA     | measures |
+|         67 | einem Menschen von Fleisch und   | Blut    | .                                      | blut    | Berliner Bühnen                                                                               | Velhagen\_und\_Klasings\_Monatshefte | right                           | NA         | NA     | mother   |
+|        120 | Weise Haussuchung ab und das     | Blut    | steigt einem in den Schädel            | blut    | Auf der Bühne sah man:                                                                        |                                      |                                 |            |        |          |
+| Die Mutter |                                  |         |                                        |         |                                                                                               |                                      |                                 |            |        |          |
+| Aufführung | der „Gruppe Junger Schauspieler“ |         | Welt\_am\_Abend                        | left    | 18.01.1932 K. Kn. mother                                                                      |                                      |                                 |            |        |          |
+
 # 11\. Additional Values for In-Line Code included in Write-Up
 
 The following variables are used as in-line code in the
