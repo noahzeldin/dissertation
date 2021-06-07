@@ -1320,6 +1320,27 @@ The following variables are used as in-line code in the
 included in ch. 2.7 and have been provided here in the interest of transparency 
 and reproducibility.
 
+Use of the keyword *proletarisch* across the political spectrum:
+
+```{r}
+# create tibble with tallies of uses
+proletarisch_kwic_gpo_tally <- proletarisch_kwic %>% 
+  group_by(general_political_orientation) %>% 
+  tally() %>% 
+  as_tibble()
+
+# create values for tallies
+## total 
+proletarisch_kwic_total_tally <- proletarisch_kwic_gpo_tally %>% 
+  tally(n) %>% 
+  as.numeric()
+## leftwing publications
+proletarisch_kwic_left_tally <- proletarisch_kwic_gpo_tally %>% 
+  filter(general_political_orientation == "left") %>% 
+  select(n) %>% 
+  as.numeric()
+```
+
 ```{r}
 # Create tibble with top 15 most frequent terms in titles.
 mother_title_freq_top_15 <- textstat_frequency(mother_title_dfm, n = 15) %>% 
@@ -1527,6 +1548,8 @@ articles_last_date_written <- str_c(articles_last_date_written,
                                     articles_last_year, 
                                 sep = ", ")
 ```
+
+
 
 
 # Final Step: Save Workspace
