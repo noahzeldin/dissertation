@@ -1313,6 +1313,20 @@ ca_mother
 ```
 
 
+# Evidence for Claims made in Ch. 2
+
+The following code provides evidence for claims made in ch. 2 but for which there are no corresponding in-line code values.
+
+```{r}
+# All uses of the keyword agitprop appear in articles on 
+# The Measures Taken (i.e. in no articles on The Mother)
+agitprop_kwic %>% 
+  group_by(piece) %>% 
+  tally()
+```
+
+
+
 # Additional Values for In-Line Code included in Write-Up
 
 The following variables are used as in-line code in the 
