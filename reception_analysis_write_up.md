@@ -105,12 +105,12 @@ considered a serious contribution to scholarship on either the political
 history of the Weimar Republic or the history of the Republic’s media.
 
 Let us begin with some basic figures for the data. The corpus includes
-123 articles in total, 43 of which are about *The Measures Taken* and 80
+126 articles in total, 46 of which are about *The Measures Taken* and 80
 of which are about *The Mother*. The dates of publication\[9\] range
 from June 4, 1930 to December 9, 1932, representing a two-and-a-half
 year period.\[10\] Importantly, a very substantial proportion of the
 articles considered here were published within a week of the respective
-work’s premiere: 45% for *The Measures Taken* and 74% for *The
+work’s premiere: 41% for *The Measures Taken* and 74% for *The
 Mother*.\[11\] Especially for the latter, it must be kept in mind that
 much of the corpus analyzed here consists of articles written about the
 premiere performances, both of which were held in Berlin.
@@ -184,7 +184,7 @@ Let us examine more closely the use of the keyword *LEHRSTÜCK*
 *The Measures Taken*, it is less present in that of *The Mother*.
 However, this difference is relative and does not imply a complete
 absence from the latter. In fact, it appears 45 times in 28 of the
-article texts (35%). Additionally, the keyword appears in 8 titles of
+article texts (34%). Additionally, the keyword appears in 8 titles of
 articles on the *The Mother* (10%), making it the 10th most frequently
 used word in these titles. We see therefore that although it is
 certainly the case that the term “Lehrstück” is more closely associated
@@ -192,8 +192,8 @@ with *The Measures Taken*, it is also true that a sizable portion of the
 Republic’s press also associated the term with *The Mother*.
 
 Furthermore, the terms related to learning and teaching that I have
-grouped together under the keyword *LEHRLERN* appear in 44% of the
-articles on *The Mother* and is the 9th most frequently used term,
+grouped together under the keyword *LEHRLERN* appear in 45% of the
+articles on *The Mother* and is the 8th most frequently used term,
 demonstrating that pedagogy was a major concern for contemporary
 reception of the work.\[16\] However, uses of terms in this keyword
 grouping are of course not necessarily positive, which is the case
@@ -237,7 +237,7 @@ work was dominated by discussions of its music and the choir in
 particular. However, we can also determine the extent to which
 contemporary reception considered the work to be an oratorio.
 
-The word “oratorio” appears in 9 articles on *The Measures Taken*. A
+The word “oratorio” appears in 10 articles on *The Measures Taken*. A
 mixed review of the performance held in Vienna on September 20, 1932
 published in the main organ of the Austrian Social Democrats states
 plainly, “Its form is by no means that of a play \[*Theaterstück*\] but
@@ -436,7 +436,7 @@ Additionally, this passage contains one of only three appearances of
 “Stalin” or “Stalinism” in the entire corpus. (Given postwar
 scholarship’s obsession with comparing *The Measures Taken* with the
 Great Purge of 1936-38 and Stalinism in general, it is significant not
-one of the 43 articles on *The Measures Taken* contained in this corpus
+one of the 46 articles on *The Measures Taken* contained in this corpus
 mentions Stalin.) Another can be found in the SPD newspaper in Zwickau,
 in which Gorky’s recent pledge of support for Stalin is criticized as
 betrayal of his origins. One of the others can be found in the SPD
@@ -637,7 +637,7 @@ unique place and time.
 
 9.  The following remarks about dates pertain only to those articles for
     which precise publication dates were available, i.e. those with day,
-    month and year. These constitute 86% of the articles in the corpus.
+    month and year. These constitute 87% of the articles in the corpus.
 
 10. The first article, published months before the premiere of *The
     Measures Taken* by Durus \[A. Kemeny\] in *Die Rote Fahne*
@@ -656,7 +656,7 @@ unique place and time.
 
 11. Again, *The Measures Taken* premiered in the late hours of the
     evening between Dec. 13 and 14, 1930, and *The Mother* premiered on
-    Jan. 17, 1932. BFA 3: 431 and 478.
+    Jan. 17, 1932. GBA 3:431 and 478.
 
 12. Note: Two exceptionally long articles on The Measures Taken with
     unknown political orientation are responsible for stretching the IQR
@@ -679,7 +679,7 @@ unique place and time.
     *Lied*, the German word for song, and the Anglicism *Song* under a
     single token \[*LIED*\] to be rather harmless.
 
-15. In fact, of the 77 uses of the term in the corpus, 68 occur in
+15. In fact, of the 78 uses of the term in the corpus, 69 occur in
     leftwing publications.
 
 16. Perhaps somewhat surprisingly, this keyword grouping appears most
@@ -740,7 +740,7 @@ unique place and time.
 
 30. In the word cloud above, the word appears to be associated with the
     rightwing press on *The Mother*, because the majority of appearances
-    of the term were in rightwing publications. However, 15 centrist
+    of the term were in rightwing publications. However, 17 centrist
     articles also use the word, while only 2 articles from leftwing
     outlets include the word “primitive,” one on *The Measures Taken*
     and one on *The Mother*. The former, which appeared in the Communist
@@ -769,7 +769,7 @@ unique place and time.
     Weisenborn”, *Rote Fahne*, Jan. 19, 1932 - uses any variant of
     “boring” or “boredom” and uses it simply to state that, relating
     to the form and didacticism of *The Mother*, “knowledge”
-    \[*Wissen*\] is “nothing boring\[.\]” 6 articles include both
+    \[*Wissen*\] is “nothing boring\[.\]” 7 articles include both
     keyword groupings (“boring” and “primitive”), none of which are
     leftwing.
 
@@ -831,7 +831,7 @@ unique place and time.
     the same R package, FactoMineR.
 
 42. Articles with “unknown” political orientation have been excluded,
-    constituting 19% of the corpus.
+    constituting 18% of the corpus.
 
 43. K. P., “‘Die Maßnahme.’ Nachtvorstellung in der Philharmonie,”
     *Vorwärts*, Dec. 15, 1930. Note that although this article does not
