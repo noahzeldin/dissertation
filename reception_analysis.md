@@ -163,7 +163,7 @@ data_reduced <- data_no_erfurt %>%
     filter(author != "Ferdinand Junghans")
 ```
 
-  - 10 articles removed from original data set (`data_main`).
+  - 11 articles removed from original data set (`data_main`).
 
 # 4\. Quanteda Set-Up
 
@@ -640,8 +640,8 @@ grouped_ca_no_erfurt_or_unknown
 ```
 
     ## **Results of the Correspondence Analysis (CA)**
-    ## The row variable has  6  categories; the column variable has 7796 categories
-    ## The chi square of independence between the two variables is equal to 48474.43 (p-value =  1.896141e-219 ).
+    ## The row variable has  6  categories; the column variable has 8045 categories
+    ## The chi square of independence between the two variables is equal to 50622.15 (p-value =  1.574941e-252 ).
     ## *The results are available in the following objects:
     ## 
     ##    name              description                   
@@ -885,7 +885,7 @@ lehrlern_mother_gpo_count
     ## # A tibble: 4 x 2
     ##   doc_id  LEHRLERN
     ##   <chr>      <dbl>
-    ## 1 center        29
+    ## 1 center        31
     ## 2 left          18
     ## 3 right         15
     ## 4 unknown       15
@@ -943,7 +943,7 @@ articles_perc_without_full_dates <-
   round() 
 ```
 
-14% of articles do *not* have full dates.
+13% of articles do *not* have full dates.
 
 Percent of articles *with* full dates (i.e. included for Lubridate):
 
@@ -951,7 +951,7 @@ Percent of articles *with* full dates (i.e. included for Lubridate):
 articles_perc_with_full_dates <- 100 - articles_perc_without_full_dates
 ```
 
-86% of articles have full dates.
+87% of articles have full dates.
 
 ### By Piece
 
@@ -993,7 +993,7 @@ dates_tib_lubridate %>%
   arrange(desc(n))
 ```
 
-    ## # A tibble: 20 x 2
+    ## # A tibble: 23 x 2
     ##    date           n
     ##    <date>     <int>
     ##  1 1930-12-15    10
@@ -1006,16 +1006,7 @@ dates_tib_lubridate %>%
     ##  8 1930-12-24     1
     ##  9 1931-01-01     1
     ## 10 1931-01-03     1
-    ## 11 1931-01-11     1
-    ## 12 1931-01-14     1
-    ## 13 1931-01-24     1
-    ## 14 1931-05-09     1
-    ## 15 1931-12-09     1
-    ## 16 1932-02-19     1
-    ## 17 1932-06-01     1
-    ## 18 1932-09-24     1
-    ## 19 1932-11-22     1
-    ## 20 1932-11-25     1
+    ## # ... with 13 more rows
 
 #### *The Mother*
 
@@ -1053,29 +1044,20 @@ dates_tib_lubridate %>%
   arrange(desc(n))
 ```
 
-    ## # A tibble: 20 x 2
+    ## # A tibble: 21 x 2
     ##    date           n
     ##    <date>     <int>
-    ##  1 1932-01-18    20
+    ##  1 1932-01-18    19
     ##  2 1932-01-17     7
     ##  3 1932-01-19     7
     ##  4 1932-01-24     5
-    ##  5 1932-01-23     4
-    ##  6 1932-01-22     3
+    ##  5 1932-01-22     4
+    ##  6 1932-01-23     4
     ##  7 1932-01-25     3
     ##  8 1932-01-26     2
     ##  9 1932-01-27     2
     ## 10 1932-01-30     2
-    ## 11 1931-12-23     1
-    ## 12 1932-01-08     1
-    ## 13 1932-01-13     1
-    ## 14 1932-01-15     1
-    ## 15 1932-01-20     1
-    ## 16 1932-01-21     1
-    ## 17 1932-01-29     1
-    ## 18 1932-02-23     1
-    ## 19 1932-03-05     1
-    ## 20 1932-12-09     1
+    ## # ... with 11 more rows
 
 ## Date Ranges, Time Lengths, etc.
 
@@ -1178,7 +1160,7 @@ articles_mt_premiere_week_perc <-
     nrow()) / nrow(dates_mt_lubridate)) * 100)
 ```
 
-45% of articles on *The Measures Taken* were published within one week
+41% of articles on *The Measures Taken* were published within one week
 of the premiere.
 
 #### *The Mother*
@@ -1207,7 +1189,7 @@ articles_mother_premiere_week_perc <-
     nrow()) / nrow(dates_mother_lubridate)) * 100)
 ```
 
-74% of articles on *The Mother* were published within one week of the
+73% of articles on *The Mother* were published within one week of the
 premiere.
 
 ## Articles on *The Measures Taken* published in 1932 (with full dates)
@@ -1219,14 +1201,17 @@ dates_tib_lubridate %>%
     left_join(data_main, by = "article")
 ```
 
-    ## # A tibble: 5 x 13
+    ## # A tibble: 8 x 13
     ##   article date.x     piece.x title text  newspaper publisher political_affil~
     ##     <dbl> <date>     <chr>   <chr> <chr> <chr>     <chr>     <chr>           
     ## 1      35 1932-02-19 measur~ "Leh~ "Nic~ Literari~ Welt Ver~ unknown         
-    ## 2      50 1932-06-01 measur~ "„Di~ "1.\~ Der_Kämp~ KPD       KPD             
-    ## 3      34 1932-09-24 measur~ "Die~ "Die~ Arbeiter~ Sozialde~ SPÖ             
-    ## 4      36 1932-11-22 measur~ "Ers~ "In ~ General-~ independ~ unknown         
-    ## 5      37 1932-11-25 measur~ "Kom~ "Am ~ Bayrisch~ independ~ unknown         
+    ## 2     137 1932-05-02 measur~ "„Di~ "Kom~ Sächsisc~ KPD       KPD             
+    ## 3     135 1932-05-04 measur~ "Aus~ "Da ~ Sächsisc~ KPD       KPD             
+    ## 4     134 1932-05-07 measur~ "Die~ "Die~ Leipzige~ SPD       SPD             
+    ## 5      50 1932-06-01 measur~ "„Di~ "1.\~ Der_Kämp~ KPD       KPD             
+    ## 6      34 1932-09-24 measur~ "Die~ "Die~ Arbeiter~ Sozialde~ SPÖ             
+    ## 7      36 1932-11-22 measur~ "Ers~ "In ~ General-~ independ~ unknown         
+    ## 8      37 1932-11-25 measur~ "Kom~ "Am ~ Bayrisch~ independ~ unknown         
     ## # ... with 5 more variables: general_political_orientation <chr>, date.y <chr>,
     ## #   author <chr>, complete_or_incomplete <chr>, piece.y <chr>
 
@@ -1588,6 +1573,7 @@ combine_kwic_with_data(corp, c("blut", "mai"), 5) %>%
 |        120 | Weise Haussuchung ab und das     | Blut    | steigt einem in den Schädel            | blut    | Auf der Bühne sah man:                                                                        |                                      |                                 |            |        |          |
 | Die Mutter |                                  |         |                                        |         |                                                                                               |                                      |                                 |            |        |          |
 | Aufführung | der „Gruppe Junger Schauspieler“ |         | Welt\_am\_Abend                        | left    | 18.01.1932 K. Kn. mother                                                                      |                                      |                                 |            |        |          |
+|        137 | Orchester führen am 5 .          | Mai     | ( Himmelfahrt ) , vormittags           | mai     | „Die Maßnahme“                                                                                | Sächsische\_Arbeiter-Zeitung         | left                            | 02.05.1932 | NA     | measures |
 
 # 11\. Additional Values for In-Line Code included in Write-Up
 
