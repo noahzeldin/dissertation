@@ -1344,6 +1344,15 @@ and reproducibility.
 Use of the keyword *proletarisch* across the political spectrum:
 
 ```{r}
+# number of articles in SPD publ. on Measures Taken
+articles_spd_mt <- data_reduced %>% 
+  filter(piece == "measures" & publisher == "SPD") %>% 
+  nrow() %>% 
+  as.numeric()
+```
+
+
+```{r}
 # create tibble with tallies of uses
 proletarisch_kwic_gpo_tally <- proletarisch_kwic %>% 
   group_by(general_political_orientation) %>% 
@@ -1468,7 +1477,6 @@ langweilig_primitiv_no_articles <-
   nrow() %>% 
   as.numeric()
 ```
-
 
 ```{r}
 # Oratorium in Measures Taken
