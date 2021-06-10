@@ -1358,12 +1358,12 @@ articles_spd_mt <- data_reduced %>%
 ```{r}
 # numbers related to instances of "Wissen"
 
-# number of appearances of "Wissen" in corpus
+# appearances in corpus
 wissen_appearances <- wissen_kwic %>% 
   # must remove Kurella, "Ein Versuch mit nicht ganz tauglichen Mitteln and
   # K. Kn., "Auf der Bühne sah man: Die Mutter"
   # both instances of "Wissen" = verb at beginning of sentence (so capitalized)
-  filter(author != "Alfred Kurella", author !=  "K. Kn.") %>% 
+  filter(author != "Alfred Kurella", author != "K. Kn.") %>% 
   nrow() %>% 
   as.numeric()
 
