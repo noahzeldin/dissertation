@@ -751,7 +751,7 @@ unique place and time.
 
 31. In the word cloud above, the word appears to be associated with the
     rightwing press on *The Mother*, because the majority of appearances
-    of the term were in rightwing publications. However, 17 centrist
+    of the term were in rightwing publications. However, 18 centrist
     articles also use the word, while only 2 articles from leftwing
     outlets include the word “primitive,” one on *The Measures Taken*
     and one on *The Mother*. The former, which appeared in the Communist
@@ -842,7 +842,7 @@ unique place and time.
     the same R package, FactoMineR.
 
 43. Articles with “unknown” political orientation have been excluded,
-    constituting 18% of the corpus.
+    constituting 17% of the corpus.
 
 44. K. P., “‘Die Maßnahme.’ Nachtvorstellung in der Philharmonie,”
     *Vorwärts*, Dec. 15, 1930. Note that although this article does not
