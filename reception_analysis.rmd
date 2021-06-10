@@ -1473,7 +1473,7 @@ mother_rank_lehrlern <- mother_freq_top_30 %>%
 
 ```{r}
 # center + primitiv
-primitiv_center_no_articles <- 
+primitiv_center_articles <- 
   primitiv_kwic %>% 
   filter(general_political_orientation == "center") %>% 
   count(article) %>% 
@@ -1483,7 +1483,7 @@ primitiv_center_no_articles <-
 
 ```{r}
 # left + primitiv
-primitiv_left_no_articles <- 
+primitiv_left_articles <- 
   primitiv_kwic %>% 
   filter(general_political_orientation == "left") %>% 
   count(article) %>% 
@@ -1493,7 +1493,7 @@ primitiv_left_no_articles <-
 
 ```{r}
 # langweilig + primitiv
-langweilig_primitiv_no_articles <- 
+langweilig_primitiv_articles <- 
   langweilig_primitiv_kwic %>% 
   count(article) %>% 
   nrow() %>% 
@@ -1502,7 +1502,7 @@ langweilig_primitiv_no_articles <-
 
 ```{r}
 # Oratorium in Measures Taken
-oratorium_mt_no_articles <- oratorium_mt_kwic %>% 
+oratorium_mt_articles <- oratorium_mt_kwic %>% 
   count(article) %>% 
   nrow() %>% 
   as.numeric()
@@ -1510,7 +1510,7 @@ oratorium_mt_no_articles <- oratorium_mt_kwic %>%
 
 ```{r}
 # Appearances in Centrist Press
-lehrlern_mother_center_no_appearances <- 
+lehrlern_mother_center_appearances <- 
   lehrlern_mother_gpo_count %>% 
   filter(doc_id == "center") %>% 
   select(LEHRLERN) %>% 
@@ -1520,14 +1520,14 @@ lehrlern_mother_center_no_appearances <-
 ```{r}
 # Percent of appearances in Centrist Press
 lehrlern_mother_center_perc <- 
-  round((lehrlern_mother_center_no_appearances / 
+  round((lehrlern_mother_center_appearances / 
            lehrlern_mother_gpo_count$LEHRLERN %>% sum())
         * 100)
 ```
 
 ```{r}
 # Appearances in Leftwing Press
-lehrlern_mother_left_no_appearances <- 
+lehrlern_mother_left_appearances <- 
   lehrlern_mother_gpo_count %>% 
   filter(doc_id == "left") %>% 
   select(LEHRLERN) %>% 
@@ -1537,7 +1537,7 @@ lehrlern_mother_left_no_appearances <-
 ```{r}
 # Percent of appearances in Leftwing Press
 lehrlern_mother_left_perc <- 
-  round((lehrlern_mother_left_no_appearances / 
+  round((lehrlern_mother_left_appearances / 
            lehrlern_mother_gpo_count$LEHRLERN %>% sum())
         * 100)
 ```
