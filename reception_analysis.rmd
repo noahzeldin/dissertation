@@ -659,7 +659,11 @@ bildung_kwic <-
 
 ```{r}
 wissen_kwic <- 
-  combine_kwic_with_data(corp, "wissen*", 10)
+  combine_kwic_with_data(corp, "wissen", 10) %>% 
+  as_tibble() %>% 
+  # filter, so that only noun form remains 
+  # (case_insensitive option not possible) with pre-defined function
+  filter(keyword == "Wissen") 
 ```
 
 * lehrstück [learning-piece] - *The Mother*
@@ -1351,6 +1355,24 @@ articles_spd_mt <- data_reduced %>%
   as.numeric()
 ```
 
+```{r}
+# numbers related to instances of "Wissen"
+
+# number of appearances of "Wissen" in corpus
+wissen_appearances <- wissen_kwic %>% 
+  # must remove Kurella, "Ein Versuch mit nicht ganz tauglichen Mitteln and
+  # K. Kn., "Auf der Bühne sah man: Die Mutter"
+  # both instances of "Wissen" = verb at beginning of sentence (so capitalized)
+  filter(author != "Alfred Kurella", author !=  "K. Kn.") %>% 
+  nrow() %>% 
+  as.numeric()
+
+# appearances in Brand, "Brechts Lehrstück ein großer Erfolg"
+wissen_appearances_brand <- wissen_kwic %>% 
+  filter(author == "Paul Brand") %>% 
+  nrow() %>% 
+  as.numeric()
+```
 
 ```{r}
 # create tibble with tallies of uses
