@@ -1414,14 +1414,6 @@ mother_title_docfreq_lehrstueck_perc <-
 ```
 
 ```{r}
-# Rank of Lehrstück
-mother_title_rank_lehrstueck <- mother_title_freq_top_15 %>% 
-  filter(feature == "LEHRSTÜCK") %>% 
-  select(rank) %>% 
-  as.numeric()
-```
-
-```{r}
 # Create tibble with top 30 most frequent terms in texts
 mother_freq_top_30 <- textstat_frequency(mother_dfm, n = 30) %>% 
     as_tibble() 
