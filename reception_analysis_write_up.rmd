@@ -60,7 +60,7 @@ Note that in the following visualizations, words in majuscules are in fact group
 Let us begin with a word cloud visualization for the two works. The word cloud measures relative frequency or "keyness," which means, for example, that just because a word appears in one group does not mean it is wholly absent from another, but rather that it is more strongly associated with a particular group. 
 
 ```{r, include = TRUE, echo = FALSE, warning=FALSE, fig.width=10, fig.height=10}
-textplot_wordcloud(piece_dfm_no_erfurt,
+textplot_wordcloud(piece_dfm_no_erfurt_english,
                    max_words = 100,
                    color = colors_main,
                    rotation = FALSE,
