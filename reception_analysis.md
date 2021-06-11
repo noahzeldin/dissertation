@@ -640,8 +640,8 @@ grouped_ca_no_erfurt_or_unknown
 ```
 
     ## **Results of the Correspondence Analysis (CA)**
-    ## The row variable has  6  categories; the column variable has 8045 categories
-    ## The chi square of independence between the two variables is equal to 50622.15 (p-value =  1.574941e-252 ).
+    ## The row variable has  6  categories; the column variable has 8365 categories
+    ## The chi square of independence between the two variables is equal to 52521.6 (p-value =  2.166423e-257 ).
     ## *The results are available in the following objects:
     ## 
     ##    name              description                   
@@ -767,7 +767,11 @@ bildung_kwic <-
 
 ``` r
 wissen_kwic <- 
-  combine_kwic_with_data(corp, "wissen*", 10)
+  combine_kwic_with_data(corp, "wissen", 10) %>% 
+  as_tibble() %>% 
+  # filter, so that only noun form remains 
+  # (case_insensitive option not possible) with pre-defined function
+  filter(keyword == "Wissen") 
 ```
 
   - lehrstück \[learning-piece\] - *The Mother*
@@ -1344,14 +1348,12 @@ toks_grouped %>%
     knitr::kable()
 ```
 
-| article | toks\_sum | title                                         | author                    | newspaper               | date       |
-| ------: | --------: | :-------------------------------------------- | :------------------------ | :---------------------- | :--------- |
-|      35 |       879 | Lehrstück in Gegenwart und Vergangenheit      | Julius Bab                | Literarische\_Welt      | 19.02.1932 |
-|      18 |       852 | Politische Musik zu Brecht-Eislers »Maßnahme« | Hans Heinz Stuckenschmidt | Der\_Anbruch            | xx.xx.1931 |
-|      25 |       215 | Anmerkung zu Brechts »Versuchen«              | Lutz Weltmann             | Die\_Literatur          | 03.01.1931 |
-|      19 |       211 | Probenerfahrung bei der »Maßnahme«            | Friedrich Deutsch         | Der\_Anbruch            | xx.xx.1931 |
-|       7 |       152 | Brecht-Eisler / Die Maßnahme/Philharmonie     | Klaus Pringsheim          | Münchner\_Merkur        | 15.12.1930 |
-|      37 |       128 | Kommunistische »Musik«.                       | k.                        | Bayrische-Staatszeitung | 25.11.1932 |
+| article | toks\_sum | title                                     | author           | newspaper               | date       |
+| ------: | --------: | :---------------------------------------- | :--------------- | :---------------------- | :--------- |
+|      35 |       879 | Lehrstück in Gegenwart und Vergangenheit  | Julius Bab       | Literarische\_Welt      | 19.02.1932 |
+|      25 |       215 | Anmerkung zu Brechts »Versuchen«          | Lutz Weltmann    | Die\_Literatur          | 03.01.1931 |
+|       7 |       152 | Brecht-Eisler / Die Maßnahme/Philharmonie | Klaus Pringsheim | Münchner\_Merkur        | 15.12.1930 |
+|      37 |       128 | Kommunistische »Musik«.                   | k.               | Bayrische-Staatszeitung | 25.11.1932 |
 
 ## Wordclouds
 
@@ -1585,6 +1587,33 @@ transparency and reproducibility.
 Use of the keyword *proletarisch* across the political spectrum:
 
 ``` r
+# number of articles in SPD publ. on Measures Taken
+articles_spd_mt <- data_reduced %>% 
+  filter(piece == "measures" & publisher == "SPD") %>% 
+  nrow() %>% 
+  as.numeric()
+```
+
+``` r
+# numbers related to instances of "Wissen"
+
+# appearances in corpus
+wissen_appearances <- wissen_kwic %>% 
+  # must remove Kurella, "Ein Versuch mit nicht ganz tauglichen Mitteln and
+  # K. Kn., "Auf der Bühne sah man: Die Mutter"
+  # both instances of "Wissen" = verb at beginning of sentence (so capitalized)
+  filter(author != "Alfred Kurella", author != "K. Kn.") %>% 
+  nrow() %>% 
+  as.numeric()
+
+# appearances in Brand, "Brechts Lehrstück ein großer Erfolg"
+wissen_appearances_brand <- wissen_kwic %>% 
+  filter(author == "Paul Brand") %>% 
+  nrow() %>% 
+  as.numeric()
+```
+
+``` r
 # create tibble with tallies of uses
 proletarisch_kwic_gpo_tally <- proletarisch_kwic %>% 
   group_by(general_political_orientation) %>% 
@@ -1621,14 +1650,6 @@ mother_title_docfreq_lehrstueck <- mother_title_freq_top_15 %>%
 # Percent of titles in which Lehrstück appears
 mother_title_docfreq_lehrstueck_perc <- 
   round(mother_title_docfreq_lehrstueck/ndoc(mother_title_dfm) * 100)
-```
-
-``` r
-# Rank of Lehrstück
-mother_title_rank_lehrstueck <- mother_title_freq_top_15 %>% 
-  filter(feature == "LEHRSTÜCK") %>% 
-  select(rank) %>% 
-  as.numeric()
 ```
 
 ``` r
@@ -1683,7 +1704,7 @@ mother_rank_lehrlern <- mother_freq_top_30 %>%
 
 ``` r
 # center + primitiv
-primitiv_center_no_articles <- 
+primitiv_center_articles <- 
   primitiv_kwic %>% 
   filter(general_political_orientation == "center") %>% 
   count(article) %>% 
@@ -1693,7 +1714,7 @@ primitiv_center_no_articles <-
 
 ``` r
 # left + primitiv
-primitiv_left_no_articles <- 
+primitiv_left_articles <- 
   primitiv_kwic %>% 
   filter(general_political_orientation == "left") %>% 
   count(article) %>% 
@@ -1703,7 +1724,7 @@ primitiv_left_no_articles <-
 
 ``` r
 # langweilig + primitiv
-langweilig_primitiv_no_articles <- 
+langweilig_primitiv_articles <- 
   langweilig_primitiv_kwic %>% 
   count(article) %>% 
   nrow() %>% 
@@ -1712,7 +1733,7 @@ langweilig_primitiv_no_articles <-
 
 ``` r
 # Oratorium in Measures Taken
-oratorium_mt_no_articles <- oratorium_mt_kwic %>% 
+oratorium_mt_articles <- oratorium_mt_kwic %>% 
   count(article) %>% 
   nrow() %>% 
   as.numeric()
@@ -1720,7 +1741,7 @@ oratorium_mt_no_articles <- oratorium_mt_kwic %>%
 
 ``` r
 # Appearances in Centrist Press
-lehrlern_mother_center_no_appearances <- 
+lehrlern_mother_center_appearances <- 
   lehrlern_mother_gpo_count %>% 
   filter(doc_id == "center") %>% 
   select(LEHRLERN) %>% 
@@ -1730,14 +1751,14 @@ lehrlern_mother_center_no_appearances <-
 ``` r
 # Percent of appearances in Centrist Press
 lehrlern_mother_center_perc <- 
-  round((lehrlern_mother_center_no_appearances / 
+  round((lehrlern_mother_center_appearances / 
            lehrlern_mother_gpo_count$LEHRLERN %>% sum())
         * 100)
 ```
 
 ``` r
 # Appearances in Leftwing Press
-lehrlern_mother_left_no_appearances <- 
+lehrlern_mother_left_appearances <- 
   lehrlern_mother_gpo_count %>% 
   filter(doc_id == "left") %>% 
   select(LEHRLERN) %>% 
@@ -1747,7 +1768,7 @@ lehrlern_mother_left_no_appearances <-
 ``` r
 # Percent of appearances in Leftwing Press
 lehrlern_mother_left_perc <- 
-  round((lehrlern_mother_left_no_appearances / 
+  round((lehrlern_mother_left_appearances / 
            lehrlern_mother_gpo_count$LEHRLERN %>% sum())
         * 100)
 ```
