@@ -112,12 +112,12 @@ Mother*.\[12\] Especially for the latter, it must be kept in mind that
 much of the corpus analyzed here consists of articles written about the
 premiere performances, both of which were held in Berlin.
 
-These articles vary significantly in length. The figure below (**Tokens
-per Article**) provides a visualization, comparing the lengths of
-articles after processing (e.g. removing the most commonly used words
-that provide no relevant information, like pronouns and basic verbs),
-expressed in number of words or “tokens.” These are grouped first by
-piece and then by political orientation.
+These articles vary significantly in length. The figure below provides a
+visualization, comparing the lengths of articles after processing
+(e.g. removing the most commonly used words that provide no relevant
+information, like pronouns and basic verbs), expressed in number of
+words or “tokens.” These are grouped first by piece and then by
+political orientation.
 
 ![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
@@ -377,29 +377,29 @@ Another short article, published a week later in the same newspaper
 under the title, “Are you familiar with the Learning-piece ‘The
 Mother’?”, contains a similar urging to its readership: “Go with
 your wife to *The Mother*. Every woman, every mother must see the new
-Marxist, ***lebendige***, innovative drama *The Mother*.”\[36\] Given,
-however, that, for example, these and other the main KPD organ, the Rote
-FahneCommunist aligned newspapers, including KPD organs, advertised the
-piece and offered discounted tickets to their subscribers, this kind of
-encouragement is unsurprising.\[37\]
+Marxist, spirited, innovative drama *The Mother*.”\[36\] Given, however,
+that, for example, these and other Communist-aligned newspapers,
+including KPD organs, advertised the piece and offered discounted
+tickets to their subscribers, this kind of encouragement is
+unsurprising.\[37\]
 
 One of the most detailed and laudatory leftwing articles on *The Mother*
 was published shortly after the premiere in the *Rote Fahne* under the
-title “Brecht’s Learning-piece a Great Success.” The article praises
-Brecht and discusses the pedagogy behind the piece. For instance,
-discussing the scene in which Vlassova distributes leaflets calling for
-the factory workers to strike, the author of the article writes, “The
-foundational concepts of Marxism are made clear to her through the
-simplest examples of proletarian life.” We see here that for Communists,
-the intentionally simplified and pedagogically oriented content of the
-work was a positive quality, in contrast to rightwing and centrist
-critics.
+title “Brecht’s Learning-piece a Great Success.”\[38\] The article
+praises Brecht and discusses the pedagogy behind the piece. For
+instance, discussing the scene in which Vlassova distributes leaflets
+calling for the factory workers to strike, the author of the article
+writes, “The foundational concepts of Marxism are made clear to her
+through the simplest examples of proletarian life.” We see here that for
+Communists, the intentionally simplified and pedagogically oriented
+content of the work was a positive quality, in contrast to rightwing and
+centrist critics.
 
 However, perhaps one of the most intriguing reviews of *The Mother*
 contained in the corpus was published in the main SPD organ *Vorwärts*
 (to be precise, in the evening edition, *Der Abend*), the day after the
-work’s premiere.\[38\] The author, Max Hochdorf, tries to reclaim
-Gorky’s novel for the Social Democrats\[39\] and criticizes Brecht,
+work’s premiere.\[39\] The author, Max Hochdorf, tries to reclaim
+Gorky’s novel for the Social Democrats\[40\] and criticizes Brecht,
 who “racks his brains on his epic theater\[,\]” which Hochdorf later
 calls a “pseudo-theater” \[*Halbtheater*\]. Hochdorf’s aesthetic
 conservatism, arguably a manifestation of some of the trends discussed
@@ -415,7 +415,7 @@ anti-Communism comes through in the following passage:
 > if all the other people in the theater were idiots \[…\]. In short,
 > this magnificent novel, recast into a drama, becomes once again a
 > novel but has lost the psychological luster. The people become
-> mechanical loudspeakers of the party.\[40\]
+> mechanical loudspeakers of the party.\[41\]
 
 Although Hochdorf makes no reference to agitprop (as mentioned above,
 astoundingly, no article on *The Mother* included in the corpus uses the
@@ -438,13 +438,13 @@ Stalin is criticized as betrayal of his origins. The third appearance of
 “Stalin” is in a long, extraordinarily critical review of *The Mother*,
 published two days after the work’s premiere in *Germania*, the paper of
 the Catholic Zentrum \[Center\] party, which, in the final years of the
-Weimar Republic, drifted continually to the right.\[41\] “The Communist
+Weimar Republic, drifted continually to the right.\[42\] “The Communist
 ‘Mother,’” as the article’s title refers to the piece, opens with a
 criticism of Gorky’s return to Russia and “his father Stalin, who has
 long resented him.” Like the Social Democrat Hochdorf, the author, H.
 Bachmann, criticizes Brecht’s “Epic Theater” as “primitive.”
 Additionally, Bachmann lambastes the lack of individuality and
-Vlassova’s tactic of deceit in the work’s penultimate scene,\[42\] in
+Vlassova’s tactic of deceit in the work’s penultimate scene,\[43\] in
 other words, the work’s agitprop-like qualities and strong endorsement
 of political realism. The article ends with a sweeping criticism and
 call for the work to be banned:
@@ -457,7 +457,7 @@ call for the work to be banned:
 > and their world revolution conclusive for the most simple-minded (and
 > certainly only for them). The work is 100% in opposition to our system
 > of government and advocates for Moscow. Therefore, it must be
-> banned\!\[43\]
+> banned\!\[44\]
 
 This corresponds to the similarly dramatic ending of the above-discussed
 review in the rightwing *Deutsche Zeitung*, discussed above:
@@ -468,7 +468,7 @@ review in the rightwing *Deutsche Zeitung*, discussed above:
 > Marxist theater school for illiterates with poetic character, which
 > cannot, as Bert Brecht desires, be replaced by a “montage,” but
 > instead grows organically from nationality and national traditions
-> \[*Volkstum*\].\[44\]
+> \[*Volkstum*\].\[45\]
 
 The examples provided above are simply meant to fill out the admittedly
 abstract macro level analysis and to demonstrate how strongly related
@@ -479,7 +479,7 @@ I will conclude the examination of the reception of *The Measures Taken*
 and *The Mother* with a concretization of what I have referred to as the
 political-aesthetic space of the Weimar Press via correspondence
 analysis (CA), a spatial representation of the associations between
-variables.\[45\] The goal of conducting the CA is to measure (and
+variables.\[46\] The goal of conducting the CA is to measure (and
 visualize) the tendencies described above, that is, the association of
 certain words and thus the reception of *The Measures Taken* and *The
 Mother* and political affiliation. In other words, the CA will determine
@@ -490,7 +490,7 @@ deviation in vocabulary. Note that I use the same processed data set for
 the CA that I used for the above visualizations and analysis.
 
 The figure below presents the CA with six groups, corresponding to the
-known political affiliations for each work,\[46\] with the top twenty
+known political affiliations for each work,\[47\] with the top twenty
 contributing keywords, several of which are recognizable from the
 visualizations presented above. The horizontal axis represents the
 aesthetic space. Terms associated with *The Mother* are pulled to the
@@ -503,8 +503,6 @@ For additional readability, I provide below cropped reproductions of the
 left and right halves of the CA.
 
 ![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
-
- 
 
 ![](reception_analysis_write_up_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
@@ -527,7 +525,7 @@ more strongly associated with non-leftwing reviews of *The Measures
 Taken*. At the same time, however, the keyword grouping *ARBEITERSÄNGER*
 \[worker-singers\] is strongly associated with the leftwing press. (NB:
 The analyzed corpus includes only 2 articles on *The Measures Taken*
-published in an official SPD organ.)\[47\] This indicates that leftwing
+published in an official SPD organ.)\[48\] This indicates that leftwing
 (and therefore Communist) outlets were, in comparison to the
 non-leftwing press, relatively more concerned with the political content
 of the work and with the worker-singers’ movement than with the
@@ -820,7 +818,10 @@ unique place and time.
     also contains an article on the political feuds within the DASB:
     “Rote Front der Arbeitersänger.”
 
-38. Max Hochdorf, “Bert Brechts Episches Theater,” *Der Abend*, Jan. 18,
+38. Brand, “Brechts Lehrstück in großer Erfolg” (discussed in previous
+    footnotes.)
+
+39. Max Hochdorf, “Bert Brechts Episches Theater,” *Der Abend*, Jan. 18,
     1932. As a reminder of the political situation of the time, the
     previous page of the issue contains both an article on two recent
     attacks by Nazis on youth members of the Social Democratic defense
@@ -832,11 +833,11 @@ unique place and time.
     “Selbstschuss der Demokratie. Unparteiische Entwaffnung in
     Deutschösterreich,” ibid.
 
-39. Hochdorf notes correctly that the German translation of the novel
+40. Hochdorf notes correctly that the German translation of the novel
     was first published in *Vorwärts* in 1907 (also noted in GBA 3:479
     and BHB 1:295).
 
-40. “Brecht krempelt aber auch den wunderbaren Gorkismus von dazumal in
+41. “Brecht krempelt aber auch den wunderbaren Gorkismus von dazumal in
     den Stalinismus von 1932 um. Er lässt den Bolschewistenkatechismus
     auf der Bühne zerkauen, und niemand hat Recht außer ihm, und er tut
     so, als wenn alle übrigen Leute im Theater Idioten mit unendlich
@@ -844,14 +845,14 @@ unique place and time.
     Drama, wird wieder ein Roman, aber hat den psychologischen Schmelz
     verloren. Die Menschen werden zu Lautsprechermaschinen der Partei.”
 
-41. H. Bachmann, “Die kommunistische ‘Mutter.’ Gastspiel im
+42. H. Bachmann, “Die kommunistische ‘Mutter.’ Gastspiel im
     Komödienhaus,” *Germania*, Jan. 19, 1932. Brecht was evidently
     quite familiar with this article. See GBA 24:184, 185 and 187.
 
-42. Scene 14. “Vor einer Vaterländischen Kupfersammelstelle.” GBA
+43. Scene 14. “Vor einer Vaterländischen Kupfersammelstelle.” GBA
     3:319-323.
 
-43. “Das Ganze ist eine eindeutige, klipp und klare Heroisierung eines
+44. “Das Ganze ist eine eindeutige, klipp und klare Heroisierung eines
     revolutionären Frauentyps, herausgeführt aus der bürgerlichen in die
     klassenkämpferische, proletarische Welt. Ein Lehrstück, - das (wie
     wohl auch schon vorgesehen) nur ins Russische und in allen anderen
@@ -862,16 +863,16 @@ unique place and time.
     herrschende Staatssystem und plädiert für Moskau. Also – muss es
     verboten werden\!”
 
-44. “Der politische Marxismus hat – das lehrt diese primitive, aber
+45. “Der politische Marxismus hat – das lehrt diese primitive, aber
     gefährliche Aufführung – seinen dramaturgischen Stil und seine
     Bühnentheorie gefunden. Wir müssen im Kampf um das Schicksal
     unseres Theaters den marxistischen Theaterschulen für Analphabeten
     die dichterische Persönlichkeit gegenüberstellen, die nicht – wie
-    Bert Brecht es will – durch eine „Montage“ ersetzt werden kann,
+    Bert Brecht es will – durch eine ‘Montage’ ersetzt werden kann,
     sondern aus dem Volkstum organisch wächst.” Biedrynski,
     “Marxistische Theaterschule.”
 
-45. To put it somewhat more technically, “The objective is to construct
+46. To put it somewhat more technically, “The objective is to construct
     a low-dimensional map that well summarizes the data, which in the
     case of CA are the associations between two categorical variables.”
     Michailidis, “Correspondence Analysis,” n.p. As the reader may be
@@ -888,10 +889,10 @@ unique place and time.
     Deschamps, “Correspondence Analysis” provides a tutorial that uses
     the same R package, FactoMineR.
 
-46. Articles with “unknown” political orientation have been excluded,
+47. Articles with “unknown” political orientation have been excluded,
     constituting 17% of the corpus.
 
-47. The first is a review of the premiere: K. P., “‘Die Maßnahme.’
+48. The first is a review of the premiere: K. P., “‘Die Maßnahme.’
     Nachtvorstellung in der Philharmonie,” *Vorwärts*, Dec. 15, 1930.
     Note that although this article does not mention “worker-singers,”
     it does discuss the DASB and the three choirs which participated in
