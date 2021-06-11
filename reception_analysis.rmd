@@ -1316,9 +1316,9 @@ ca_mother
 ```
 
 
-# 10. Evidence for Claims made in Ch. 2
+# 10. Additional Evidence for Claims made in Ch. 2
 
-The following code provides evidence for claims made in ch. 2 but for which there are no corresponding in-line code values.
+The following code provides evidence for claims made in ch. 2 but for which there are no corresponding in-line code values or code in above sections.
 
 ```{r}
 # All uses of the keyword agitprop appear in articles on 
