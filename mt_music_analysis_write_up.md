@@ -62,20 +62,20 @@ tendency in Eisler’s choral writing, namely, the tendency to reduce
 simultaneous lines by grouping different voices together, generally in
 pairs.\[4\] One can discern two clear objectives from this reduction via
 grouping: 1) lessening the difficulty of a given passage and 2)
-increasing the comprehensibility of the text. Let us, then, focus for a
-moment on this reduction via grouping, as it plays a significant role in
-Eisler’s “agitpropization” of workers’ choral music.
+increasing the comprehensibility of the text.\[5\] Let us, then, focus
+for a moment on this reduction via grouping, as it plays a significant
+role in Eisler’s “agitpropization” of workers’ choral music.
 
 After computing the proportions of groupings in the choir’s sung
 material, as gauged by number of measures (weighted by duration), we
 find that the most common grouping by a large margin is a) sopranos
-paired with tenors and b) altos paired with basses (37%).\[5\] It is
+paired with tenors and b) altos paired with basses (37%).\[6\] It is
 also far and away the most common grouping for homophonic passages
 (46%). This two-paired grouping is followed by tenors paired with basses
 (16%) and then by no groupings (11%), which of course includes passages
 featuring only one or two voices. The final grouping of significance is
 that of all four voices in tutti monophony (10%), in all cases,
-full-fledged unison.\[6\]
+full-fledged unison.\[7\]
 
 These figures demonstrate the full extent of Eisler’s reduction of
 simultaneous lines in the choir’s written material. As stated above, I
@@ -96,12 +96,16 @@ material, while female voices constitute 41%. Unsurprisingly, this
 discrepancy arises largely from the inclusion of two pieces that use
 men’s choir without sopranos or altos, no. 5. “Gesang der
 Reiskahnschlepper” and no. 7a. “Streiklied” (53% of the discrepancy in
-fact).
+fact). The mere inclusion of female voices and the relative balance of
+the former and their male counterparts can itself be considered a
+political gesture, as some DASB functionaries seem to have been
+suspicious of the growing number of women singers and their ability to
+sing political music.\[8\]
 
 It is immediately clear to any listener that Eisler’s choral writing for
 *The Measures Taken* is resolutely modernist, even though it undoubtedly
 engages with the choral-musical traditions that would have been familiar
-to the worker-singers performing the work.\[7\] Several elements can be
+to the worker-singers performing the work.\[9\] Several elements can be
 identified as the chief contributors to the work’s musical modernism.
 The first, already discussed above, is the instrumentation, namely,
 Eisler’s decision to exclude strings and woodwinds in favor of brass
@@ -120,14 +124,14 @@ writing (that is, none features all twelve pitches), several approach
 this: Three feature eleven pitches, one features ten, another features
 nine, while four feature eight. The three pieces that feature eleven
 pitches (2b. “Lob der U.S.S.R.”, 9. “Ändere die Welt” and 12b. “Wir sind
-der Abschaum der Welt”) contain politically neutral texts,\[8\] which I
+der Abschaum der Welt”) contain politically neutral texts,\[10\] which I
 think is no coincidence, as an expanded tonal vocabulary arguably makes
 the text less comprehensible. (I discuss the relationship between
 musical complexity and textual content at length below.) The
 chromaticism of several important pieces arguably demonstrates that
 although Eisler clearly reduced textural complexity, he decided against
-a comparably universal reduction for pitch and tonality. Perhaps this
-was a way for him to balance the demands of composing a politically
+a comparably universal reduction for pitch and tonality.\[11\] Perhaps
+this was a way for him to balance the demands of composing a politically
 charged work for non-professional musicians, while retaining modernist
 elements.
 
@@ -135,31 +139,31 @@ Let us now move on to rhythm and meter. As previous scholars have noted,
 tight, pounding rhythms are an important feature of *The Measures
 Taken*. The noticeable lack of syncopated rhythms, complex tuplets and
 the like in the choral material arguably constitutes a counterweight to
-the remarkably frequent meter changes,\[9\] which significantly increase
-the difficulty of the music and are another indication of the necessity
-of a professional conductor.\[10\] Let us first consider the five pieces
-with the highest number of meter changes.
+the remarkably frequent meter changes,\[12\] which significantly
+increase the difficulty of the music and are another indication of the
+necessity of a professional conductor.\[13\] Let us first consider the
+five pieces with the highest number of meter changes.
 
-| Piece No. | Meter Changes | Avg. Rate of Meter Change (sec) | Duration of Piece (sec) |
-| :-------- | ------------: | ------------------------------: | ----------------------: |
-| 4         |            18 |                           13.73 |                  247.22 |
-| 3b        |            12 |                            2.47 |                   29.61 |
-| 1         |             9 |                           32.76 |                  294.86 |
-| 2b        |             9 |                           13.82 |                  124.35 |
-| 9         |             8 |                           36.14 |                  289.09 |
+| Piece No. | Meter Changes | Avg. Rate of Meter Change (sec) | Duration of Piece (sec) | Duration of Piece (min, sec) |
+| :-------- | ------------: | ------------------------------: | ----------------------: | ---------------------------: |
+| 4         |            18 |                           13.73 |                  247.22 |                        4M 7S |
+| 3b        |            12 |                            2.47 |                   29.61 |                          29S |
+| 1         |             9 |                           32.76 |                  294.86 |                       4M 55S |
+| 2b        |             9 |                           13.82 |                  124.35 |                        2M 4S |
+| 9         |             8 |                           36.14 |                  289.09 |                       4M 49S |
 
 Eighteen meter changes in the course of a single piece for a
 non-professional choir (no. 4 “Lob der illegalen Arbeit”) is rather
 extraordinary. Next, we can consider the five pieces with the fastest
 rate of meter change.
 
-| Piece No. | Meter Changes | Avg. Rate of Meter Change (sec) | Duration of Piece (sec) |
-| :-------- | ------------: | ------------------------------: | ----------------------: |
-| 6b        |             4 |                            1.90 |                    7.62 |
-| 3b        |            12 |                            2.47 |                   29.61 |
-| 12a       |             5 |                            5.64 |                   28.18 |
-| 4         |            18 |                           13.73 |                  247.22 |
-| 2b        |             9 |                           13.82 |                  124.35 |
+| Piece No. | Meter Changes | Avg. Rate of Meter Change (sec) | Duration of Piece (sec) | Duration of Piece (min, sec) |
+| :-------- | ------------: | ------------------------------: | ----------------------: | ---------------------------: |
+| 6b        |             4 |                            1.90 |                    7.62 |                           8S |
+| 3b        |            12 |                            2.47 |                   29.61 |                          29S |
+| 12a       |             5 |                            5.64 |                   28.18 |                          28S |
+| 4         |            18 |                           13.73 |                  247.22 |                        4M 7S |
+| 2b        |             9 |                           13.82 |                  124.35 |                        2M 4S |
 
 Examining the average rate of meter change is arguably even more
 impressive than examining the counts. In 6b. “Lenin-Zitat”
@@ -181,7 +185,7 @@ duration, are in order 2/4, 3/2, 3/4, 2/2 and 4/2. (Note: Eisler avoids
 difficult, irregular meters, e.g. 5/4 or 7/8, altogether.) Second, if
 one separates the eight meters that appear in the work into three broad
 groups: duple/quadruple, triple and other (i.e. the proportionally
-negligible, though musically significant, five 1/4 measures),\[11\] the
+negligible, though musically significant, five 1/4 measures),\[14\] the
 second group, duple and quadruple meters, constitutes the majority
 (gauged by number of measures, weighted by duration), albeit a slight
 one (53% to 47%).
@@ -194,7 +198,7 @@ I have shown above, Eisler indeed pursued this route, especially with
 regard to texture. However, I would wager the speculative claim that
 those worker-singers, who could read musical notation, would have been
 more familiar with quarter- or even eighth-note-based meters than with
-half-note-based meters.\[12\] Thus, the frequency with which Eisler used
+half-note-based meters.\[15\] Thus, the frequency with which Eisler used
 the latter could be considered surprising. Then, there is the question
 of duple/quadruple and triple meters. Considering the militantly
 political nature of the work, I think it is surprising that only a very
@@ -208,7 +212,7 @@ virtually equal aggregate durations. Eisler’s use of triple meters could
 perhaps be interpreted as a subtle subversion of the march and anthem,
 as can his insertion of the intentionally awkward 1/4 bar of no. 7a.
 “Streiklied” \[“Strike Song”\] (m. 9), the most monophonic and
-“agitpropized” piece in the whole work.\[13\]
+“agitpropized” piece in the whole work.\[16\]
 
 From these observations, it can be concluded that Eisler takes a very
 specific approach to the choral writing of *The Measures Taken*. In
@@ -233,8 +237,8 @@ textual comprehensibility.
     depends on statistical arguments.”
 
 3.  I do not consider mm. 22-27 of “Lob der illegalen Arbeit” to be
-    antiphonic. Since the basses sing throughout, I do not consider it a
-    true ‘call and response’ passage. Note also that the unweighted
+    antiphonic. Since the basses sing throughout, I do not regard it as
+    a true ‘call and response’ passage. Note also that the unweighted
     proportions, i.e. measured by number of measures without regard to
     duration, change meaningfully only for homophony and polyphony,
     which change respectively to 64% and 12%.
@@ -242,9 +246,11 @@ textual comprehensibility.
 4.  I am grateful to Eisler scholar, Dr. Johannes Gall, for discussing
     this point with me and affirming its significance.
 
-5.  This grouping is also noted in Grabs, “Die Musik,” 214.
+5.  Kim, *Das Lehrstück*, 187 makes a similar argument.
 
-6.  The most significant passage of four-voice unison occurs at the
+6.  This grouping is also noted in Grabs, “Die Musik,” 214.
+
+7.  The most significant passage of four-voice unison occurs at the
     beginning of “Ändere die Welt” (mm. 2-18). Also, note that the
     ranking of these top proportions remain unchanged if instead of
     considering groupings of groupings, e.g. sopranos paired with tenors
@@ -252,9 +258,11 @@ textual comprehensibility.
     individually. However, the pairing of sopranos with tenors does
     appear slightly more often and that of altos with basses.
 
-7.  See, for instance, Dümling, *Lasst euch*, 291-94 and 298.
+8.  See Bodek, *Proletarian Performance*, 58-59.
 
-8.  I consider the text of “Wir sind der Abschaum der Welt’ to be
+9.  See, for instance, Dümling, *Lasst euch*, 291-94 and 298.
+
+10. I consider the text of “Wir sind der Abschaum der Welt’ to be
     politically neutral, because there is no mention of Communism, the
     Communist Party, the Soviet Union, etc. Instead, the song discusses
     general issues like fighting”exploitation" \[*Ausbeutung*\] and and
@@ -265,9 +273,13 @@ textual comprehensibility.
     the first or second version of the text in the BFA. Cf. Eisler, *Die
     Maßnahme*, 113-17 and GBA 3:95-96 and 122-23.
 
-9.  This general tendency is also noted in Kim, *Das Lehrstück*, 196.
+11. That said, Eisler clearly took care to limit the range and
+    difficulty of the intervals of individual lines. See Kim, *Das
+    Lehrstück*, 189-90.
 
-10. However, it is arguably the “Gesang der Reiskahnschlepper” \[“Song
+12. This general tendency is also noted in Kim, *Das Lehrstück*, 196.
+
+13. However, it is arguably the “Gesang der Reiskahnschlepper” \[“Song
     of the Rice Barge Haulers”\], which demands most from the conductor,
     who has to navigate 9 tempo changes and frequent shifts between male
     choir, solo tenor and orchestra. NB: This count and rate of tempo
@@ -276,14 +288,14 @@ textual comprehensibility.
     a negiligible few measures of easy choral material at the very end
     (7 tempo changes at an average of every 26.73 seconds).
 
-11. These appear in the following pieces: no. 1, mm. 12 and 15; no. 6b,
+14. These appear in the following pieces: no. 1, mm. 12 and 15; no. 6b,
     mm. 4 and 9; and no. 7a, m. 9. I discuss the final of these below.
 
-12. One could of course conceivably conduct a statistical survey of the
+15. One could of course conceivably conduct a statistical survey of the
     surviving literature of the DASB choirs, but this demanding
     undertaking clearly lies beyond the scope of the present study.
 
-13. This could be compared with Eisler’s intentionally awkward
+16. This could be compared with Eisler’s intentionally awkward
     insertions of 2/4 bars in the “Solidaritätslied” \[“Solidarity
     Song”\], the main meter of which is 4/4. See the analysis in
     Dümling, *Lasst euch*, 328-30 (and more generally 320-31). See also

@@ -67,16 +67,35 @@ Noah Zeldin
                 Measures](#by-number-of-measures-1)
               - [5.6.2.2 By Duration (of
                 Measures)](#by-duration-of-measures-1)
+  - [6 Additional Values for In-Line Code included in
+    Write-Up](#additional-values-for-in-line-code-included-in-write-up)
+      - [6.1 Texture](#texture-1)
+          - [6.1.1 Unweighted (number of
+            mm.)](#unweighted-number-of-mm.)
+          - [6.1.2 Weighted (duration)](#weighted-duration)
+      - [6.2 Groupings](#groupings-1)
+          - [6.2.1 Top 4 by Duration](#top-4-by-duration)
+          - [6.2.2 Separated by Texture](#separated-by-texture-1)
+      - [6.3 Meter](#meter)
+          - [6.3.1 Percentages of duple and triple
+            meters](#percentages-of-duple-and-triple-meters)
+          - [6.3.2 Tables for Top 5 Pieces by Meter Change Count and
+            Rate](#tables-for-top-5-pieces-by-meter-change-count-and-rate)
+      - [6.4 Tempo](#tempo)
+  - [7 Final Step: Save Workspace](#final-step-save-workspace)
 
 # 1 Introductory Remarks
 
 Below is the annotated set-up for my formal analysis of Hanns Eisler’s
 music to [*The Measures
 Taken*](https://www.universaledition.com/hanns-eisler-199/works/die-massnahme-2040),
-which is included in the second chapter of my dissertation. This
-analysis was conducted in [R](https://www.r-project.org/). (I have tried
-to use [tidyverse](https://www.tidyverse.org/) syntax as consistently as
-possible. I therefore refer to tables as
+which is included in the second chapter of my dissertation. The
+corresponding excerpt is available
+[here](https://github.com/noahzeldin/dissertation/blob/main/mt_music_analysis_write_up.md).
+
+The analysis was conducted in [R](https://www.r-project.org/). (I have
+tried to use [tidyverse](https://www.tidyverse.org/) syntax as
+consistently as possible. I therefore refer to tables as
 [“tibbles”](https://tibble.tidyverse.org/).) Data sets will be made
 available to researchers upon request.
 
@@ -687,16 +706,21 @@ meter_ch_count_piece_top_5 <- dur_meter_tempo_piece %>%
     select(-tempo_ch_count, -tempo_ch_rate_sec) %>% 
     slice(1:5)
 
+meter_ch_count_piece_top_5 <- left_join(meter_ch_count_piece_top_5, 
+                                        dur_piece_lubridate, 
+                                        by = "piece_no") %>% 
+    rename(dur_sec = duration.x, dur_min_sec = duration.y)
+
 knitr::kable(meter_ch_count_piece_top_5)
 ```
 
-| piece\_no | meter\_ch\_count | meter\_ch\_rate\_sec | duration |
-| :-------- | ---------------: | -------------------: | -------: |
-| 4         |               18 |                13.73 |   247.22 |
-| 3b        |               12 |                 2.47 |    29.61 |
-| 1         |                9 |                32.76 |   294.86 |
-| 2b        |                9 |                13.82 |   124.35 |
-| 9         |                8 |                36.14 |   289.09 |
+| piece\_no | meter\_ch\_count | meter\_ch\_rate\_sec | dur\_sec | dur\_min\_sec |
+| :-------- | ---------------: | -------------------: | -------: | ------------: |
+| 4         |               18 |                13.73 |   247.22 |         4M 7S |
+| 3b        |               12 |                 2.47 |    29.61 |           29S |
+| 1         |                9 |                32.76 |   294.86 |        4M 55S |
+| 2b        |                9 |                13.82 |   124.35 |         2M 4S |
+| 9         |                8 |                36.14 |   289.09 |        4M 49S |
 
 5 pieces with fastest rates of meter change:
 
@@ -707,16 +731,21 @@ meter_ch_rate_piece_top_5 <- dur_meter_tempo_piece %>%
     arrange(meter_ch_rate_sec) %>% 
     slice(1:5)
 
+meter_ch_rate_piece_top_5 <- left_join(meter_ch_rate_piece_top_5, 
+                                        dur_piece_lubridate, 
+                                        by = "piece_no") %>% 
+    rename(dur_sec = duration.x, dur_min_sec = duration.y)
+
 knitr::kable(meter_ch_rate_piece_top_5)
 ```
 
-| piece\_no | meter\_ch\_count | meter\_ch\_rate\_sec | duration |
-| :-------- | ---------------: | -------------------: | -------: |
-| 6b        |                4 |                 1.90 |     7.62 |
-| 3b        |               12 |                 2.47 |    29.61 |
-| 12a       |                5 |                 5.64 |    28.18 |
-| 4         |               18 |                13.73 |   247.22 |
-| 2b        |                9 |                13.82 |   124.35 |
+| piece\_no | meter\_ch\_count | meter\_ch\_rate\_sec | dur\_sec | dur\_min\_sec |
+| :-------- | ---------------: | -------------------: | -------: | ------------: |
+| 6b        |                4 |                 1.90 |     7.62 |            8S |
+| 3b        |               12 |                 2.47 |    29.61 |           29S |
+| 12a       |                5 |                 5.64 |    28.18 |           28S |
+| 4         |               18 |                13.73 |   247.22 |         4M 7S |
+| 2b        |                9 |                13.82 |   124.35 |         2M 4S |
 
 3 pieces with greatest number of tempo changes:
 
@@ -1445,7 +1474,7 @@ texture_tib_mm %>%
 Create tibble:
 
 ``` r
-texture_tib_dur <- gen_tib %>% 
+texture_tib_dur <- gen_tib %>% # same results w/ gen_tib_sung
     filter(texture != "na") %>% 
     group_by(texture) %>% 
     summarize(duration = dur_choir) %>% 
@@ -1468,26 +1497,6 @@ texture_tib_dur %>%
   - Again, homophony clearly dominates, followed by monophony.
 
 ### 5.4.2 Individual Pieces (By Duration)
-
-Create tibble (`texture_piece_dur`):
-
-``` r
-texture_piece_dur <- gen_tib %>% 
-    filter(texture != "na") %>% 
-    group_by(piece_no, texture) %>% 
-    summarize(duration = dur_choir) %>% 
-    summarize(duration = sum(duration)) %>% 
-    mutate(prop_of_piece = round((duration/sum(duration)), 
-                                 digits = 2)) %>% 
-    group_by(piece_no) %>% 
-    mutate(dur_piece = sum(duration)
-           ) %>% 
-    relocate(dur_piece, .after = duration) %>% 
-    ungroup() %>% 
-    mutate(prop_of_work = round((duration / sum(duration)), 
-                                digits = 3),
-           prop_piece_of_work = dur_piece/sum(dur_piece)) # check if necessary
-```
 
 Create mosaic plot, displaying proportion of each texture in each piece:
 
@@ -1534,7 +1543,7 @@ dur_texture_piece_mosaic_plot <- ggplot(dur_texture_piece_mosaic_table,
 dur_texture_piece_mosaic_plot
 ```
 
-![](mt_music_analysis_files/figure-gfm/unnamed-chunk-64-1.png)<!-- -->
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-63-1.png)<!-- -->
 
   - included in ch. 2
 
@@ -1618,7 +1627,7 @@ pitch_distribution_plot <- pitch_long %>%
 pitch_distribution_plot
 ```
 
-![](mt_music_analysis_files/figure-gfm/unnamed-chunk-66-1.png)<!-- -->
+![](mt_music_analysis_files/figure-gfm/unnamed-chunk-65-1.png)<!-- -->
 
 ### 5.5.3 Chromaticism of Each Piece
 
@@ -1982,3 +1991,275 @@ groupings_separate_10_dur %>%
 | s1t       |          1.62 |
 
 Results show that factoring in duration makes *very* little difference.
+
+# 6 Additional Values for In-Line Code included in Write-Up
+
+The following variables are used as in-line code in the
+[write-up](https://github.com/noahzeldin/dissertation/blob/main/reception_analysis_write_up.md)
+included in ch. 2.7 and have been provided here in the interest of
+transparency and reproducibility.
+
+## 6.1 Texture
+
+### 6.1.1 Unweighted (number of mm.)
+
+1.  Antiphony
+
+<!-- end list -->
+
+``` r
+antiphony_percent_unweighted <- texture_tib_mm %>%
+    filter(texture == "a") %>%
+    select(prop_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+2.  Homophony
+
+<!-- end list -->
+
+``` r
+homophony_percent_unweighted <- texture_tib_mm %>%
+    filter(texture == "h") %>%
+    select(prop_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+3.  Monophony
+
+<!-- end list -->
+
+``` r
+monophony_percent_unweighted <- texture_tib_mm %>%
+    filter(texture == "m") %>%
+    select(prop_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+4.  Polyphony
+
+<!-- end list -->
+
+``` r
+polyphony_percent_unweighted <- texture_tib_mm %>%
+    filter(texture == "p") %>%
+    select(prop_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+### 6.1.2 Weighted (duration)
+
+1.  Antiphony
+
+<!-- end list -->
+
+``` r
+antiphony_percent_weighted <- texture_tib_dur %>%
+    filter(texture == "a") %>%
+    select(perc_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+2.  Homophony
+
+<!-- end list -->
+
+``` r
+homophony_percent_weighted <- texture_tib_dur %>%
+    filter(texture == "h") %>%
+    select(perc_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+3.  Monophony
+
+<!-- end list -->
+
+``` r
+monophony_percent_weighted <- texture_tib_dur %>%
+    filter(texture == "m") %>%
+    select(perc_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+4.  Polyphony
+
+<!-- end list -->
+
+``` r
+polyphony_percent_weighted <- texture_tib_dur %>%
+    filter(texture == "p") %>%
+    select(perc_of_sung) %>%
+    round(., digits = 0) %>%
+    as.numeric()
+```
+
+## 6.2 Groupings
+
+### 6.2.1 Top 4 by Duration
+
+1.  st\_ab
+
+<!-- end list -->
+
+``` r
+grouping_perc_dur_st_ab <- groupings_5_dur %>%
+    filter(groupings == "st_ab") %>%
+    select(perc_of_dur) %>%
+    as.numeric()
+```
+
+2.  none
+
+<!-- end list -->
+
+``` r
+grouping_perc_dur_none <- groupings_5_dur %>%
+    filter(groupings == "none") %>%
+    select(perc_of_dur) %>%
+    as.numeric()
+```
+
+3.  tb
+
+<!-- end list -->
+
+``` r
+grouping_perc_dur_tb <- groupings_5_dur %>%
+    filter(groupings == "tb") %>%
+    select(perc_of_dur) %>%
+    as.numeric()
+```
+
+4.  satb
+
+<!-- end list -->
+
+``` r
+grouping_perc_dur_satb <- groupings_5_dur %>%
+    filter(groupings == "satb") %>%
+    select(perc_of_dur) %>%
+    as.numeric()
+```
+
+### 6.2.2 Separated by Texture
+
+1.  homophony - st\_ab
+
+<!-- end list -->
+
+``` r
+grouping_perc_dur_homophony_st_ab <- groupings_homophony_dur %>% 
+    filter(groupings == "st_ab") %>% 
+    select(perc_of_dur) %>% 
+    as.numeric()
+```
+
+2.  homophony - none
+
+<!-- end list -->
+
+``` r
+grouping_perc_dur_homophony_none <- groupings_homophony_dur %>% 
+    filter(groupings == "none") %>% 
+    select(perc_of_dur) %>% 
+    as.numeric()
+```
+
+## 6.3 Meter
+
+### 6.3.1 Percentages of duple and triple meters
+
+1.  Duple
+
+<!-- end list -->
+
+``` r
+dur_meter_groups_perc_duple <- dur_meter_groups %>% 
+  filter(group == "duple") %>% 
+  select(perc_dur) %>% 
+  as.numeric()
+```
+
+2.  Triple
+
+<!-- end list -->
+
+``` r
+dur_meter_groups_perc_triple <- dur_meter_groups %>% 
+  filter(group == "triple") %>% 
+  select(perc_dur) %>% 
+  as.numeric()
+```
+
+### 6.3.2 Tables for Top 5 Pieces by Meter Change Count and Rate
+
+``` r
+meter_ch_count_table <- knitr::kable(meter_ch_count_piece_top_5, 
+             col.names = c("Piece No.", 
+                           "Meter Changes", 
+                           "Avg. Rate of Meter Change (sec)", 
+                           "Duration of Piece (sec)",
+                           "Duration of Piece (min, sec)"), 
+             "pipe")
+
+meter_rate_count_table <- knitr::kable(meter_ch_rate_piece_top_5, 
+             col.names = c("Piece No.", 
+                           "Meter Changes", 
+                           "Avg. Rate of Meter Change (sec)", 
+                           "Duration of Piece (sec)",
+                           "Duration of Piece (min, sec)"),
+             "pipe")
+```
+
+## 6.4 Tempo
+
+1.  Tempo change count + rate - 5. Gesang der Reiskahnschlepper
+
+<!-- end list -->
+
+``` r
+tempo_ch_count_piece_5 <- tempo_ch_count_and_rate_piece %>% 
+  filter(piece_no == "5") %>% 
+  select(tempo_ch_count) %>% 
+  as.numeric()
+
+tempo_ch_rate_piece_5 <- tempo_ch_count_and_rate_piece %>% 
+  filter(piece_no == "5") %>% 
+  select(tempo_ch_rate_sec) %>% 
+  as.numeric()
+```
+
+2.  Tempo change count + rate - 8b. Song von der Ware
+
+<!-- end list -->
+
+``` r
+tempo_ch_count_piece_8b <- tempo_ch_count_and_rate_piece %>% 
+  filter(piece_no == "8b") %>% 
+  select(tempo_ch_count) %>% 
+  as.numeric()
+
+tempo_ch_rate_piece_8b <- tempo_ch_count_and_rate_piece %>% 
+  filter(piece_no == "8b") %>% 
+  select(tempo_ch_rate_sec) %>% 
+  as.numeric()
+```
+
+# 7 Final Step: Save Workspace
+
+It is necessary to save the workspace as a `.Rdata` file so that the
+code included in the write-up can access the data from the global
+environment of the code in this script. It will look something like
+this:
+
+``` r
+save.image(file = "SPECIFIED DIRECTORY/reception_analysis.Rdata")
+```

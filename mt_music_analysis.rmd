@@ -380,7 +380,6 @@ dur_piece_lubridate %>%
   knitr::kable()
 ```
 
-
 ### Duration by Category
 
 I assigned one of four categories to each of the pieces. These are:
@@ -474,6 +473,11 @@ meter_ch_count_piece_top_5 <- dur_meter_tempo_piece %>%
     select(-tempo_ch_count, -tempo_ch_rate_sec) %>% 
     slice(1:5)
 
+meter_ch_count_piece_top_5 <- left_join(meter_ch_count_piece_top_5, 
+                                        dur_piece_lubridate, 
+                                        by = "piece_no") %>% 
+    rename(dur_sec = duration.x, dur_min_sec = duration.y)
+
 knitr::kable(meter_ch_count_piece_top_5)
 ```
 
@@ -486,6 +490,11 @@ meter_ch_rate_piece_top_5 <- dur_meter_tempo_piece %>%
     select(-tempo_ch_count, -tempo_ch_rate_sec) %>% 
     arrange(meter_ch_rate_sec) %>% 
     slice(1:5)
+
+meter_ch_rate_piece_top_5 <- left_join(meter_ch_rate_piece_top_5, 
+                                        dur_piece_lubridate, 
+                                        by = "piece_no") %>% 
+    rename(dur_sec = duration.x, dur_min_sec = duration.y)
 
 knitr::kable(meter_ch_rate_piece_top_5)
 ```
@@ -1580,14 +1589,16 @@ meter_ch_count_table <- knitr::kable(meter_ch_count_piece_top_5,
              col.names = c("Piece No.", 
                            "Meter Changes", 
                            "Avg. Rate of Meter Change (sec)", 
-                           "Duration of Piece (sec)"), 
+                           "Duration of Piece (sec)",
+                           "Duration of Piece (min, sec)"), 
              "pipe")
 
 meter_rate_count_table <- knitr::kable(meter_ch_rate_piece_top_5, 
              col.names = c("Piece No.", 
                            "Meter Changes", 
                            "Avg. Rate of Meter Change (sec)", 
-                           "Duration of Piece (sec)"),
+                           "Duration of Piece (sec)",
+                           "Duration of Piece (min, sec)"),
              "pipe")
 ```
 
