@@ -13,19 +13,18 @@ and Austro-German composer
 [Hanns Eisler](https://en.wikipedia.org/wiki/Hanns_Eisler), completed in the 
 final years of the Weimar Republic.
 
-* The first is a formal analysis of Eisler's music for *The Measures Taken*. 
-
-  + The code is available [here](https://github.com/noahzeldin/dissertation/blob/main/mt_music_analysis.md). 
-
-  + An excerpt from the corresponding write-up included in my dissertation is available [here](https://github.com/noahzeldin/dissertation/blob/main/mt_music_analysis_write_up.md).
-
-* The second is a quantitative analysis of over 120 articles on *The Measures 
+* The first is a quantitative analysis of over 120 articles on *The Measures 
 Taken* and *The Mother* from the notoriously partisan press of the Weimar 
 Republic.
-
-  + The code is available [here](https://github.com/noahzeldin/dissertation/blob/main/reception_analysis.md).
   
-  + The corresponding write-up included in my dissertation is available [here](https://github.com/noahzeldin/dissertation/blob/main/reception_analysis_write_up.md).
+  + The write-up included in my dissertation is available [here](https://github.com/noahzeldin/dissertation/blob/main/reception_analysis_write_up.md).
+  
+  + The code is available [here](https://github.com/noahzeldin/dissertation/blob/main/reception_analysis.md).
 
-All analyses were conducted in [R](https://www.r-project.org/) and all code is 
-written in [RMarkdown](https://rmarkdown.rstudio.com/).
+* The second is a formal analysis of Eisler's music for *The Measures Taken*. 
+  
+  + The corresponding portion of my dissertation is available [here](https://github.com/noahzeldin/dissertation/blob/main/mt_music_analysis_write_up.md).
+  
+  + The code is available [here](https://github.com/noahzeldin/dissertation/blob/main/mt_music_analysis.md). 
+  
+All analyses were conducted in [R](https://www.r-project.org/). The expercepts from the dissertation contained in this repository were written in [RMarkdown](https://rmarkdown.rstudio.com/).
